@@ -37,6 +37,7 @@ public class MainClass {
 	public static boolean baseTransitionEnabled=false;
 	public static boolean tripletTransitionEnabled=false;
 	public static int TransitionTransversionBias=1;
+	//This File Should be run with at least 7Gb of Java Heap Space!
 	public static void main (String[] args){
 		//###################################################################
 		//#########################   DEBUG AREA   ##########################
@@ -98,7 +99,7 @@ public class MainClass {
 		//				e.printStackTrace();
 		//			}
 		//		}
-  		DNASequence Seq1=conn.LoadFastaFile("568815597");
+  		DNASequence Seq1=conn.LoadFastaFile("NC_000001.11");
   		SequenceStats Stat=new SequenceStats(Seq1.getSequenceAsString());
 		
 		baseAprioriWeights=Stat.getBase_aPriori();

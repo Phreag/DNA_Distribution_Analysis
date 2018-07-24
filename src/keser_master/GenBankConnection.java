@@ -102,8 +102,7 @@ public class GenBankConnection {
 		private boolean DownloadFasta(String GeneID){
 			URL u;
 			try {
-				u = new URL("http://www.ncbi.nlm.nih.gov/sviewer/viewer.cgi?tool=portal&sendto=on&log$=seqview&db=nuccore&dopt=fasta&sort=&val="+GeneID+"&from=begin&to=end&maxplex=1");
-				File f=new File("data/"+GeneID+".fasta");
+				u=new URL("https://www.ncbi.nlm.nih.gov/sviewer/viewer.cgi?tool=portal&save=file&log$=seqview&db=nuccore&report=fasta&id="+GeneID+"&&showgi=1");File f=new File("data/"+GeneID+".fasta");
 				FileUtils.copyURLToFile(u, f);
 				System.out.println("Download finished.");
 			} catch (Exception e) {
