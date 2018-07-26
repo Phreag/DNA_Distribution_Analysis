@@ -44,18 +44,18 @@ public class MainClass {
 		//###################################################################
 		
 		//Get One miexd String from Multi-Sequence File
-		//		List<DNASequence> Mixed=conn.LoadMixedFile();
-		//		StringBuilder builder = new StringBuilder();
-		//		for(DNASequence seq : Mixed) {		    
-		//		builder.append(seq.getSequenceAsString());
-		//    	}
+		List<DNASequence> Mixed=conn.LoadMixedFile();
+		StringBuilder builder = new StringBuilder();
+		for(DNASequence seq : Mixed) {		    
+			builder.append(seq.getSequenceAsString());
+		}	
 				
-		//		String MixedSeq=builder.toString();
-		//		System.out.println("Mixed Length: "+MixedSeq.length());		
-		//		double[] w=stat.getNucleotideDistribution(MixedSeq);
-		//		double[] tempfactors={w[0]/0.25,w[1]/0.25,w[2]/0.25,w[3]/0.25};
-		//		factors=tempfactors;
-		//		tweights=stat.getTripletDistribution(MixedSeq);
+		String MixedSeq=builder.toString();
+		System.out.println("Mixed Length: "+MixedSeq.length());		
+//		double[] w=stat.getNucleotideDistribution(MixedSeq);
+//		double[] tempfactors={w[0]/0.25,w[1]/0.25,w[2]/0.25,w[3]/0.25};
+//		factors=tempfactors;
+//		tweights=stat.getTripletDistribution(MixedSeq);
 		
 		//Batch Calculation to compare different sequences and their impact on the Scores
 		//		List<String> Sequences=new ArrayList<String>();
@@ -99,23 +99,23 @@ public class MainClass {
 		//				e.printStackTrace();
 		//			}
 		//		}
-  		DNASequence Seq1=conn.LoadFastaFile("NC_000001.11");
-  		SequenceStats Stat=new SequenceStats(Seq1.getSequenceAsString());
-		
-		baseAprioriWeights=Stat.getBase_aPriori();
-		tripletAprioriWeights=Stat.getTriplet_aPriori();
-		baseTransitionWeights=Stat.getBaseTransition();
-		tripletTransitionWeights=Stat.getTripletTransition();
-		
-		String[]Bases={"T","C","A","G"};
-		DecimalFormat df = new DecimalFormat("0.0000"); 
-		for (int x=0;x<4;x++){
-			for (int y=0;y<4;y++){
-				for (int z=0;z<4;z++){
-						System.out.println(Bases[x]+Bases[y]+Bases[z]+";"+df.format(tripletTransitionWeights[x][y][z][0][0]/4)+";"+df.format(tripletTransitionWeights[x][y][z][0][1]/4)+";"+df.format(tripletTransitionWeights[x][y][z][1][0]/4)+";"+df.format(tripletTransitionWeights[x][y][z][1][1]/4)+";"+df.format(tripletTransitionWeights[x][y][z][2][0]/4)+";"+df.format(tripletTransitionWeights[x][y][z][2][1]/4)+";"+df.format(tripletTransitionWeights[x][y][z][3][0]/4)+";"+df.format(tripletTransitionWeights[x][y][z][3][1]/4));
-				}
-			}
-		}
+//  		DNASequence Seq1=conn.LoadFastaFile("NC_000001.11");
+//  		SequenceStats Stat=new SequenceStats(Seq1.getSequenceAsString());
+//		
+//		baseAprioriWeights=Stat.getBase_aPriori();
+//		tripletAprioriWeights=Stat.getTriplet_aPriori();
+//		baseTransitionWeights=Stat.getBaseTransition();
+//		tripletTransitionWeights=Stat.getTripletTransition();
+//		
+//		String[]Bases={"T","C","A","G"};
+//		DecimalFormat df = new DecimalFormat("0.0000"); 
+//		for (int x=0;x<4;x++){
+//			for (int y=0;y<4;y++){
+//				for (int z=0;z<4;z++){
+//						System.out.println(Bases[x]+Bases[y]+Bases[z]+";"+df.format(tripletTransitionWeights[x][y][z][0][0]/4)+";"+df.format(tripletTransitionWeights[x][y][z][0][1]/4)+";"+df.format(tripletTransitionWeights[x][y][z][1][0]/4)+";"+df.format(tripletTransitionWeights[x][y][z][1][1]/4)+";"+df.format(tripletTransitionWeights[x][y][z][2][0]/4)+";"+df.format(tripletTransitionWeights[x][y][z][2][1]/4)+";"+df.format(tripletTransitionWeights[x][y][z][3][0]/4)+";"+df.format(tripletTransitionWeights[x][y][z][3][1]/4));
+//				}
+//			}
+//		}
 //		TransitionTransversionBias=2;
 ////		CodePermutation P=new CodePermutation();
 ////		P.generateCodes();
