@@ -209,7 +209,7 @@ public class SequenceStats_Coding {
 							BaseTransitionCount[i][j]+=rawData[i][j][k][l][1];
 							BaseTransitionCount[j][k]+=rawData[i][j][k][l][1];
 							BaseTransitionCount[k][l]+=rawData[i][j][k][l][1];
-							overallCount+=rawData[i][j][k][l][0];
+							overallCount+=rawData[i][j][k][l][1]*3;
 						}
 					}
 				}

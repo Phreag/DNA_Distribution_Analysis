@@ -16,10 +16,10 @@ import org.biojava.nbio.core.sequence.io.FastaReaderHelper;
 public class GenBankConnection {
 	//Allows loading of files containing multiple sequences
 	public List<DNASequence> LoadMixedFile(){
-		File f=new File("data/Mixed.fasta");
+		File f=new File("data/HomoSapiens_CodingSequences.fasta");
 		System.out.println("Loading file Mixed.fasta to memory ("+(f.length()/1024)+" KB)...");
 		try{
-			LinkedHashMap<String, DNASequence> a = FastaReaderHelper.readFastaDNASequence(new File("data/Mixed.fasta"));
+			LinkedHashMap<String, DNASequence> a = FastaReaderHelper.readFastaDNASequence(new File("data/HomoSapiens_CodingSequences.fasta"));
 			List<DNASequence> Result=new ArrayList<DNASequence>();
 			for (  Entry<String, DNASequence> entry : a.entrySet() ) {
 				System.out.println("Loaded: " + entry.getValue().getOriginalHeader() + " length = " + entry.getValue().getSequenceAsString().length() + " nucleotides" );

@@ -21,8 +21,7 @@ import org.biojava.nbio.core.sequence.io.FastaReaderHelper;
 import org.biojava.nbio.core.sequence.io.GenericFastaHeaderParser;
 import org.biojava.nbio.core.sequence.io.ProteinSequenceCreator;
 
-import Objects.GeneCode;
-import Objects.SequenceStats;
+import Objects.*;
 
 public class MainClass {
 	static String[] Code={"Leu","Pro","His","Gln","Arg","Ile","Met","Thr","Asn","Lys","Ser","Val","Ala","Asp","Glu","Gly","Phe","Tyr","Cys","Trp"};
@@ -44,32 +43,19 @@ public class MainClass {
 		//###################################################################
 		
 		//Get One miexd String from Multi-Sequence File
-		List<DNASequence> Mixed=conn.LoadMixedFile();
-		StringBuilder builder = new StringBuilder();
-		for(DNASequence seq : Mixed) {		    
-			builder.append(seq.getSequenceAsString());
-		}	
-				
-		String MixedSeq=builder.toString();
-		System.out.println("Mixed Length: "+MixedSeq.length());		
-//		double[] w=stat.getNucleotideDistribution(MixedSeq);
-//		double[] tempfactors={w[0]/0.25,w[1]/0.25,w[2]/0.25,w[3]/0.25};
-//		factors=tempfactors;
-//		tweights=stat.getTripletDistribution(MixedSeq);
+		List<DNASequence> cDNA=conn.LoadMixedFile();
+		System.out.println("Size: " +cDNA.size());
+		SequenceStats_Coding Stat=new SequenceStats_Coding();
+		for (DNASequence Seq : cDNA){
+			Stat.ProcessSequence(Seq.getSequenceAsString());
+		}
+		Stat.PrintResults();
+		Stat.PrintMatrix(Stat.getBaseTransition());
 		
-		//Batch Calculation to compare different sequences and their impact on the Scores
-		//		List<String> Sequences=new ArrayList<String>();
-		
-		//		Sequences.add("NC_001806"); //Herpes
-		//		Sequences.add("NC_001591"); //Papillomavirus
-		//		Sequences.add("NC_003461"); //Parainfluenza
-		//		Sequences.add("NC_001959"); //Norovirus G1
-		//		Sequences.add("NC_002031");//Gelbfieber
-		//		Sequences.add("NC_012532");//Zika
-		//		Sequences.add("NC_001477");//Dengue
-		//		Sequences.add("NC_004102");//Hepatitis C
-		//		Sequences.add("NC_002549");//Zaire Ebola
-		
+		DNASequence Seq1=conn.LoadFastaFile("NC_000001.11");
+		SequenceStats Stat2=new SequenceStats(Seq1.getSequenceAsString());
+		Stat2.PrintMatrix(Stat2.getBaseTransition());
+
 				
 		//		for (String Str:Sequences){
 		//			DNASequence Seq1=conn.LoadFastaFile(Str);
