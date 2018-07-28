@@ -21,6 +21,8 @@ public class StabilityCalculator {
 	
 	private boolean NonsenseMutationWeighting = false;
 	private double [][][] NonsenseMutationWeights;
+	private double NonsenseMutationFactor=1;
+	//TransitionTransversionBias
 	private int Bias=1;
 	/* Deviationmode:
 	 * 1=MS1 - Default
@@ -49,6 +51,11 @@ public class StabilityCalculator {
 		if (MainClass.tripletTransitionEnabled){
 			tripletTransitionWeighting=true;
 			tripletTransitionWeights=MainClass.tripletTransitionWeights;
+		}
+		if (MainClass.nonsenseWeightingEnabled){
+			NonsenseMutationWeighting=true;
+			NonsenseMutationFactor=MainClass.NonsenseMutationFactor;
+			NonsenseMutationWeights=MainClass.nonsenseMutationWeights;
 		}
 	}
 	//Changes the Code used for Calculations
@@ -90,9 +97,20 @@ public class StabilityCalculator {
 							Amino2=Code.getAminoAcid(a+b+x);
 							break;
 						}
-						if (Amino2.length()!=3)continue; //Filters Stop Codons
-						double Polar2=Constants.getPolarReq(Amino2);
-						double difference=(Polar1-Polar2)*(Polar1-Polar2);
+						double difference;
+						if (Amino2.length()!=3){ //Filters Stop Codons or Applies NonsenseMutationWeighting
+							if(NonsenseMutationWeighting){
+								difference=NonsenseMutationWeights[i][j][k]*NonsenseMutationFactor;
+							}else{
+								continue;
+							}
+							 
+						}else{
+							
+							double Polar2=Constants.getPolarReq(Amino2);
+							difference=(Polar1-Polar2)*(Polar1-Polar2);
+						}
+						
 						if (baseAprioriWeighting){
 							difference=difference*baseAprioriWeights[m];
 						}
@@ -122,18 +140,32 @@ public class StabilityCalculator {
 				}
 			}
 		}
-		switch (Modus){
-		case 1:
-			deviation=deviation/(174+((Bias-1)*58));
-			break;
-		case 2:
-			deviation=deviation/(176+((Bias-1)*60));
-			break;
-		case 3:
-			deviation=deviation/(176+((Bias-1)*60));
-			break;
+		if(NonsenseMutationWeighting){
+			//183 Mutations can occur
+			//Bias Factor=61 (?)
+			deviation=deviation/(183+((Bias-1)*61));
+			return deviation;
+		}else{
+			switch (Modus){
+			case 1:
+				//61 codes * 3 = 183 - 9 Codes which can be mutated to a stop codon = 174
+				//58 Mutations of these can be Transition
+				deviation=deviation/(174+((Bias-1)*58));
+				break;
+			case 2:
+				//61 codes * 3 = 183 - 7 Codes which can be mutated to a stop codon = 176
+				//60 Mutations of these can be Transition
+				deviation=deviation/(176+((Bias-1)*60));
+				break;
+			case 3:
+				//61 codes * 3 = 183 - 7 Codes which can be mutated to a stop codon = 176
+				//60 Mutations of these can be Transition
+				deviation=deviation/(176+((Bias-1)*60));
+				break;
+			}
+			return deviation;
 		}
-		return deviation;
+		
 	}
 	//returns deviation for Shift Mutations
 	//1=Right (+1), 2=Left (-1)
@@ -150,7 +182,7 @@ public class StabilityCalculator {
 				for (int k=0;k<4;k++){
 					String c=Bases[k];
 					String Amino=Code.getAminoAcid(a+b+c);
-					if (Amino.length()!=3)continue; //Filtert Stop Codons
+					if (Amino.length()!=3)continue; //Filters Stop Codons as Origin
 					double Polar1=Constants.getPolarReq(Amino);
 					Double Diff=0.0;
 					for (int m=0;m<4;m++){
@@ -164,9 +196,18 @@ public class StabilityCalculator {
 							Amino2=Code.getAminoAcid(x+a+b);
 							break;
 						}
-						if (Amino2.length()!=3)continue; //Filtert Stop Codons
-						double Polar2=Constants.getPolarReq(Amino2);
-						double difference=(Polar1-Polar2)*(Polar1-Polar2);
+						double difference;
+						if (Amino2.length()!=3){ //Filters Stop codons or applies NonsenseMutationWeights
+							if (NonsenseMutationWeighting){
+								difference=NonsenseMutationWeights[i][j][k]*NonsenseMutationFactor;
+							}else{
+								continue; 
+							}
+							
+						}else{
+							double Polar2=Constants.getPolarReq(Amino2);
+							difference=(Polar1-Polar2)*(Polar1-Polar2);
+						}
 						if (baseAprioriWeighting){
 							difference=difference*baseAprioriWeights[m];
 						}
@@ -199,9 +240,16 @@ public class StabilityCalculator {
 				}
 			}
 		}
-		//232 Possible Mutations...
-		deviation=deviation/232;
-		return deviation;
+		if (NonsenseMutationWeighting){
+			//244 possible Mutations
+			deviation=deviation/244;
+			return deviation;
+		}else{
+			//244 Possible Mutations - 12 wich can result in a stop codon
+			deviation=deviation/232;
+			return deviation;
+		}
+		
 	}
 	
 	//returns true if the Mutation was a Transition
