@@ -22,7 +22,7 @@ public class GenBankConnection {
 			LinkedHashMap<String, DNASequence> a = FastaReaderHelper.readFastaDNASequence(new File("data/HomoSapiens_CodingSequences.fasta"));
 			List<DNASequence> Result=new ArrayList<DNASequence>();
 			for (  Entry<String, DNASequence> entry : a.entrySet() ) {
-				System.out.println("Loaded: " + entry.getValue().getOriginalHeader() + " length = " + entry.getValue().getSequenceAsString().length() + " nucleotides" );
+				//System.out.println("Loaded: " + entry.getValue().getOriginalHeader() + " length = " + entry.getValue().getSequenceAsString().length() + " nucleotides" );
 				Result.add (entry.getValue());
 			}
 			if (Result.size()==0)return null;

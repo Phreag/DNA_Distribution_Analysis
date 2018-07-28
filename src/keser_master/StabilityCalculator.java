@@ -19,6 +19,8 @@ public class StabilityCalculator {
 	private boolean tripletTransitionWeighting=false;
 	private double[][][][][]tripletTransitionWeights;
 	
+	private boolean NonsenseMutationWeighting = false;
+	private double [][][] NonsenseMutationWeights;
 	private int Bias=1;
 	/* Deviationmode:
 	 * 1=MS1 - Default

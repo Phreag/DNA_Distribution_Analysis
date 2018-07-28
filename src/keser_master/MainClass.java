@@ -36,13 +36,16 @@ public class MainClass {
 	public static boolean baseTransitionEnabled=false;
 	public static boolean tripletTransitionEnabled=false;
 	public static int TransitionTransversionBias=1;
+	//Nonsense Mutation Factor: Sets weight for the Error produced by Nonsense Mutation
+	//as Factor * NumberOfTripletsAfter Sequence
+	public static double NonsenseMutationFactor=1;
 	//This File Should be run with at least 7Gb of Java Heap Space!
 	public static void main (String[] args){
 		//###################################################################
 		//#########################   DEBUG AREA   ##########################
 		//###################################################################
 		
-		//Get One miexd String from Multi-Sequence File
+		//Analysis of Coding Sequences in Reading frame
 		List<DNASequence> cDNA=conn.LoadMixedFile();
 		System.out.println("Size: " +cDNA.size());
 		SequenceStats_Coding Stat=new SequenceStats_Coding();
@@ -50,12 +53,15 @@ public class MainClass {
 			Stat.ProcessSequence(Seq.getSequenceAsString());
 		}
 		Stat.PrintResults();
+		System.out.println("BaseTransition");
 		Stat.PrintMatrix(Stat.getBaseTransition());
+		System.out.println("NonsenseMutationWeights");
+		Stat.PrintMatrix(Stat.getNonsenseMutationWeights());
+		System.out.println("TripletApriori");
+		Stat.PrintMatrix(Stat.getTriplet_aPriori());
 		
-		DNASequence Seq1=conn.LoadFastaFile("NC_000001.11");
-		SequenceStats Stat2=new SequenceStats(Seq1.getSequenceAsString());
-		Stat2.PrintMatrix(Stat2.getBaseTransition());
-
+					
+		
 				
 		//		for (String Str:Sequences){
 		//			DNASequence Seq1=conn.LoadFastaFile(Str);
@@ -141,5 +147,4 @@ public class MainClass {
 		baseTransitionEnabled=bt;
 		tripletTransitionEnabled=tt;
 	}
-	
 }

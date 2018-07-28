@@ -13,14 +13,19 @@ public class SequenceStats_Coding {
 	static DecimalFormat df = new DecimalFormat("0.0000"); 
 	private double[] Base_aPriori;
 	private double[][][] Triplet_aPriori;
+	//NonsenseMutation Weights: Average Number of Tripletts following the current triplet
+	private double[][][] NonsenseMutationWeights;
+	private double [][][] NonsenseMutationWeights_raw =new double[4][4][4];
 	private double[][][][][] TripletTransition;
 	private double[][] BaseTransition;
+	private int NumberOfTripletts;
 	
 	public SequenceStats_Coding (){
 		
 	}
 	public void ProcessSequence(String Sequence){
 		this.Sequence=Sequence;
+		NumberOfTripletts=Sequence.length()/3;
 		updateData();
 	}
 	public void PrintResults(){
@@ -28,6 +33,7 @@ public class SequenceStats_Coding {
 		calculateTriplet_aPriori();
 		calculateBaseTransition();
 		calculateTripletTransition();
+		CalculateNonsenseMutationWeights();
 		System.out.println("Finished Analyzing Coding Sequences");
 	}
 
@@ -128,21 +134,46 @@ public class SequenceStats_Coding {
 						break;
 					}
 				}
-				
-				//Ignoring Triplets with Special Characters
+				int TriplettsAfterCurrentPos=NumberOfTripletts-(i/3+1);
 				if(front==-1 && after==-1)continue;
-				
+				NonsenseMutationWeights_raw[a][b][c]+=TriplettsAfterCurrentPos;
 				if (front!=-1){
 					rawData[a][b][c][front][0]++;
 				}
 				if (after!=-1){
 					rawData[a][b][c][after][1]++;
 				}
-				
-				
 			}catch(Exception e){}
-			
 		}
+	}
+	
+	private void CalculateNonsenseMutationWeights(){
+		//Average on each Triplet
+		//Normalize to 1 (use as Factor)
+		int totalsum=0;
+		int totalcount=0;
+		NonsenseMutationWeights=new double[4][4][4];
+		for(int i=0;i<4;i++){
+			for(int j=0;j<4;j++){
+				for(int k=0;k<4;k++){
+					int count=rawData[i][j][k][0][1]+rawData[i][j][k][1][1]+rawData[i][j][k][2][1]+rawData[i][j][k][3][1];
+					totalcount+=count;
+					NonsenseMutationWeights[i][j][k]=NonsenseMutationWeights_raw[i][j][k]/count;
+					totalsum+=NonsenseMutationWeights_raw[i][j][k];
+				}
+			}
+		}
+		double average = totalsum/totalcount;
+		System.out.println(average);
+		for(int i=0;i<4;i++){
+			for(int j=0;j<4;j++){
+				for(int k=0;k<4;k++){
+					NonsenseMutationWeights[i][j][k]=NonsenseMutationWeights[i][j][k]/average;
+				}
+			}
+		}
+		
+		
 	}
 	
 	//Calculates NA weightings - Edited for 3-Step
@@ -277,14 +308,23 @@ public class SequenceStats_Coding {
 		return Erg;
 	}
 	//Prints the 4x4 transition matrix in the console
-	public void PrintMatrix(double[][] Proz){
+	public void PrintMatrix(double[][] M){
 		System.out.println("Vertikal: s(n) horizontal: s(n+1)");
 		System.out.println("--- T ------- C ------- A ------- G");
-		System.out.println("T "+df.format(Proz[0][0]/4)+" -- "+df.format(Proz[1][0]/4)+" -- "+df.format(Proz[2][0]/4)+" -- "+df.format(Proz[3][0]/4));
-		System.out.println("C "+df.format(Proz[0][1]/4)+" -- "+df.format(Proz[1][1]/4)+" -- "+df.format(Proz[2][1]/4)+" -- "+df.format(Proz[3][1]/4));
-		System.out.println("A "+df.format(Proz[0][2]/4)+" -- "+df.format(Proz[1][2]/4)+" -- "+df.format(Proz[2][2]/4)+" -- "+df.format(Proz[3][2]/4));
-		System.out.println("G "+df.format(Proz[0][3]/4)+" -- "+df.format(Proz[1][3]/4)+" -- "+df.format(Proz[2][3]/4)+" -- "+df.format(Proz[3][3]/4));	
+		System.out.println("T "+df.format(M[0][0])+" -- "+df.format(M[1][0])+" -- "+df.format(M[2][0])+" -- "+df.format(M[3][0]));
+		System.out.println("C "+df.format(M[0][1])+" -- "+df.format(M[1][1])+" -- "+df.format(M[2][1])+" -- "+df.format(M[3][1]));
+		System.out.println("A "+df.format(M[0][2])+" -- "+df.format(M[1][2])+" -- "+df.format(M[2][2])+" -- "+df.format(M[3][2]));
+		System.out.println("G "+df.format(M[0][3])+" -- "+df.format(M[1][3])+" -- "+df.format(M[2][3])+" -- "+df.format(M[3][3]));	
 	}
+	//Prints a 4x4x4 matrix in the console
+		public void PrintMatrix(double[][][] M){
+			String[] N={"T","C","A","G"};
+			for (int a=0;a<4;a++){
+				for (int b=0;b<4;b++){
+					System.out.println(N[a]+N[b]+N[0]+": "+df.format(M[a][b][0])+" "+N[a]+N[b]+N[1]+": "+df.format(M[a][b][1])+" "+N[a]+N[b]+N[2]+": "+df.format(M[a][b][2])+" "+N[a]+N[b]+N[3]+": "+df.format(M[a][b][3])+" ");
+				}
+			}
+		}
 
 	public double[] getBase_aPriori() {
 		return Base_aPriori;
@@ -300,5 +340,8 @@ public class SequenceStats_Coding {
 
 	public double[][] getBaseTransition() {
 		return BaseTransition;
+	}
+	public double[][][] getNonsenseMutationWeights() {
+		return NonsenseMutationWeights;
 	}
 }
