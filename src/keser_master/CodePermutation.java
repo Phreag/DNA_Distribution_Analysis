@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -90,6 +91,15 @@ public class CodePermutation {
 			e.printStackTrace();
 			return;
 		}
+	}
+	public void loadDefaultcodeSet(){
+		try{
+			Files.copy(Paths.get("data/codes_defaultset.txt"), Paths.get("data/codes.txt"),StandardCopyOption.REPLACE_EXISTING);
+		}catch(Exception e){
+			System.out.println("Error loading default code set. Terminating.");
+			System.exit(0);
+		}
+		System.out.println("Default Codeset loaded");
 	}
 
 	public double[][] calculateValues(){

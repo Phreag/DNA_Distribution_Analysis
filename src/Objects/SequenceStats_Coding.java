@@ -28,7 +28,7 @@ public class SequenceStats_Coding {
 		NumberOfTripletts=Sequence.length()/3;
 		updateData();
 	}
-	public void PrintResults(){
+	public void FinalizeResults(){
 		calculateBase_aPriori();
 		calculateTriplet_aPriori();
 		calculateBaseTransition();
@@ -163,7 +163,16 @@ public class SequenceStats_Coding {
 				}
 			}
 		}
-		double average = totalsum/totalcount;
+		double normalizedsum=0;
+		for(int i=0;i<4;i++){
+			for(int j=0;j<4;j++){
+				for(int k=0;k<4;k++){
+					normalizedsum= normalizedsum+NonsenseMutationWeights[i][j][k];
+				}
+			}
+		}
+		double average = normalizedsum/64;
+		System.out.println(average);
 		for(int i=0;i<4;i++){
 			for(int j=0;j<4;j++){
 				for(int k=0;k<4;k++){
@@ -171,6 +180,8 @@ public class SequenceStats_Coding {
 				}
 			}
 		}
+		System.out.println("NonsenseMutationWeights:");
+		PrintMatrix(NonsenseMutationWeights);
 		
 		
 	}
@@ -226,6 +237,7 @@ public class SequenceStats_Coding {
 			}
 			sum=sum/61;
 			System.out.println("Triplet_aPriori Average: "+sum);
+			PrintMatrix(Triplet_aPriori);
 		}
 		//Calculates NT weightings - edited for 3-Step	
 		private void calculateBaseTransition(){

@@ -46,7 +46,30 @@ public class MainClass {
 		//###################################################################
 		//#########################   DEBUG AREA   ##########################
 		//###################################################################
+		/*
+		 * 
+		 * ToDo:
+		 * Nucleotidverteilungen auf Gesamter Sequenz vs Codierende Sequenz: Tabelle 3.2
+		 */
 		
+		
+		 /*
+		 * Entstehen Statistisch gesehen durch Gewichtungen mehr Stoppcondons?
+		 * Hypothese: Die DNA ist Optimiert dass es schnell zum Abbruch kommt
+		 * Vergleich: Komplette Sequenz vs Codierende Regionen
+		 */
+		
+		 /* Vergleich: TT Gewichtung Nat. Code vs Random Set
+		 * Bei Shiftmutation. Keine Gewichtung: 267 besser
+		 * TT komplette Sequenz: 28 besser
+		 * TT CCDS: lms 1502 rms 1191 fms 965
+		 */
+		
+		 /* Tabelle 3.11 reproduzieren
+		 */
+		
+		 /* WMS0 Vergleich abhängig von Transition/Transversion Bias, Tabelle 3.12
+		 */
 		//Analysis of Coding Sequences in Reading frame
 		List<DNASequence> cDNA=conn.LoadMixedFile();
 		System.out.println("Size: " +cDNA.size());
@@ -54,16 +77,33 @@ public class MainClass {
 		for (DNASequence Seq : cDNA){
 			Stat.ProcessSequence(Seq.getSequenceAsString());
 		}
-		Stat.PrintResults();
-		System.out.println("BaseTransition");
-		Stat.PrintMatrix(Stat.getBaseTransition());
-		System.out.println("NonsenseMutationWeights");
-		Stat.PrintMatrix(Stat.getNonsenseMutationWeights());
-		System.out.println("TripletApriori");
-		Stat.PrintMatrix(Stat.getTriplet_aPriori());
+		Stat.FinalizeResults();
 		
-					
+		CodePermutation P=new CodePermutation();
+		P.loadDefaultcodeSet();
+		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+		baseAprioriWeights=Stat.getBase_aPriori();
+		tripletAprioriWeights=Stat.getTriplet_aPriori();
+		baseTransitionWeights=Stat.getBaseTransition();
+    	tripletTransitionWeights=Stat.getTripletTransition();
+ 		nonsenseMutationWeights=Stat.getNonsenseMutationWeights();
+ 		NonsenseMutationFactor=100.0;
+ 		setWeightings(false,false,false,false,true);
+ 		P=new CodePermutation();
+		P.loadDefaultcodeSet();
+		new CodeEvaluation(P.calculateValues()).countBetterCodes();
 		
+//		CodePermutation P=new CodePermutation();
+//		P.loadDefaultcodeSet();
+//		//new CodeEvaluation(P.calculateValues()).countBetterCodes();
+//		baseAprioriWeights=Stat.getBase_aPriori();
+//		tripletAprioriWeights=Stat.getTriplet_aPriori();
+//		baseTransitionWeights=Stat.getBaseTransition();
+//		tripletTransitionWeights=Stat.getTripletTransition();
+//		nonsenseMutationWeights=Stat.getNonsenseMutationWeights();
+//		NonsenseMutationFactor=10.0;
+//		setWeightings(false,false,false,false,true);			
+//		new CodeEvaluation(P.calculateValues()).countBetterCodes();
 				
 		//		for (String Str:Sequences){
 		//			DNASequence Seq1=conn.LoadFastaFile(Str);

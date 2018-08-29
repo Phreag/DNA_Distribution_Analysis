@@ -56,6 +56,7 @@ public class StabilityCalculator {
 			NonsenseMutationWeighting=true;
 			NonsenseMutationFactor=MainClass.NonsenseMutationFactor;
 			NonsenseMutationWeights=MainClass.nonsenseMutationWeights;
+			System.out.println("NonsenseMutationFactor: "+NonsenseMutationFactor);
 		}
 	}
 	//Changes the Code used for Calculations
