@@ -241,35 +241,6 @@ public class SequenceStats {
 			}
 		}
 	}
-	
-	//Difference by Element between matrices
-		public double[][] MatrixDiff(double[][] M1,double[][] M2){
-			double[][]Erg=new double[4][4];
-			for (int i=0;i<4;i++){
-				for (int j=0;j<4;j++){
-					Erg[i][j]=M1[i][j]-M2[i][j];
-				}
-			}
-			double sum=0;
-			for (int i=0;i<4;i++){
-				for (int j=0;j<4;j++){
-					sum+=Math.abs(Erg[i][j]);
-				}
-			}
-			System.out.println("Gesamtdiferenz: "+df.format(sum));
-			PrintMatrix(Erg);
-			return Erg;
-		}
-		//Prints the 4x4 transition matrix in the console
-		public void PrintMatrix(double[][] Proz){
-			System.out.println("Vertikal: s(n) horizontal: s(n+1)");
-			System.out.println("--- T ------- C ------- A ------- G");
-			System.out.println("T "+df.format(Proz[0][0]/4)+" -- "+df.format(Proz[1][0]/4)+" -- "+df.format(Proz[2][0]/4)+" -- "+df.format(Proz[3][0]/4));
-			System.out.println("C "+df.format(Proz[0][1]/4)+" -- "+df.format(Proz[1][1]/4)+" -- "+df.format(Proz[2][1]/4)+" -- "+df.format(Proz[3][1]/4));
-			System.out.println("A "+df.format(Proz[0][2]/4)+" -- "+df.format(Proz[1][2]/4)+" -- "+df.format(Proz[2][2]/4)+" -- "+df.format(Proz[3][2]/4));
-			System.out.println("G "+df.format(Proz[0][3]/4)+" -- "+df.format(Proz[1][3]/4)+" -- "+df.format(Proz[2][3]/4)+" -- "+df.format(Proz[3][3]/4));	
-		}
-
 	public double[] getBase_aPriori() {
 		return Base_aPriori;
 	}

@@ -180,10 +180,6 @@ public class SequenceStats_Coding {
 				}
 			}
 		}
-		System.out.println("NonsenseMutationWeights:");
-		PrintMatrix(NonsenseMutationWeights);
-		
-		
 	}
 	
 	//Calculates NA weightings - Edited for 3-Step
@@ -237,7 +233,6 @@ public class SequenceStats_Coding {
 			}
 			sum=sum/61;
 			System.out.println("Triplet_aPriori Average: "+sum);
-			PrintMatrix(Triplet_aPriori);
 		}
 		//Calculates NT weightings - edited for 3-Step	
 		private void calculateBaseTransition(){
@@ -301,41 +296,7 @@ public class SequenceStats_Coding {
 		}
 	
 	//Difference by Element between matrices
-	public double[][] MatrixDiff(double[][] M1,double[][] M2){
-		double[][]Erg=new double[4][4];
-		for (int i=0;i<4;i++){
-			for (int j=0;j<4;j++){
-				Erg[i][j]=M1[i][j]-M2[i][j];
-			}
-		}
-		double sum=0;
-		for (int i=0;i<4;i++){
-			for (int j=0;j<4;j++){
-				sum+=Math.abs(Erg[i][j]);
-			}
-		}
-		System.out.println("Gesamtdiferenz: "+df.format(sum));
-		PrintMatrix(Erg);
-		return Erg;
-	}
-	//Prints the 4x4 transition matrix in the console
-	public void PrintMatrix(double[][] M){
-		System.out.println("Vertikal: s(n) horizontal: s(n+1)");
-		System.out.println("--- T ------- C ------- A ------- G");
-		System.out.println("T "+df.format(M[0][0])+" -- "+df.format(M[1][0])+" -- "+df.format(M[2][0])+" -- "+df.format(M[3][0]));
-		System.out.println("C "+df.format(M[0][1])+" -- "+df.format(M[1][1])+" -- "+df.format(M[2][1])+" -- "+df.format(M[3][1]));
-		System.out.println("A "+df.format(M[0][2])+" -- "+df.format(M[1][2])+" -- "+df.format(M[2][2])+" -- "+df.format(M[3][2]));
-		System.out.println("G "+df.format(M[0][3])+" -- "+df.format(M[1][3])+" -- "+df.format(M[2][3])+" -- "+df.format(M[3][3]));	
-	}
-	//Prints a 4x4x4 matrix in the console
-		public void PrintMatrix(double[][][] M){
-			String[] N={"T","C","A","G"};
-			for (int a=0;a<4;a++){
-				for (int b=0;b<4;b++){
-					System.out.println(N[a]+N[b]+N[0]+": "+df.format(M[a][b][0])+" "+N[a]+N[b]+N[1]+": "+df.format(M[a][b][1])+" "+N[a]+N[b]+N[2]+": "+df.format(M[a][b][2])+" "+N[a]+N[b]+N[3]+": "+df.format(M[a][b][3])+" ");
-				}
-			}
-		}
+	
 
 	public double[] getBase_aPriori() {
 		return Base_aPriori;
