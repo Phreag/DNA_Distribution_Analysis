@@ -51,14 +51,79 @@ public class MainClass {
 		 * ToDo:
 		 * Nucleotidverteilungen auf Gesamter Sequenz vs Codierende Sequenz: Tabelle 3.2
 		 */
-		
+		//CCDS
+//		List<DNASequence> cDNA=conn.LoadMixedFile();
+//		System.out.println("Size: " +cDNA.size());
+//		SequenceStats_Coding Stat=new SequenceStats_Coding();
+//		for (DNASequence Seq : cDNA){
+//			Stat.ProcessSequence(Seq.getSequenceAsString());
+//		}
+//		Stat.FinalizeResults();
+//		System.out.println("CCDS NA Gewichte");
+//		Stat.PrintMatrix(Stat.getBase_aPriori());
+//		//Chromosom 1
+//		DNASequence Seq1=conn.LoadFastaFile("NC_000001.11");
+//		SequenceStats Stat2=new SequenceStats(Seq1.getSequenceAsString());
+//		System.out.println("Chromosom 1 NA Gewichte");
+//		Stat.PrintMatrix(Stat2.getBase_aPriori());
+		/*Resultat
+		 * CCDS NA Gewichte T: 0.8669436165203899 C: 1.0655803531259607 A: 1.0047852038259497 G: 1.0626908265276998
+		 * Chromosom 1 NA Gewichte T: 1.1670230633493237 C: 0.8339956930420922 A: 1.1640052355203168 G: 0.8349760080882673
+		 */
 		
 		 /*
 		 * Entstehen Statistisch gesehen durch Gewichtungen mehr Stoppcondons?
 		 * Hypothese: Die DNA ist Optimiert dass es schnell zum Abbruch kommt
 		 * Vergleich: Komplette Sequenz vs Codierende Regionen
 		 */
-		
+		//Stoppcodons je Base bei Punktmutation Chromosom 1
+//		DNASequence Seq1=conn.LoadFastaFile("NC_000001.11");
+//		SequenceStats Stat=new SequenceStats(Seq1.getSequenceAsString());
+//		System.out.println("Chromosom 1: Keine Gewichtungen");
+//		ToolMethods.getWeightedCountOfStopCodons();
+//		baseAprioriWeights=Stat.getBase_aPriori();
+//		tripletAprioriWeights=Stat.getTriplet_aPriori();
+//		setWeightings(true,false,false,false,false);
+//		System.out.println("Chromosom 1: NA");
+//		ToolMethods.getWeightedCountOfStopCodons();
+//		setWeightings(false,true,false,false,false);
+//		System.out.println("Chromosom 1: TA");
+//		ToolMethods.getWeightedCountOfStopCodons();
+//		setWeightings(true,true,false,false,false);
+//		System.out.println("Chromosom 1: NA+TA");
+//		ToolMethods.getWeightedCountOfStopCodons();
+		/*
+		 * Chromosom 1: Keine Gewichtungen
+		 * Pos1: 9,0000 Pos2: 7,0000 Pos3: 7,0000
+		 * Chromosom 1: NA
+		 * Pos1: 8,4989 Pos2: 6,8380 Pos3: 6,8380
+		 * Chromosom 1: TA
+		 * Pos1: 11,2169 Pos2: 7,3554 Pos3: 7,6613
+		 * Chromosom 1: NA+TA
+		 * Pos1: 11,0398 Pos2: 7,3938 Pos3: 7,6449
+
+		 */
+		//Stoppcodons je Base bei Punktmutation CCDS
+		List<DNASequence> cDNA=conn.LoadMixedFile();
+		System.out.println("Size: " +cDNA.size());
+		SequenceStats_Coding Stat=new SequenceStats_Coding();
+		for (DNASequence Seq : cDNA){
+			Stat.ProcessSequence(Seq.getSequenceAsString());
+		}
+		Stat.FinalizeResults();
+		System.out.println("CCDS: Keine Gewichtungen");
+		ToolMethods.getWeightedCountOfStopCodons();
+		baseAprioriWeights=Stat.getBase_aPriori();
+		tripletAprioriWeights=Stat.getTriplet_aPriori();
+		setWeightings(true,false,false,false,false);
+		System.out.println("CCDS: NA");
+		ToolMethods.getWeightedCountOfStopCodons();
+		setWeightings(false,true,false,false,false);
+		System.out.println("CCDS: TA");
+		ToolMethods.getWeightedCountOfStopCodons();
+		setWeightings(true,true,false,false,false);
+		System.out.println("CCDS: NA+TA");
+		ToolMethods.getWeightedCountOfStopCodons();
 		 /* Vergleich: TT Gewichtung Nat. Code vs Random Set
 		 * Bei Shiftmutation. Keine Gewichtung: 267 besser
 		 * TT komplette Sequenz: 28 besser
@@ -71,27 +136,27 @@ public class MainClass {
 		 /* WMS0 Vergleich abhängig von Transition/Transversion Bias, Tabelle 3.12
 		 */
 		//Analysis of Coding Sequences in Reading frame
-		List<DNASequence> cDNA=conn.LoadMixedFile();
-		System.out.println("Size: " +cDNA.size());
-		SequenceStats_Coding Stat=new SequenceStats_Coding();
-		for (DNASequence Seq : cDNA){
-			Stat.ProcessSequence(Seq.getSequenceAsString());
-		}
-		Stat.FinalizeResults();
-		
-		CodePermutation P=new CodePermutation();
-		P.loadDefaultcodeSet();
-		new CodeEvaluation(P.calculateValues()).countBetterCodes();
-		baseAprioriWeights=Stat.getBase_aPriori();
-		tripletAprioriWeights=Stat.getTriplet_aPriori();
-		baseTransitionWeights=Stat.getBaseTransition();
-    	tripletTransitionWeights=Stat.getTripletTransition();
- 		nonsenseMutationWeights=Stat.getNonsenseMutationWeights();
- 		NonsenseMutationFactor=100.0;
- 		setWeightings(false,false,false,false,true);
- 		P=new CodePermutation();
-		P.loadDefaultcodeSet();
-		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+//		List<DNASequence> cDNA=conn.LoadMixedFile();
+//		System.out.println("Size: " +cDNA.size());
+//		SequenceStats_Coding Stat=new SequenceStats_Coding();
+//		for (DNASequence Seq : cDNA){
+//			Stat.ProcessSequence(Seq.getSequenceAsString());
+//		}
+//		Stat.FinalizeResults();
+//		
+//		CodePermutation P=new CodePermutation();
+//		P.loadDefaultcodeSet();
+//		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+//		baseAprioriWeights=Stat.getBase_aPriori();
+//		tripletAprioriWeights=Stat.getTriplet_aPriori();
+//		baseTransitionWeights=Stat.getBaseTransition();
+//    	tripletTransitionWeights=Stat.getTripletTransition();
+// 		nonsenseMutationWeights=Stat.getNonsenseMutationWeights();
+// 		NonsenseMutationFactor=100.0;
+// 		setWeightings(false,false,false,false,true);
+// 		P=new CodePermutation();
+//		P.loadDefaultcodeSet();
+//		new CodeEvaluation(P.calculateValues()).countBetterCodes();
 		
 //		CodePermutation P=new CodePermutation();
 //		P.loadDefaultcodeSet();
