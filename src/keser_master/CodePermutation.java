@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.aparapi.Kernel;
-import com.aparapi.Range;
 
 import Objects.GeneCode;
 

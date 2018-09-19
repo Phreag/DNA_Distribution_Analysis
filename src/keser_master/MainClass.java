@@ -184,12 +184,6 @@ public class MainClass {
 //		P.loadDefaultcodeSet();
 //		new CodeEvaluation(P.calculateValues()).countBetterCodes();
 		
-		/*
-		 * Berechnung mit Aparapi auf GPU durchführen - Testcode
-		 */
-		CodePermutation P=new CodePermutation();
-		P.loadDefaultcodeSet();
-		P.calculateValuesGPU();
 		
 		
 		 /* WMS0 Vergleich abhängig von Transition/Transversion Bias, Tabelle 3.12
