@@ -19,15 +19,15 @@ import org.biojava.nbio.core.sequence.io.FastaReaderHelper;
 public class GenBankConnection {
 	
 	public List<DNASequence> LoadMixedFileReadingframe() {
-		File f=new File("data/HomoSapiens_CodingSequences.fasta");
+		File f=new File("data/HomoSapiens_CCDS_Klaucke.fasta");
 		System.out.println("Loading file Mixed.fasta to memory ("+(f.length()/1024)+" KB)...");
 		try{
-			LinkedHashMap<String, DNASequence> a = FastaReaderHelper.readFastaDNASequence(new File("data/HomoSapiens_CodingSequences.fasta"));
+			LinkedHashMap<String, DNASequence> a = FastaReaderHelper.readFastaDNASequence(new File("data/HomoSapiens_CCDS_Klaucke.fasta"));
 			List<DNASequence> Result = new ArrayList<DNASequence>();
 			FileWriter fw = new FileWriter(new File("data/SequenceDataUse.log"), true);
 			fw.write("\r\n \r\n Results calculated on " + new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date())
 					+ ":" + "\r\n");
-			fw.write("Loaded Sequence filename: data/HomoSapiens_CodingSequences.fasta\r\n");
+			fw.write("Loaded Sequence filename: data/HomoSapiens_CCDS_Klaucke.fasta\r\n");
 			fw.write("Usable Sequences:");
 
 			int loadedCount = 0;
