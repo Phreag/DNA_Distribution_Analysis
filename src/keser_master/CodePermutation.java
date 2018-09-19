@@ -18,6 +18,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.aparapi.Kernel;
+import com.aparapi.Range;
+
 import Objects.GeneCode;
 
 public class CodePermutation {
@@ -28,6 +31,7 @@ public class CodePermutation {
 	private double[][] ValueBuffer;
 	private int[] progress;
 	private List<String> CodeBuffer;
+	private String[][] CodeBufferArray;
 	private int nextValue;
 	private FileWriter codes;
 	private FileWriter values;
