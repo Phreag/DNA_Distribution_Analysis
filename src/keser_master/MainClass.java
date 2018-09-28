@@ -131,60 +131,59 @@ public class MainClass {
 		 */
 		
 		 /* Tabelle 3.11 reproduzieren
-		 */
-//		List<DNASequence> cDNA=conn.LoadMixedFileReadingframe();
-//		System.out.println("Size: " +cDNA.size());
-//		SequenceStats_Coding Stat=new SequenceStats_Coding();
-//		for (DNASequence Seq : cDNA){
-//			Stat.ProcessSequence(Seq.getSequenceAsString());
-//		}
-//		Stat.FinalizeResults();
-//		DNASequence Seq1=conn.LoadFastaFile("NC_000001.11");
-//		SequenceStats Stat=new SequenceStats(Seq1.getSequenceAsString());
-//		baseAprioriWeights=Stat.getBase_aPriori();
-//		tripletAprioriWeights=Stat.getTriplet_aPriori();
-//		tripletTransitionWeights=Stat.getTripletTransition();
-//		
-//		CodePermutation P=new CodePermutation();
-//		P.loadDefaultcodeSet();
-//		new CodeEvaluation(P.calculateValues()).countBetterCodes();
-//		
-//		setWeightings(true, false, false, false, false);
-//		P=new CodePermutation();
-//		P.loadDefaultcodeSet();
-//		new CodeEvaluation(P.calculateValues()).countBetterCodes();
-//		
-//		setWeightings(false, true, false, false, false);
-//		P=new CodePermutation();
-//		P.loadDefaultcodeSet();
-//		new CodeEvaluation(P.calculateValues()).countBetterCodes();
-//		
-//		setWeightings(false, false, false, true, false);
-//		P=new CodePermutation();
-//		P.loadDefaultcodeSet();
-//		new CodeEvaluation(P.calculateValues()).countBetterCodes();
-//		
-//		setWeightings(true, true, false, false, false);
-//		P=new CodePermutation();
-//		P.loadDefaultcodeSet();
-//		new CodeEvaluation(P.calculateValues()).countBetterCodes();
-//		
-//		setWeightings(true, false, false, true, false);
-//		P=new CodePermutation();
-//		P.loadDefaultcodeSet();
-//		new CodeEvaluation(P.calculateValues()).countBetterCodes();
-//		
-//		setWeightings(false, true, false, true, false);
-//		P=new CodePermutation();
-//		P.loadDefaultcodeSet();
-//		new CodeEvaluation(P.calculateValues()).countBetterCodes();
-//		
-//		setWeightings(true, true, false, true, false);
-//		P=new CodePermutation();
-//		P.loadDefaultcodeSet();
-//		new CodeEvaluation(P.calculateValues()).countBetterCodes();
-		
-		
+		 */ 
+/*		List<DNASequence> cDNA=conn.LoadMixedFileReadingframe();
+		System.out.println("Size: " +cDNA.size());
+		SequenceStats_Coding Stat=new SequenceStats_Coding();
+		for (DNASequence Seq : cDNA){
+			Stat.ProcessSequence(Seq.getSequenceAsString());
+		}
+		Stat.FinalizeResults();*/
+		DNASequence Seq1=conn.LoadFastaFile("NC_000001.11");
+		SequenceStats Stat=new SequenceStats(Seq1.getSequenceAsString());
+		baseAprioriWeights=Stat.getBase_aPriori();
+		tripletAprioriWeights=Stat.getTriplet_aPriori();
+		tripletTransitionWeights=Stat.getTripletTransition();
+
+		CodePermutation P=new CodePermutation();
+		P.loadDefaultcodeSet();
+		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+
+		setWeightings(true, false, false, false, false);
+		P=new CodePermutation();
+		P.loadDefaultcodeSet();
+		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+
+		setWeightings(false, true, false, false, false);
+		P=new CodePermutation();
+		P.loadDefaultcodeSet();
+		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+
+		setWeightings(false, false, false, true, false);
+		P=new CodePermutation();
+		P.loadDefaultcodeSet();
+		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+
+		setWeightings(true, true, false, false, false);
+		P=new CodePermutation();
+		P.loadDefaultcodeSet();
+		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+
+		setWeightings(true, false, false, true, false);
+		P=new CodePermutation();
+		P.loadDefaultcodeSet();
+		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+
+		setWeightings(false, true, false, true, false);
+		P=new CodePermutation();
+		P.loadDefaultcodeSet();
+		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+
+		setWeightings(true, true, false, true, false);
+		P=new CodePermutation();
+		P.loadDefaultcodeSet();
+		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+
 		
 		 /* WMS0 Vergleich abhängig von Transition/Transversion Bias, Tabelle 3.12
 		 */
