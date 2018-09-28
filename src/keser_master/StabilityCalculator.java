@@ -50,10 +50,13 @@ public class StabilityCalculator {
 			tripletTransitionWeights=MainClass.tripletTransitionWeights;
 		}
 	}
+
+
 	//Changes the Code used for Calculations
 	public void ChangeCode(String[] Mapping){
 		Code.changeCode(Mapping);
 	}
+
 	//Returns Deviations calculated with all current set Parameters
 	//Only for single base Mutations
 	//1=MS1

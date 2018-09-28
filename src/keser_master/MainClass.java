@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -130,60 +131,148 @@ public class MainClass {
 		
 		 /* Tabelle 3.11 reproduzieren
 		 */
-/*		List<DNASequence> cDNA=conn.LoadMixedFileReadingframe();
+/*		List<DNASequence> cDNA=conn.LoadMixedFileReadingframe("Escherichia_coli.HUSEC2011CHR1.cdna.all.fasta");
 		System.out.println("Size: " +cDNA.size());
 		SequenceStats_Coding Stat=new SequenceStats_Coding();
 		for (DNASequence Seq : cDNA){
 			Stat.ProcessSequence(Seq.getSequenceAsString());
 		}
-		Stat.FinalizeResults();*/
-		DNASequence Seq1=conn.LoadFastaFile("NC_000001.11");
-		SequenceStats Stat=new SequenceStats(Seq1.getSequenceAsString());
-		baseAprioriWeights=Stat.getBase_aPriori();
-		tripletAprioriWeights=Stat.getTriplet_aPriori();
-		tripletTransitionWeights=Stat.getTripletTransition();
+		Stat.FinalizeResults();
+        baseAprioriWeights=Stat.getBase_aPriori();
+        tripletAprioriWeights=Stat.getTriplet_aPriori();
+        tripletTransitionWeights=Stat.getTripletTransition();
+		String T="Tabelle 3.11 Reproduktion: Escherichia_coli.HUSEC2011CHR1.cdna.all.fasta";
 
 		CodePermutation P=new CodePermutation();
 		P.loadDefaultcodeSet();
-		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+		new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
 
 		setWeightings(true, false, false, false);
 		P=new CodePermutation();
 		P.loadDefaultcodeSet();
-		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+		new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
 
 		setWeightings(false, true, false, false);
 		P=new CodePermutation();
 		P.loadDefaultcodeSet();
-		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+		new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
 
 		setWeightings(false, false, false, true);
 		P=new CodePermutation();
 		P.loadDefaultcodeSet();
-		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+		new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
 
 		setWeightings(true, true, false, false);
 		P=new CodePermutation();
 		P.loadDefaultcodeSet();
-		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+		new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
 
 		setWeightings(true, false, false, true);
 		P=new CodePermutation();
 		P.loadDefaultcodeSet();
-		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+		new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
 
 		setWeightings(false, true, false, true);
 		P=new CodePermutation();
 		P.loadDefaultcodeSet();
-		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+		new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
 
 		setWeightings(true, true, false, true);
 		P=new CodePermutation();
 		P.loadDefaultcodeSet();
-		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+		new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
 
-		
-		 /* WMS0 Vergleich abhängig von Transition/Transversion Bias, Tabelle 3.12
+
+		DNASequence Seq1=conn.LoadFastaFile("Escherichia_coli.HUSEC2011CHR1.dna.chromosome.Chromosome");
+		SequenceStats Stat2=new SequenceStats(Seq1.getSequenceAsString());
+		baseAprioriWeights=Stat2.getBase_aPriori();
+		tripletAprioriWeights=Stat2.getTriplet_aPriori();
+		tripletTransitionWeights=Stat2.getTripletTransition();
+		T="Tabelle 3.11 Reproduktion: Escherichia_coli.HUSEC2011CHR1.dna.chromosome.Chromosome";
+
+        setWeightings(false, false, false, false);
+		P=new CodePermutation();
+		P.loadDefaultcodeSet();
+		new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
+
+		setWeightings(true, false, false, false);
+		P=new CodePermutation();
+		P.loadDefaultcodeSet();
+		new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
+
+		setWeightings(false, true, false, false);
+		P=new CodePermutation();
+		P.loadDefaultcodeSet();
+		new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
+
+		setWeightings(false, false, false, true);
+		P=new CodePermutation();
+		P.loadDefaultcodeSet();
+		new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
+
+		setWeightings(true, true, false, false);
+		P=new CodePermutation();
+		P.loadDefaultcodeSet();
+		new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
+
+		setWeightings(true, false, false, true);
+		P=new CodePermutation();
+		P.loadDefaultcodeSet();
+		new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
+
+		setWeightings(false, true, false, true);
+		P=new CodePermutation();
+		P.loadDefaultcodeSet();
+		new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
+
+		setWeightings(true, true, false, true);
+		P=new CodePermutation();
+		P.loadDefaultcodeSet();
+		new CodeEvaluation(P.calculateValues()).countBetterCodes(T);*/
+
+		//Gewichtung der Mutationen bei denen Stopcodons entstehen können in Codierenden Sequenzen und in nicht Codierenden Sequenzen
+
+		List<DNASequence> cDNA=conn.LoadMixedFileReadingframe("HomoSapiens_CCDS_Klaucke.fasta");
+		System.out.println("Size: " +cDNA.size());
+		SequenceStats_Coding Stat=new SequenceStats_Coding();
+		for (DNASequence Seq : cDNA){
+			Stat.ProcessSequence(Seq.getSequenceAsString());
+		}
+		Stat.FinalizeResults();
+		baseAprioriWeights=Stat.getBase_aPriori();
+		tripletAprioriWeights=Stat.getTriplet_aPriori();
+		baseTransitionWeights=Stat.getBaseTransition();
+		tripletTransitionWeights=Stat.getTripletTransition();
+
+		setWeightings(false,false,false,false);
+		System.out.println("Unweighted Number of Possible Nonsense Mutations SNP: "+ Arrays.toString(ToolMethods.getWeightedCountOfStopCodons_SNP()));
+		System.out.println("Unweighted Number of Possible Nonsense Mutations Shift: "+ Arrays.toString(ToolMethods.getWeightedCountOfStopCodons_Shift()));
+		System.out.println("Sum: "+ToolMethods.getWeightedStopCodonFrequency_Overall());
+		setWeightings(true,true,true,true);
+
+		System.out.println("Weighted Number of Possible Nonsense Mutations SNP: "+ Arrays.toString(ToolMethods.getWeightedCountOfStopCodons_SNP()));
+		System.out.println("Weighted Number of Possible Nonsense Mutations Shift: "+ Arrays.toString(ToolMethods.getWeightedCountOfStopCodons_Shift()));
+		System.out.println("Sum: "+ToolMethods.getWeightedStopCodonFrequency_Overall());
+
+		DNASequence Seq1=conn.LoadFastaFile("NC_000001.11");
+		SequenceStats Stat2=new SequenceStats(Seq1.getSequenceAsString());
+		baseAprioriWeights=Stat2.getBase_aPriori();
+		tripletAprioriWeights=Stat2.getTriplet_aPriori();
+		baseTransitionWeights=Stat2.getBaseTransition();
+		tripletTransitionWeights=Stat2.getTripletTransition();
+
+		setWeightings(false,false,false,false);
+		System.out.println("Unweighted Number of Possible Nonsense Mutations SNP: "+ Arrays.toString(ToolMethods.getWeightedCountOfStopCodons_SNP()));
+		System.out.println("Unweighted Number of Possible Nonsense Mutations Shift: "+ Arrays.toString(ToolMethods.getWeightedCountOfStopCodons_Shift()));
+		System.out.println("Sum: "+ToolMethods.getWeightedStopCodonFrequency_Overall());
+
+		setWeightings(true,true,true,true);
+
+		System.out.println("Weighted Number of Possible Nonsense Mutations SNP: "+ Arrays.toString(ToolMethods.getWeightedCountOfStopCodons_SNP()));
+		System.out.println("Weighted Number of Possible Nonsense Mutations Shift: "+ Arrays.toString(ToolMethods.getWeightedCountOfStopCodons_Shift()));
+		System.out.println("Sum: "+ToolMethods.getWeightedStopCodonFrequency_Overall());
+
+		 /*ToDo: WMS0 Vergleich abhängig von Transition/Transversion Bias, Tabelle 3.12
 		 */
 		//Analysis of Coding Sequences in Reading frame
 //		List<DNASequence> cDNA=conn.LoadMixedFile();

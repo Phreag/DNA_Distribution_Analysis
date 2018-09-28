@@ -6,7 +6,7 @@ public class ToolMethods {
 	static DecimalFormat df = new DecimalFormat("0.0000"); 
 	private static String[]Bases={"T","C","A","G"};
 	
-	public static double[] getWeightedCountOfStopCodons(){
+	public static double[] getWeightedCountOfStopCodons_SNP(){
 		double[] sum= new double[3];
 		for(int a=0;a<4;a++){
 			for(int b=0;b<4;b++){
@@ -21,7 +21,7 @@ public class ToolMethods {
 							if (pos==0){
 								NewCodon=Bases[x]+Bases[b]+Bases[c];
 								basePrev=a;
-							}else if (pos==2){
+							}else if (pos==1){
 								NewCodon=Bases[a]+Bases[x]+Bases[c];
 								basePrev=b;
 							}else{
@@ -43,9 +43,60 @@ public class ToolMethods {
 				}
 			}
 		}
-		System.out.println("Pos1: "+df.format(sum[0])+" Pos2: "+df.format(sum[1])+" Pos3: "+df.format(sum[2]));
 		return sum;
 	}
+	public static double[] getWeightedCountOfStopCodons_Shift(){
+		double[] sum= new double[2];
+		for(int a=0;a<4;a++){
+			for(int b=0;b<4;b++){
+				for(int c=0;c<4;c++){
+
+					String Pattern=Bases[a]+Bases[b]+Bases[c];
+					if (Pattern.equalsIgnoreCase("TAA")||Pattern.equalsIgnoreCase("TAG")||Pattern.equalsIgnoreCase("TGA"))continue;
+					for(int x=0;x<4;x++){
+
+
+						for (int dir=0;dir<2;dir++){
+							String NewCodon= "";
+							int basePrev;
+							if (dir==0){
+								NewCodon=Bases[x]+Bases[a]+Bases[b];
+							}else{
+								NewCodon=Bases[b]+Bases[c]+Bases[x];
+							}
+							//No Stopcodon
+							if (!NewCodon.equalsIgnoreCase("TAA") && !NewCodon.equalsIgnoreCase("TAG") && !NewCodon.equalsIgnoreCase("TGA"))continue;
+							double count = 1;
+							if (MainClass.baseTransitionEnabled){
+								if (dir == 0){
+									count = count * MainClass.baseTransitionWeights[x][a];
+								}else{
+									count = count * MainClass.baseTransitionWeights[c][x];
+								}
+							}
+							if (MainClass.tripletTransitionEnabled){
+								if (dir == 0){
+									count = count * MainClass.tripletTransitionWeights[a][b][c][x][0];
+								}else{
+									count = count * MainClass.tripletTransitionWeights[a][b][c][x][1];
+								}
+
+							}
+							sum[dir]=sum[dir]+count;
+						}
+					}
+				}
+			}
+		}
+		return sum;
+	}
+	public static double getWeightedStopCodonFrequency_Overall(){
+		double[] SNP=getWeightedCountOfStopCodons_SNP();
+		double[] Shift= getWeightedCountOfStopCodons_Shift();
+		double total=SNP[0]+SNP[1]+SNP[2]+Shift[0]+Shift[1];
+		return total;
+	}
+
 	//Elementwise Difference between 2 4x4 matrices
 	public static double[][] MatrixDiff(double[][] M1,double[][] M2){
 		double[][]Erg=new double[4][4];

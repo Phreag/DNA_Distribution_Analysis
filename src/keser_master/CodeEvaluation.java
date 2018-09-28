@@ -16,7 +16,7 @@ public class CodeEvaluation {
 	//Counts how many of the code in the current set are better than the first code in the set.
 	//To work properly, the natural code should be the first code.
 	//Needs the generated values matrix.
-	public int[] countBetterCodes(){
+	public int[] countBetterCodes(String Title){
 		System.out.println("Evaluating Results and counting better codes found...");
 		int[] betterCodes=new int[values[0].length+1];
 		for (int i=0;i<values.length;i++){
@@ -31,16 +31,23 @@ public class CodeEvaluation {
 			}
 			if(isCompleteBetter){
 				betterCodes[betterCodes.length-1]++;
-				System.out.println("Allover Better Code found: "+i);
+				//System.out.println("Allover Better Code found: "+i);
 			}
 		}
 		System.out.println("Number of better codes found:");
 		System.out.println(Arrays.toString(betterCodes)); 
 	    try {
 	    	 FileWriter fw = new FileWriter(new File("data/EvaluationResults.log"), true);
-	    	 fw.write("Results calculated on "+new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date())+":"+"\n");
-	    	 fw.write("   ["+MainClass.baseAprioriEnabled+ ","+ MainClass.tripletAprioriEnabled+ ","+ MainClass.baseTransitionEnabled+ ","+ MainClass.tripletTransitionEnabled+","+MainClass.TransitionTransversionBias+"]"+"\n");
-	    	 fw.write("   "+Arrays.toString(betterCodes)+"\n");
+	    	 fw.write("Better Codes Found on "+new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date())+": ("+ Title +")\n");
+	    	 String Configuration="";
+	    	 if(MainClass.baseAprioriEnabled)Configuration=Configuration+"[NA]";
+	    	 if(MainClass.tripletAprioriEnabled)Configuration=Configuration+"[TA]";
+	    	 if(MainClass.baseTransitionEnabled)Configuration=Configuration+"[NT]";
+			 if(MainClass.tripletTransitionEnabled)Configuration=Configuration+"[TT]";
+			 Configuration = Configuration + "[Bias = "+MainClass.TransitionTransversionBias+"]";
+
+	    	 fw.write("   "+ Configuration +"\n");
+	    	 fw.write("   [MS1,MS2,MS3,MS0,rMS,lMS,fMS,GMS,ImmerBesser] "+Arrays.toString(betterCodes)+"\n");
 	    	 fw.write("\n");
 	    	 fw.close();
 	    } catch (IOException e) {
@@ -49,5 +56,6 @@ public class CodeEvaluation {
 		}
 		return betterCodes;
 	}
+
 
 }
