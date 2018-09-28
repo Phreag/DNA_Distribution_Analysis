@@ -131,7 +131,7 @@ public class MainClass {
 		 */
 		
 		 /* Tabelle 3.11 reproduzieren
-		 */ 
+		 */
 /*		List<DNASequence> cDNA=conn.LoadMixedFileReadingframe();
 		System.out.println("Size: " +cDNA.size());
 		SequenceStats_Coding Stat=new SequenceStats_Coding();
