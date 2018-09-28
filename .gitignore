@@ -1,3 +1,5 @@
 /bin/
 /target/
-/data/*.*
+/data/*.fasta
+/data/*.txt
+/data/*.csv
