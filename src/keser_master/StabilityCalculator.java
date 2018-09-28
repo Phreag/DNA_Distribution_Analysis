@@ -18,10 +18,7 @@ public class StabilityCalculator {
 	
 	private boolean tripletTransitionWeighting=false;
 	private double[][][][][]tripletTransitionWeights;
-	
-	private boolean NonsenseMutationWeighting = false;
-	private double [][][] NonsenseMutationWeights;
-	private double NonsenseMutationFactor=1;
+
 	//TransitionTransversionBias
 	private int Bias=1;
 	/* Deviationmode:
@@ -51,12 +48,6 @@ public class StabilityCalculator {
 		if (MainClass.tripletTransitionEnabled){
 			tripletTransitionWeighting=true;
 			tripletTransitionWeights=MainClass.tripletTransitionWeights;
-		}
-		if (MainClass.nonsenseWeightingEnabled){
-			NonsenseMutationWeighting=true;
-			NonsenseMutationFactor=MainClass.NonsenseMutationFactor;
-			NonsenseMutationWeights=MainClass.nonsenseMutationWeights;
-			System.out.println("NonsenseMutationFactor: "+NonsenseMutationFactor);
 		}
 	}
 	//Changes the Code used for Calculations
@@ -100,11 +91,8 @@ public class StabilityCalculator {
 						}
 						double difference;
 						if (Amino2.length()!=3){ //Filters Stop Codons or Applies NonsenseMutationWeighting
-							if(NonsenseMutationWeighting){
-								difference=NonsenseMutationWeights[i][j][k]*NonsenseMutationFactor;
-							}else{
-								continue;
-							}
+
+							continue;
 							 
 						}else{
 							
@@ -141,31 +129,26 @@ public class StabilityCalculator {
 				}
 			}
 		}
-		if(NonsenseMutationWeighting){
-			//183 Mutations can occur
-			//Bias Factor=61 (?)
-			deviation=deviation/(183+((Bias-1)*61));
-			return deviation;
-		}else{
-			switch (Modus){
-			case 1:
-				//61 codes * 3 = 183 - 9 Codes which can be mutated to a stop codon = 174
-				//58 Mutations of these can be Transition
-				deviation=deviation/(174+((Bias-1)*58));
-				break;
-			case 2:
-				//61 codes * 3 = 183 - 7 Codes which can be mutated to a stop codon = 176
-				//60 Mutations of these can be Transition
-				deviation=deviation/(176+((Bias-1)*60));
-				break;
-			case 3:
-				//61 codes * 3 = 183 - 7 Codes which can be mutated to a stop codon = 176
-				//60 Mutations of these can be Transition
-				deviation=deviation/(176+((Bias-1)*60));
-				break;
-			}
-			return deviation;
+
+		switch (Modus){
+		case 1:
+			//61 codes * 3 = 183 - 9 Codes which can be mutated to a stop codon = 174
+			//58 Mutations of these can be Transition
+			deviation=deviation/(174+((Bias-1)*58));
+			break;
+		case 2:
+			//61 codes * 3 = 183 - 7 Codes which can be mutated to a stop codon = 176
+			//60 Mutations of these can be Transition
+			deviation=deviation/(176+((Bias-1)*60));
+			break;
+		case 3:
+			//61 codes * 3 = 183 - 7 Codes which can be mutated to a stop codon = 176
+			//60 Mutations of these can be Transition
+			deviation=deviation/(176+((Bias-1)*60));
+			break;
 		}
+		return deviation;
+
 		
 	}
 	//returns deviation for Shift Mutations
@@ -199,12 +182,8 @@ public class StabilityCalculator {
 						}
 						double difference;
 						if (Amino2.length()!=3){ //Filters Stop codons or applies NonsenseMutationWeights
-							if (NonsenseMutationWeighting){
-								difference=NonsenseMutationWeights[i][j][k]*NonsenseMutationFactor;
-							}else{
-								continue; 
-							}
-							
+
+							continue;
 						}else{
 							double Polar2=Constants.getPolarReq(Amino2);
 							difference=(Polar1-Polar2)*(Polar1-Polar2);
@@ -241,16 +220,10 @@ public class StabilityCalculator {
 				}
 			}
 		}
-		if (NonsenseMutationWeighting){
-			//244 possible Mutations
-			deviation=deviation/244;
-			return deviation;
-		}else{
-			//244 Possible Mutations - 12 wich can result in a stop codon
-			deviation=deviation/232;
-			return deviation;
-		}
-		
+
+		//244 Possible Mutations - 12 wich can result in a stop codon
+		deviation=deviation/232;
+		return deviation;
 	}
 	
 	//returns true if the Mutation was a Transition

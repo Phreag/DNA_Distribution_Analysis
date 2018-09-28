@@ -39,7 +39,7 @@ public class CodeEvaluation {
 	    try {
 	    	 FileWriter fw = new FileWriter(new File("data/EvaluationResults.log"), true);
 	    	 fw.write("Results calculated on "+new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date())+":"+"\n");
-	    	 fw.write("   ["+MainClass.baseAprioriEnabled+ ","+ MainClass.tripletAprioriEnabled+ ","+ MainClass.baseTransitionEnabled+ ","+ MainClass.tripletTransitionEnabled+","+MainClass.nonsenseWeightingEnabled+","+MainClass.TransitionTransversionBias+"]"+"\n");
+	    	 fw.write("   ["+MainClass.baseAprioriEnabled+ ","+ MainClass.tripletAprioriEnabled+ ","+ MainClass.baseTransitionEnabled+ ","+ MainClass.tripletTransitionEnabled+","+MainClass.TransitionTransversionBias+"]"+"\n");
 	    	 fw.write("   "+Arrays.toString(betterCodes)+"\n");
 	    	 fw.write("\n");
 	    	 fw.close();

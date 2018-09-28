@@ -29,14 +29,12 @@ public class MainClass {
 	static GenBankConnection conn=new GenBankConnection();
 	public static double[] baseAprioriWeights;
 	public static double[][][] tripletAprioriWeights;
-	public static double[][][] nonsenseMutationWeights;
 	public static double[][] baseTransitionWeights;
 	public static double[][][][][]tripletTransitionWeights;
 	public static boolean baseAprioriEnabled=false;
 	public static boolean tripletAprioriEnabled=false;
 	public static boolean baseTransitionEnabled=false;
 	public static boolean tripletTransitionEnabled=false;
-	public static boolean nonsenseWeightingEnabled=false;
 	public static int TransitionTransversionBias=1;
 	//Nonsense Mutation Factor: Sets weight for the Error produced by Nonsense Mutation
 	//as Factor * NumberOfTripletsAfter Sequence
@@ -149,37 +147,37 @@ public class MainClass {
 		P.loadDefaultcodeSet();
 		new CodeEvaluation(P.calculateValues()).countBetterCodes();
 
-		setWeightings(true, false, false, false, false);
+		setWeightings(true, false, false, false);
 		P=new CodePermutation();
 		P.loadDefaultcodeSet();
 		new CodeEvaluation(P.calculateValues()).countBetterCodes();
 
-		setWeightings(false, true, false, false, false);
+		setWeightings(false, true, false, false);
 		P=new CodePermutation();
 		P.loadDefaultcodeSet();
 		new CodeEvaluation(P.calculateValues()).countBetterCodes();
 
-		setWeightings(false, false, false, true, false);
+		setWeightings(false, false, false, true);
 		P=new CodePermutation();
 		P.loadDefaultcodeSet();
 		new CodeEvaluation(P.calculateValues()).countBetterCodes();
 
-		setWeightings(true, true, false, false, false);
+		setWeightings(true, true, false, false);
 		P=new CodePermutation();
 		P.loadDefaultcodeSet();
 		new CodeEvaluation(P.calculateValues()).countBetterCodes();
 
-		setWeightings(true, false, false, true, false);
+		setWeightings(true, false, false, true);
 		P=new CodePermutation();
 		P.loadDefaultcodeSet();
 		new CodeEvaluation(P.calculateValues()).countBetterCodes();
 
-		setWeightings(false, true, false, true, false);
+		setWeightings(false, true, false, true);
 		P=new CodePermutation();
 		P.loadDefaultcodeSet();
 		new CodeEvaluation(P.calculateValues()).countBetterCodes();
 
-		setWeightings(true, true, false, true, false);
+		setWeightings(true, true, false, true);
 		P=new CodePermutation();
 		P.loadDefaultcodeSet();
 		new CodeEvaluation(P.calculateValues()).countBetterCodes();
@@ -300,11 +298,10 @@ public class MainClass {
 
 	}
 	//Set Weightings here to enable or disable them globally
-	private static void setWeightings(boolean ba, boolean ta, boolean bt, boolean tt, boolean nm){
+	private static void setWeightings(boolean ba, boolean ta, boolean bt, boolean tt){
 		baseAprioriEnabled=ba;
 		tripletAprioriEnabled=ta;
 		baseTransitionEnabled=bt;
 		tripletTransitionEnabled=tt;
-		nonsenseWeightingEnabled=nm;
 	}
 }
