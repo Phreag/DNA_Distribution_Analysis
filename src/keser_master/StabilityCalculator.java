@@ -87,24 +87,27 @@ public class StabilityCalculator {
 				String b=Bases[j];
 				for (int k=0;k<4;k++){
 					String c=Bases[k];
-					String Amino=Code.getAminoAcid(a+b+c);
+					String codon1=a+b+c;
+					String Amino=Code.getAminoAcid(codon1);
 					if (Amino.length()!=3)continue; //Filters Stop Codons
 					double Polar1=Constants.getPolarReq(Amino);
 					Double Diff=0.0;
 					for (int m=0;m<4;m++){
 						String x=Bases[m];
 						String Amino2="";
+						String codon2="";
 						switch (Modus){
 						case 1:
-							Amino2=Code.getAminoAcid(x+b+c);
+						    codon2=x+b+c;
 							break;
 						case 2:
-							Amino2=Code.getAminoAcid(a+x+c);
+                            codon2=a+x+c;
 							break;
 						case 3:
-							Amino2=Code.getAminoAcid(a+b+x);
+						    codon2=a+b+x;
 							break;
 						}
+                        Amino2=Code.getAminoAcid(codon2);
 						double difference;
 						if (Amino2.length()!=3){ //Filters Stop Codons or Applies NonsenseMutationWeighting
 
@@ -140,7 +143,7 @@ public class StabilityCalculator {
 							}
 						}
                         if(printHistogram){
-                            printHiostogramEntry(difference,"SNP_"+Modus);
+                            printHiostogramEntry(difference,"SNP;"+codon1+"-"+codon2+";"+Amino+"-"+Amino2);
                         }
 						Diff+=difference;
 					}
@@ -185,21 +188,24 @@ public class StabilityCalculator {
 				String b=Bases[j];
 				for (int k=0;k<4;k++){
 					String c=Bases[k];
-					String Amino=Code.getAminoAcid(a+b+c);
+					String codon1=a+b+c;
+					String Amino=Code.getAminoAcid(codon1);
 					if (Amino.length()!=3)continue; //Filters Stop Codons as Origin
 					double Polar1=Constants.getPolarReq(Amino);
 					Double Diff=0.0;
 					for (int m=0;m<4;m++){
 						String x=Bases[m];
 						String Amino2="";
+						String codon2="";
 						switch (Modus){
 						case 1:
-							Amino2=Code.getAminoAcid(b+c+x);
+						    codon2=b+c+x;
 							break;
 						case 2:
-							Amino2=Code.getAminoAcid(x+a+b);
+                            codon2=x+a+b;
 							break;
 						}
+                        Amino2=Code.getAminoAcid(codon2);
 						double difference;
 						if (Amino2.length()!=3){ //Filters Stop codons or applies NonsenseMutationWeights
 
@@ -235,7 +241,7 @@ public class StabilityCalculator {
 							}
 						}
 						if(printHistogram){
-						    printHiostogramEntry(difference,"SHIFT_"+Modus);
+                            printHiostogramEntry(difference,"SHIFT;"+codon1+"-"+codon2+";"+Amino+"-"+Amino2);
                         }
 						Diff+=difference;
 					}
@@ -293,9 +299,9 @@ public class StabilityCalculator {
             if(MainClass.baseTransitionEnabled)Configuration=Configuration+"[NT]";
             if(MainClass.tripletTransitionEnabled)Configuration=Configuration+"[TT]";
             if(Configuration.equals(""))Configuration="[NONE]";
-            FileWriter fw = new FileWriter(new File("data/HIST_"+identifier+"_"+Configuration+".csv"), true);
+            FileWriter fw = new FileWriter(new File("data/HIST_Detail_"+Configuration+".csv"), true);
             FileWriter fw2 = new FileWriter(new File("data/HIST_"+Configuration+".csv"), true);
-            fw.write(String.valueOf(MainClass.df.format(value))+"\n");
+            fw.write(String.valueOf(MainClass.df.format(value))+";"+identifier+"\n");
             fw2.write(String.valueOf(MainClass.df.format(value))+"\n");
             fw.close();
             fw2.close();
