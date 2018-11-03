@@ -3,6 +3,13 @@ package keser_master;
 import Objects.Constants;
 import Objects.GeneCode;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+
 public class StabilityCalculator {
 	private GeneCode Code;
 	private String[]Bases={"T","C","A","G"};
@@ -18,6 +25,12 @@ public class StabilityCalculator {
 	
 	private boolean tripletTransitionWeighting=false;
 	private double[][][][][]tripletTransitionWeights;
+
+    private boolean printHistogram;
+
+    public void setPrintHistogram(boolean printHistogram) {
+        this.printHistogram = printHistogram;
+    }
 
 	//TransitionTransversionBias
 	private int Bias=1;
@@ -126,8 +139,12 @@ public class StabilityCalculator {
 								difference=difference*Bias;
 							}
 						}
+                        if(printHistogram){
+                            printHiostogramEntry(difference,"SNP_"+Modus);
+                        }
 						Diff+=difference;
 					}
+
 					deviation=deviation+Diff;
 				}
 			}
@@ -217,6 +234,9 @@ public class StabilityCalculator {
 								break;
 							}
 						}
+						if(printHistogram){
+						    printHiostogramEntry(difference,"SHIFT_"+Modus);
+                        }
 						Diff+=difference;
 					}
 					deviation=deviation+Diff;
@@ -265,4 +285,25 @@ public class StabilityCalculator {
 		lMS=lMS*232;
 		return(MS1+MS2+MS3+rMS+lMS)/(174+176+176+232+232);
 	}
+	private void printHiostogramEntry(double value, String identifier){
+        try {
+            String Configuration="";
+            if(MainClass.baseAprioriEnabled)Configuration=Configuration+"[NA]";
+            if(MainClass.tripletAprioriEnabled)Configuration=Configuration+"[TA]";
+            if(MainClass.baseTransitionEnabled)Configuration=Configuration+"[NT]";
+            if(MainClass.tripletTransitionEnabled)Configuration=Configuration+"[TT]";
+            if(Configuration.equals(""))Configuration="[NONE]";
+            FileWriter fw = new FileWriter(new File("data/HIST_"+identifier+"_"+Configuration+".csv"), true);
+            FileWriter fw2 = new FileWriter(new File("data/HIST_"+Configuration+".csv"), true);
+            fw.write(String.valueOf(MainClass.df.format(value))+"\n");
+            fw2.write(String.valueOf(MainClass.df.format(value))+"\n");
+            fw.close();
+            fw2.close();
+        } catch (IOException e) {
+            System.out.println("Filewriter Error");
+            e.printStackTrace();
+        }
+    }
+
+
 }
