@@ -15,17 +15,19 @@ public class SequenceStats {
 	private double[][][] Triplet_aPriori;
 	private double[][][][][] TripletTransition;
 	private double[][] BaseTransition;
-	
-	public SequenceStats (String Sequence){
+
+	public void processSequence(String Sequence){
 		this.Sequence=Sequence;
-		System.out.println("Calculatinng raw Statistics-Matrix..");
-		calculateRawData();
-		System.out.println("Processing raw Data...");
+		updateData();
+	}
+	public void finalizeResults(){
 		calculateBase_aPriori();
 		calculateTriplet_aPriori();
 		calculateBaseTransition();
 		calculateTripletTransition();
+		System.out.println("Finished Analyzing Coding Sequences");
 	}
+
 	//Calculates NA weightings
 	private void calculateBase_aPriori(){
 		int[] BaseCount=new int[4];
@@ -136,7 +138,7 @@ public class SequenceStats {
 		sumAfter=sumAfter/256;
 		System.out.println("Triplet Transition Average: Front:"+sumFront+" After:"+sumAfter);
 	}
-	private void calculateRawData(){
+	private void updateData(){
 		//Iterate over whole Sequence;
 		for (int i=1;i<Sequence.length()-3;i++){
 			int a=-1;

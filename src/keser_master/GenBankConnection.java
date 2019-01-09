@@ -112,8 +112,8 @@ public class GenBankConnection {
 	}
 	
 	//Allows loading of files containing multiple sequences
-	public List<DNASequence> LoadMixedFile(){
-		File f=new File("data/HomoSapiens_CodingSequences.fasta");
+	public List<DNASequence> LoadMixedFile(String Filename){
+		File f=new File("data/"+Filename);
 		System.out.println("Loading file Mixed.fasta to memory ("+(f.length()/1024)+" KB)...");
 		try{
 			LinkedHashMap<String, DNASequence> a = FastaReaderHelper.readFastaDNASequence(new File("data/HomoSapiens_CodingSequences.fasta"));

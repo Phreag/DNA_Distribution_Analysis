@@ -23,12 +23,12 @@ public class SequenceStats_Coding {
 	public SequenceStats_Coding (){
 		
 	}
-	public void ProcessSequence(String Sequence){
+	public void processSequence(String Sequence){
 		this.Sequence=Sequence;
 		NumberOfTripletts=Sequence.length()/3;
 		updateData();
 	}
-	public void FinalizeResults(){
+	public void finalizeResults(){
 		calculateBase_aPriori();
 		calculateTriplet_aPriori();
 		calculateBaseTransition();

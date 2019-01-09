@@ -330,37 +330,73 @@ public class MainClass {
 
 		//ToDO: Histrgramm der Fehler mit Gewichtungen und ohne auf der Codierenden Sequenz
         //no Weightings
-		GeneCode code = new GeneCode();
-		setWeightings(false,false, false, false);
-		StabilityCalculator calc=new StabilityCalculator(code);
-		calc.setPrintHistogram(true);
-		calc.get_BaseDeviation(1);
-		calc.get_BaseDeviation(2);
-		calc.get_BaseDeviation(3);
-		calc.get_ShiftDeviation(1);
-		calc.get_ShiftDeviation(2);
-		//NA+TA+TT
+//		GeneCode code = new GeneCode();
+//		setWeightings(false,false, false, false);
+//		StabilityCalculator calc=new StabilityCalculator(code);
+//		calc.setPrintHistogram(true);
+//		calc.get_BaseDeviation(1);
+//		calc.get_BaseDeviation(2);
+//		calc.get_BaseDeviation(3);
+//		calc.get_ShiftDeviation(1);
+//		calc.get_ShiftDeviation(2);
+//		//NA+TA+TT
+//		List<DNASequence> cDNA=conn.LoadMixedFileReadingframe("HomoSapiens_CCDS_Klaucke.fasta");
+//		System.out.println("Size: " +cDNA.size());
+//		SequenceStats_Coding Stat=new SequenceStats_Coding();
+//		for (DNASequence Seq : cDNA){
+//			Stat.ProcessSequence(Seq.getSequenceAsString());
+//		}
+//		Stat.FinalizeResults();
+//		baseAprioriWeights=Stat.getBase_aPriori();
+//		baseAprioriWeights=Stat.getBase_aPriori();
+//		tripletAprioriWeights=Stat.getTriplet_aPriori();
+//		baseTransitionWeights=Stat.getBaseTransition();
+//		tripletTransitionWeights=Stat.getTripletTransition();
+//        setWeightings(true,true, false, true);
+//        calc=new StabilityCalculator(code);
+//        calc.setPrintHistogram(true);
+//        calc.get_BaseDeviation(1);
+//        calc.get_BaseDeviation(2);
+//        calc.get_BaseDeviation(3);
+//        calc.get_ShiftDeviation(1);
+//        calc.get_ShiftDeviation(2);
+
+		//ToDO: Messung der durchschnittlichen Länge der Sequenz nach einer Mutation bis zu einem Stoppcodon
+		//Berechnung der Wahrscheinlichkeit nach jedem Triplett ein Stoppcodon zu erhalten
+		//betrachtung der Länge bis maximal 20 Tripletts nach der Mutation
+		//Basis: Triplettübergang zu Triplett (TT)
+//		List<DNASequence> cDNA=conn.LoadMixedFile("HomoSapiens_CCDS_Klaucke.fasta");
+//		System.out.println("Size: " +cDNA.size());
+//		SequenceStats Stat=new SequenceStats();
+//		for (DNASequence Seq : cDNA){
+//			Stat.processSequence(Seq.getSequenceAsString());
+//		}
+//		Stat.finalizeResults();
+
 		List<DNASequence> cDNA=conn.LoadMixedFileReadingframe("HomoSapiens_CCDS_Klaucke.fasta");
 		System.out.println("Size: " +cDNA.size());
 		SequenceStats_Coding Stat=new SequenceStats_Coding();
 		for (DNASequence Seq : cDNA){
-			Stat.ProcessSequence(Seq.getSequenceAsString());
+			Stat.processSequence(Seq.getSequenceAsString());
 		}
-		Stat.FinalizeResults();
-		baseAprioriWeights=Stat.getBase_aPriori();
-		baseAprioriWeights=Stat.getBase_aPriori();
-		tripletAprioriWeights=Stat.getTriplet_aPriori();
-		baseTransitionWeights=Stat.getBaseTransition();
-		tripletTransitionWeights=Stat.getTripletTransition();
-        setWeightings(true,true, false, true);
-        calc=new StabilityCalculator(code);
-        calc.setPrintHistogram(true);
-        calc.get_BaseDeviation(1);
-        calc.get_BaseDeviation(2);
-        calc.get_BaseDeviation(3);
-        calc.get_ShiftDeviation(1);
-        calc.get_ShiftDeviation(2);
+		Stat.finalizeResults();
 
+//		DNASequence Seq1=conn.LoadFastaFile("NC_000001.11");
+//		SequenceStats Stat=new SequenceStats();
+//		Stat.processSequence(Seq1.getSequenceAsString());
+//		Stat.finalizeResults();
+
+		StopCodonCalculator calc = new StopCodonCalculator(new GeneCode(),Stat.getBaseTransition(),Stat.getTriplet_aPriori());
+		System.out.println(calc.getChainLengthAfterMuatation());
+
+
+
+
+	/*	DNASequence Seq1=conn.LoadFastaFile("NC_000001.11");
+		SequenceStats Stat2=new SequenceStats();
+		Stat2.processSequence(Seq1.getSequenceAsString());
+		Stat2.finalizeResults();
+*/
 
 		//###################################################################
 		//###################################################################
