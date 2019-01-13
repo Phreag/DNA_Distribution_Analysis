@@ -1,6 +1,7 @@
 package Objects;
 
 public class GeneCode {
+	public static String[] naturalCode = {"Leu","Pro","His","Gln","Arg","Ile","Met","Thr","Asn","Lys","Ser","Val","Ala","Asp","Glu","Gly","Phe","Tyr","Cys","Trp"};
 	//Each array holds all triplets coding for a specific amino acid.
 	String[]Codes1={"CTT","CTC","CTA","CTG","TTA","TTG"};//Leu
 	String[]Codes2={"CCT","CCC","CCA","CCG"};//Pro
@@ -22,13 +23,11 @@ public class GeneCode {
 	String[]Codes18={"TAT","TAC"};//Tyr
 	String[]Codes19={"TGT","TGC"};//Cys
 	String[]Codes20={"TGG"};//Trp
-	//String[]Codes21={"TAA","TAG","TGA"};//Stops
+	//String[]Codes21={"TAA","TAG","TGA"}; Stopcodons will always be the same
 	String[][]Allcodes={Codes1,Codes2,Codes3,Codes4,Codes5,Codes6,Codes7,Codes8,Codes9,Codes10,Codes11,Codes12,Codes13,Codes14,Codes15,Codes16,Codes17,Codes18,Codes19,Codes20};
 	String[]Mapping;
 	public GeneCode(){
-		//Natural Code
-		String[] Code={"Leu","Pro","His","Gln","Arg","Ile","Met","Thr","Asn","Lys","Ser","Val","Ala","Asp","Glu","Gly","Phe","Tyr","Cys","Trp"};
-		Mapping=Code;
+		Mapping=naturalCode;
 	}
 	public GeneCode(String[]Mapping){
 		//Can be used to instantiate any generated code

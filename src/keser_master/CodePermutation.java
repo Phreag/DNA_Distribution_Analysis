@@ -22,14 +22,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import Objects.GeneCode;
 
 public class CodePermutation {
-	String[] Code={"Leu","Pro","His","Gln","Arg","Ile","Met","Thr","Asn","Lys","Ser","Val","Ala","Asp","Glu","Gly","Phe","Tyr","Cys","Trp"};
+	//Mapping to read Values from Regine
 	String[] RegC={"Phe","Leu","Ile","Met","Val","Ser","Pro","Thr","Ala","Tyr","His","Gln","Asn","Lys","Asp","Glu","Cys","Trp","Arg","Gly"};
 	int[] DiffCode={16,   -1,   3,    3,     7,    5,   -5,    0,    4,    8,    -8, -8,    -4,    -4,   -1,   -1,   2,    2,    -14,   -4};
 	private int CodeCount;
 	private double[][] ValueBuffer;
 	private int[] progress;
 	private List<String> CodeBuffer;
-	private String[][] CodeBufferArray;
 	private int nextValue;
 	private FileWriter codes;
 	private FileWriter values;
@@ -206,9 +205,9 @@ public class CodePermutation {
 			int acid=0;
 			while (found==false){
 				acid=rnd.nextInt(20);
-				if (!(Contains(rCode,Code[acid],i)))found=true;;
+				if (!(Contains(rCode,GeneCode.naturalCode[acid],i)))found=true;;
 			}
-			rCode[i]=Code[acid];
+			rCode[i]=GeneCode.naturalCode[acid];
 		}
 		return rCode;
 	}
@@ -230,7 +229,7 @@ public class CodePermutation {
 			codes=new FileWriter("data/codes.txt");
 			GeneCode g=new GeneCode();
 			//1st is Natural code
-	    	writeCodeLine(Code);
+	    	writeCodeLine(GeneCode.naturalCode);
 	    	
 	    	for (int i=0;i<1000000;i++){
 		    	String[] rCode=getRandomCode();

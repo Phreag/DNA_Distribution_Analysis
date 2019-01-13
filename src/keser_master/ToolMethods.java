@@ -1,9 +1,11 @@
 package keser_master;
 
+import Objects.Constants;
+
 import java.text.DecimalFormat;
 
 public class ToolMethods {
-	static DecimalFormat df = new DecimalFormat("0.0000"); 
+	public static DecimalFormat df = new DecimalFormat("0.0000");
 	private static String[]Bases={"T","C","A","G"};
 	
 	public static double[] getWeightedCountOfStopCodons_SNP(){
@@ -11,9 +13,7 @@ public class ToolMethods {
 		for(int a=0;a<4;a++){
 			for(int b=0;b<4;b++){
 				for(int c=0;c<4;c++){
-					
-					String Pattern=Bases[a]+Bases[b]+Bases[c];
-					if (Pattern.equalsIgnoreCase("TAA")||Pattern.equalsIgnoreCase("TAG")||Pattern.equalsIgnoreCase("TGA"))continue;
+					if(Constants.isStopCodon(a,b,c))continue;
 					for(int x=0;x<4;x++){
 						for (int pos=0;pos<3;pos++){
 							String NewCodon= "";
@@ -28,14 +28,15 @@ public class ToolMethods {
 								NewCodon=Bases[a]+Bases[b]+Bases[x];
 								basePrev=c;
 							}
+
 							//No Stopcodon
-							if (!NewCodon.equalsIgnoreCase("TAA") && !NewCodon.equalsIgnoreCase("TAG") && !NewCodon.equalsIgnoreCase("TGA"))continue;
+							if(Constants.isStopCodon(NewCodon))continue;
 							double count = 1;
-							if (MainClass.baseAprioriEnabled){
-								count = count * MainClass.baseAprioriWeights[basePrev];
+							if (MainClass.nucleotideApriori!=null){
+								count = count * MainClass.nucleotideApriori.getValue(basePrev);
 							}
-							if (MainClass.tripletAprioriEnabled){
-								count = count * MainClass.tripletAprioriWeights[a][b][c];
+							if (MainClass.tripletApriori!=null){
+								count = count * MainClass.tripletApriori.getValue(a,b,c);
 							}
 							sum[pos]=sum[pos]+count;
 						}
@@ -67,18 +68,18 @@ public class ToolMethods {
 							//No Stopcodon
 							if (!NewCodon.equalsIgnoreCase("TAA") && !NewCodon.equalsIgnoreCase("TAG") && !NewCodon.equalsIgnoreCase("TGA"))continue;
 							double count = 1;
-							if (MainClass.baseTransitionEnabled){
+							if (MainClass.nucleotideTransition!=null){
 								if (dir == 0){
-									count = count * MainClass.baseTransitionWeights[x][a];
+									count = count * MainClass.nucleotideTransition.getValue(x,a);
 								}else{
-									count = count * MainClass.baseTransitionWeights[c][x];
+									count = count * MainClass.nucleotideTransition.getValue(c,x);
 								}
 							}
-							if (MainClass.tripletTransitionEnabled){
+							if (MainClass.tripletTransition!=null){
 								if (dir == 0){
-									count = count * MainClass.tripletTransitionWeights[a][b][c][x][0];
+									count = count * MainClass.tripletTransition.getValueLeft(a,b,c,x);
 								}else{
-									count = count * MainClass.tripletTransitionWeights[a][b][c][x][1];
+									count = count * MainClass.tripletTransition.getValueRight(a,b,c,x);
 								}
 
 							}

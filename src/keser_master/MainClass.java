@@ -1,47 +1,22 @@
 package keser_master;
  
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.sql.SQLOutput;
 import java.text.DecimalFormat;
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map.Entry;
-import org.apache.commons.io.FileUtils;
+
 import org.biojava.nbio.core.sequence.DNASequence;
-import org.biojava.nbio.core.sequence.compound.AminoAcidCompound;
-import org.biojava.nbio.core.sequence.compound.AminoAcidCompoundSet;
-import org.biojava.nbio.core.sequence.io.FastaReader;
-import org.biojava.nbio.core.sequence.io.FastaReaderHelper;
-import org.biojava.nbio.core.sequence.io.GenericFastaHeaderParser;
-import org.biojava.nbio.core.sequence.io.ProteinSequenceCreator;
 
 import Objects.*;
 
 public class MainClass {
-	static String[] Code={"Leu","Pro","His","Gln","Arg","Ile","Met","Thr","Asn","Lys","Ser","Val","Ala","Asp","Glu","Gly","Phe","Tyr","Cys","Trp"};
-	static DecimalFormat df = new DecimalFormat("0.0000"); 
 	static GenBankConnection conn=new GenBankConnection();
-	public static double[] baseAprioriWeights;
-	public static double[][][] tripletAprioriWeights;
-	public static double[][] baseTransitionWeights;
-	public static double[][][][][]tripletTransitionWeights;
-	public static boolean baseAprioriEnabled=false;
-	public static boolean tripletAprioriEnabled=false;
-	public static boolean baseTransitionEnabled=false;
-	public static boolean tripletTransitionEnabled=false;
+	public static NucleotideApriori nucleotideApriori;
+	public static NucleotideTransition nucleotideTransition;
+	public static TripletApriori tripletApriori;
+	public static TripletTransition tripletTransition;
 	public static int TransitionTransversionBias=1;
-	//Nonsense Mutation Factor: Sets weight for the Error produced by Nonsense Mutation
-	//as Factor * NumberOfTripletsAfter Sequence
-	public static double NonsenseMutationFactor=1;
-	//This File Should be run with at least 7Gb of Java Heap Space!
+
+
+	//This Program should be run with at least 7Gb of java heap space!
 	public static void main (String[] args){
 		//###################################################################
 		//#########################   DEBUG AREA   ##########################
@@ -375,7 +350,7 @@ public class MainClass {
 
 		List<DNASequence> cDNA=conn.LoadMixedFileReadingframe("HomoSapiens_CCDS_Klaucke.fasta");
 		System.out.println("Size: " +cDNA.size());
-		SequenceStats_Coding Stat=new SequenceStats_Coding();
+		SequenceStatsCalculator Stat=new SequenceStatsCalculator();
 		for (DNASequence Seq : cDNA){
 			Stat.processSequence(Seq.getSequenceAsString());
 		}
@@ -405,21 +380,21 @@ public class MainClass {
 
 	}
 	//Set Weightings here to enable or disable them globally
-	private static void setWeightings(boolean ba, boolean ta, boolean bt, boolean tt){
-		baseAprioriEnabled=ba;
-		tripletAprioriEnabled=ta;
-		baseTransitionEnabled=bt;
-		tripletTransitionEnabled=tt;
+	private static void setWeightings(NucleotideApriori na, TripletApriori ta, NucleotideTransition nt, TripletTransition tt){
+		nucleotideApriori=na;
+		tripletApriori=ta;
+		nucleotideTransition=nt;
+		tripletTransition=tt;
 		String Info="";
-		if(ba)Info="[NA]";
-		if(ta)Info=Info+"[TA]";
-		if(bt)Info=Info+"[NT]";
-		if(tt)Info=Info+"[TT]";
+		if(na!=null)Info="[NA]";
+		if(ta!=null)Info=Info+"[TA]";
+		if(nt!=null)Info=Info+"[NT]";
+		if(tt!=null)Info=Info+"[TT]";
 		if(Info.equals(""))Info="None";
 		System.out.println("Weightings: "+Info);
 	}
 
-	private static void If(boolean ba) {
+	public static String getConfigString(){
+		//todo
 	}
-
 }
