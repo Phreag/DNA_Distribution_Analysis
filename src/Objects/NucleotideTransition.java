@@ -10,4 +10,8 @@ public class NucleotideTransition {
     public double getValue(int a, int b){
         return nucleotideTransition[a][b];
     }
+
+    public double[][] getData(){
+        return nucleotideTransition;
+    }
 }

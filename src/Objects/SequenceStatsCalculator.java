@@ -123,9 +123,17 @@ public class SequenceStatsCalculator {
                     for (int l = 0; l < 4; l++) {
                         for (int m = 0; m < 4; m++) {
                             for (int n = 0; n < 4; n++) {
-                                //if(Constants.isStopCodon(i,j,k))continue;
-                                nucleotideTransitionCount[i][j] += rawData[i][j][k][l][m][n];
-                                overallCount += rawData[i][j][k][l][m][n];
+                                if (readInReadingFrame) {
+                                    //if(Constants.isStopCodon(i,j,k))continue;
+                                    nucleotideTransitionCount[i][j] += rawData[i][j][k][l][m][n];
+                                    nucleotideTransitionCount[j][k] += rawData[i][j][k][l][m][n];
+                                    nucleotideTransitionCount[k][l] += rawData[i][j][k][l][m][n];
+                                    overallCount += rawData[i][j][k][l][m][n]*3;
+                                } else {
+                                    nucleotideTransitionCount[i][j] += rawData[i][j][k][l][m][n];
+                                    overallCount += rawData[i][j][k][l][m][n];
+                                }
+
                             }
                         }
                     }
@@ -136,7 +144,7 @@ public class SequenceStatsCalculator {
         double sum = 0;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                nucleotideTransition[i][j] = ((double) nucleotideTransition[i][j] / (double) overallCount) * 16;
+                nucleotideTransition[i][j] = ((double) nucleotideTransitionCount[i][j] / (double) overallCount) * 16;
                 sum += nucleotideTransition[i][j];
             }
         }

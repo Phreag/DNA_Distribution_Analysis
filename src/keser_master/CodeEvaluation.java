@@ -39,13 +39,7 @@ public class CodeEvaluation {
 	    try {
 	    	 FileWriter fw = new FileWriter(new File("data/EvaluationResults.log"), true);
 	    	 fw.write("Better Codes Found on "+new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date())+": ("+ Title +")\n");
-	    	 String Configuration="";
-	    	 if(MainClass.baseAprioriEnabled)Configuration=Configuration+"[NA]";
-	    	 if(MainClass.tripletAprioriEnabled)Configuration=Configuration+"[TA]";
-	    	 if(MainClass.baseTransitionEnabled)Configuration=Configuration+"[NT]";
-			 if(MainClass.tripletTransitionEnabled)Configuration=Configuration+"[TT]";
-			 Configuration = Configuration + "[Bias = "+MainClass.TransitionTransversionBias+"]";
-
+	    	 String Configuration= MainClass.getConfigString();
 	    	 fw.write("   "+ Configuration +"\n");
 	    	 fw.write("   [MS1,MS2,MS3,MS0,rMS,lMS,fMS,GMS,ImmerBesser] "+Arrays.toString(betterCodes)+"\n");
 	    	 fw.write("\n");

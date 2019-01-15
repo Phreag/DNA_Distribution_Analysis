@@ -78,7 +78,7 @@ public class StabilityCalculator {
                         if (MainClass.tripletApriori != null) {
                             difference = difference * MainClass.tripletApriori.getValue(i, j, k);
                         }
-                        if (MainClass.TransitionTransversionBias != 1) {
+                        if (MainClass.transitionTransversionBias != 1) {
                             String from = "";
                             switch (Modus) {
                                 case 1:
@@ -92,7 +92,7 @@ public class StabilityCalculator {
                                     break;
                             }
                             if (isTransition(from, x)) {
-                                difference = difference * MainClass.TransitionTransversionBias;
+                                difference = difference * MainClass.transitionTransversionBias;
                             }
                         }
                         if (printHistogram) {
@@ -110,17 +110,17 @@ public class StabilityCalculator {
             case 1:
                 //61 codes * 3 = 183 - 9 Codes which can be mutated to a stop codon = 174
                 //58 Mutations of these can be Transition
-                deviation = deviation / (174 + ((MainClass.TransitionTransversionBias - 1) * 58));
+                deviation = deviation / (174 + ((MainClass.transitionTransversionBias - 1) * 58));
                 break;
             case 2:
                 //61 codes * 3 = 183 - 7 Codes which can be mutated to a stop codon = 176
                 //60 Mutations of these can be Transition
-                deviation = deviation / (176 + ((MainClass.TransitionTransversionBias - 1) * 60));
+                deviation = deviation / (176 + ((MainClass.transitionTransversionBias - 1) * 60));
                 break;
             case 3:
                 //61 codes * 3 = 183 - 7 Codes which can be mutated to a stop codon = 176
                 //60 Mutations of these can be Transition
-                deviation = deviation / (176 + ((MainClass.TransitionTransversionBias - 1) * 60));
+                deviation = deviation / (176 + ((MainClass.transitionTransversionBias - 1) * 60));
                 break;
         }
         return deviation;
@@ -249,12 +249,7 @@ public class StabilityCalculator {
 
     private void printHiostogramEntry(double value, String identifier) {
         try {
-            String Configuration = "";
-            if (MainClass.nucleotideTransition != null) Configuration = Configuration + "[NA]";
-            if (MainClass.tripletApriori != null) Configuration = Configuration + "[TA]";
-            if (MainClass.nucleotideTransition != null) Configuration = Configuration + "[NT]";
-            if (MainClass.tripletTransition != null) Configuration = Configuration + "[TT]";
-            if (Configuration.equals("")) Configuration = "[NONE]";
+            String Configuration = MainClass.getConfigString();
             FileWriter fw = new FileWriter(new File("data/HIST_Detail_" + Configuration + ".csv"), true);
             FileWriter fw2 = new FileWriter(new File("data/HIST_" + Configuration + ".csv"), true);
             fw.write(String.valueOf(ToolMethods.df.format(value)) + ";" + identifier + "\n");

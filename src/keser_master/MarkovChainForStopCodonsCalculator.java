@@ -104,11 +104,8 @@ public class MarkovChainForStopCodonsCalculator {
         //0 = weight
         //1 = dist
         for (int i = 0; i < 4; i++) {
-            String x = Constants.Bases[i];
             for (int j = 0; j < 4; j++) {
-                String y = Constants.Bases[j];
                 for (int k = 0; k < 4; k++) {
-                    String z = Constants.Bases[k];
                     int index = k + (4 * j) + (16 * i);
                     //double weight = 1;
                     double weight = getWeight(a,b,c,i,j,k);

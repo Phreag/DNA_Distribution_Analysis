@@ -6,8 +6,8 @@ import java.text.DecimalFormat;
 
 public class ToolMethods {
 	public static DecimalFormat df = new DecimalFormat("0.0000");
-	private static String[]Bases={"T","C","A","G"};
-	
+
+	//calculates a value which determines how often a muatation results in a stop codon for single nucleotide mutations
 	public static double[] getWeightedCountOfStopCodons_SNP(){
 		double[] sum= new double[3];
 		for(int a=0;a<4;a++){
@@ -19,13 +19,13 @@ public class ToolMethods {
 							String NewCodon= "";
 							int basePrev;
 							if (pos==0){
-								NewCodon=Bases[x]+Bases[b]+Bases[c];
+								NewCodon=Constants.Bases[x]+Constants.Bases[b]+Constants.Bases[c];
 								basePrev=a;
 							}else if (pos==1){
-								NewCodon=Bases[a]+Bases[x]+Bases[c];
+								NewCodon=Constants.Bases[a]+Constants.Bases[x]+Constants.Bases[c];
 								basePrev=b;
 							}else{
-								NewCodon=Bases[a]+Bases[b]+Bases[x];
+								NewCodon=Constants.Bases[a]+Constants.Bases[b]+Constants.Bases[x];
 								basePrev=c;
 							}
 
@@ -46,24 +46,23 @@ public class ToolMethods {
 		}
 		return sum;
 	}
+
+	//calculates a value which determines how often a muatation results in a stop codon for frameshift muatations
 	public static double[] getWeightedCountOfStopCodons_Shift(){
 		double[] sum= new double[2];
 		for(int a=0;a<4;a++){
 			for(int b=0;b<4;b++){
 				for(int c=0;c<4;c++){
-
-					String Pattern=Bases[a]+Bases[b]+Bases[c];
+					String Pattern=Constants.Bases[a]+Constants.Bases[b]+Constants.Bases[c];
 					if (Pattern.equalsIgnoreCase("TAA")||Pattern.equalsIgnoreCase("TAG")||Pattern.equalsIgnoreCase("TGA"))continue;
 					for(int x=0;x<4;x++){
-
-
 						for (int dir=0;dir<2;dir++){
 							String NewCodon= "";
 							int basePrev;
 							if (dir==0){
-								NewCodon=Bases[x]+Bases[a]+Bases[b];
+								NewCodon=Constants.Bases[x]+Constants.Bases[a]+Constants.Bases[b];
 							}else{
-								NewCodon=Bases[b]+Bases[c]+Bases[x];
+								NewCodon=Constants.Bases[b]+Constants.Bases[c]+Constants.Bases[x];
 							}
 							//No Stopcodon
 							if (!NewCodon.equalsIgnoreCase("TAA") && !NewCodon.equalsIgnoreCase("TAG") && !NewCodon.equalsIgnoreCase("TGA"))continue;
@@ -95,6 +94,9 @@ public class ToolMethods {
 		double[] SNP=getWeightedCountOfStopCodons_SNP();
 		double[] Shift= getWeightedCountOfStopCodons_Shift();
 		double total=SNP[0]+SNP[1]+SNP[2]+Shift[0]+Shift[1];
+		System.out.println("Gewichtet Anzahl an Stopcodons die bei Muatationen entstehen können :"+df.format(total));
+		System.out.println("SNP: Pos1: "+ df.format(SNP[0])+" Pos2: "+ df.format(SNP[1])+" Pos3: "+ df.format(SNP[0]));
+		System.out.println("Shift: Links: "+ df.format(Shift[0])+" Rechts: "+ df.format(Shift[1]));
 		return total;
 	}
 

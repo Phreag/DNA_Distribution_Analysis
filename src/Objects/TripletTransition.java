@@ -24,6 +24,14 @@ public class TripletTransition {
         return tripletTransitionNucleotide[a][b][c][x][1];
     }
 
+    public double[][][][][] getDataNucleotide(){
+        return tripletTransitionNucleotide;
+    }
+
+    public double[][][][][][] getDataTriplet(){
+        return tripletTransition;
+    }
+
 
 
 }

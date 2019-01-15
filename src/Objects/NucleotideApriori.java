@@ -9,4 +9,8 @@ public class NucleotideApriori {
     public double getValue(int nucleotide){
         return nucleotide_aPriori[nucleotide];
     }
+
+    public double[] getData(){
+        return nucleotide_aPriori;
+    }
 }
