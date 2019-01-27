@@ -79,7 +79,7 @@ public class Constants {
                     return true;
                     //G
                 } else if (c == 3) {
-                    return false;
+                    return true;
                 }
                 //G
             } else if (b == 3) {
@@ -93,7 +93,9 @@ public class Constants {
     }
 
     public static boolean isStopCodon(String codon) {
-        if (codon.equalsIgnoreCase("TAA") || codon.equalsIgnoreCase("TAG") || codon.equalsIgnoreCase("TGA")){
+        if (codon.equalsIgnoreCase("TAA") ||
+                codon.equalsIgnoreCase("TAG") ||
+                codon.equalsIgnoreCase("TGA")){
             return true;
         }
         return false;

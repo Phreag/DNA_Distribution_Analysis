@@ -1,14 +1,18 @@
 package keser_master;
 
 import Objects.Constants;
+import org.biojava.nbio.core.sequence.DNASequence;
+
 import java.text.DecimalFormat;
+import java.util.List;
 
 public class ToolMethods {
 	public static DecimalFormat df = new DecimalFormat("0.0000");
+	public static DecimalFormat df_long = new DecimalFormat("0.0000000");
 
 	//calculates a value which determines how often a muatation results in a stop codon for single nucleotide mutations
 	public static double[] getWeightedCountOfStopCodons_SNP(){
-		double[] sum= new double[3];
+		double[] sum = new double[3];
 		for(int a=0;a<4;a++){
 			for(int b=0;b<4;b++){
 				for(int c=0;c<4;c++){
@@ -27,9 +31,7 @@ public class ToolMethods {
 								NewCodon=Constants.Bases[a]+Constants.Bases[b]+Constants.Bases[x];
 								basePrev=c;
 							}
-
-							//No Stopcodon
-							if(Constants.isStopCodon(NewCodon))continue;
+							if(!Constants.isStopCodon(NewCodon))continue;
 							double count = 1;
 							if (MainClass.nucleotideApriori!=null){
 								count = count * MainClass.nucleotideApriori.getValue(basePrev);
@@ -52,19 +54,16 @@ public class ToolMethods {
 		for(int a=0;a<4;a++){
 			for(int b=0;b<4;b++){
 				for(int c=0;c<4;c++){
-					String Pattern=Constants.Bases[a]+Constants.Bases[b]+Constants.Bases[c];
-					if (Pattern.equalsIgnoreCase("TAA")||Pattern.equalsIgnoreCase("TAG")||Pattern.equalsIgnoreCase("TGA"))continue;
+					if(Constants.isStopCodon(a,b,c))continue;
 					for(int x=0;x<4;x++){
 						for (int dir=0;dir<2;dir++){
-							String NewCodon= "";
-							int basePrev;
+							String NewCodon;
 							if (dir==0){
 								NewCodon=Constants.Bases[x]+Constants.Bases[a]+Constants.Bases[b];
 							}else{
 								NewCodon=Constants.Bases[b]+Constants.Bases[c]+Constants.Bases[x];
 							}
-							//No Stopcodon
-							if (!NewCodon.equalsIgnoreCase("TAA") && !NewCodon.equalsIgnoreCase("TAG") && !NewCodon.equalsIgnoreCase("TGA"))continue;
+							if(!Constants.isStopCodon(NewCodon))continue;
 							double count = 1;
 							if (MainClass.nucleotideTransition!=null){
 								if (dir == 0){
@@ -93,32 +92,31 @@ public class ToolMethods {
 	public static double getWeightedStopCodonFrequency_Overall(){
 		double[] SNP=getWeightedCountOfStopCodons_SNP();
 		double[] Shift= getWeightedCountOfStopCodons_Shift();
-		double total=SNP[0]+SNP[1]+SNP[2]+Shift[0]+Shift[1];
-		System.out.println("Gewichtet Anzahl an Stopcodons die bei Muatationen entstehen können :"+df.format(total));
-		System.out.println("SNP: Pos1: "+ df.format(SNP[0])+" Pos2: "+ df.format(SNP[1])+" Pos3: "+ df.format(SNP[0]));
-		System.out.println("Shift: Links: "+ df.format(Shift[0])+" Rechts: "+ df.format(Shift[1]));
-		return total;
+		return SNP[0]+SNP[1]+SNP[2]+Shift[0]+Shift[1];
 	}
 
 	//calculates the ratio of coding tripletts to stop-tripletts
-	public static double getStopCodonFrequency(String sequence, boolean inReadingFrame, int offset){
+	public static double getStopCodonFrequency(List<DNASequence> sequences, boolean inReadingFrame, int offset){
 		int triplettcount = 0;
 		int stopcodoncount = 0;
-		if(offset!=0){
-			sequence=sequence.substring(offset);
-		}
-		int stepsize = 1;
-		if(inReadingFrame){
-			stepsize=3;
-		}
-
-		//count stopcodons
-		for (int i = 0; i<sequence.length()-3; i = i + stepsize){
-			String codon = sequence.substring(i,i+3);
-			triplettcount++;
-			if(Constants.isStopCodon(codon)){
-				stopcodoncount++;
+		for (DNASequence seq:sequences){
+			String sequence = seq.getSequenceAsString();
+			if(offset!=0){
+				sequence=sequence.substring(offset);
 			}
+			int stepsize = 1;
+			if(inReadingFrame){
+				stepsize=3;
+			}
+			//count stopcodons
+			for (int i = 0; i<sequence.length()-2; i = i + stepsize){
+				String codon = sequence.substring(i,i+3);
+				triplettcount++;
+				if(Constants.isStopCodon(codon)){
+					stopcodoncount++;
+				}
+			}
+
 		}
 		return (double)stopcodoncount/(double)triplettcount;
 	}
