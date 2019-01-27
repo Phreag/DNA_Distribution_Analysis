@@ -1,13 +1,10 @@
 package keser_master;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -20,91 +17,36 @@ public class GenBankConnection {
 	
 	public List<DNASequence> LoadMixedFileReadingframe(String Filename) {
 		File f=new File("data/"+Filename);
-		System.out.println("Loading file Mixed.fasta to memory ("+(f.length()/1024)+" KB)...");
+		System.out.println("Loading file "+Filename+" to memory ("+(f.length()/1024)+" KB)...");
 		try{
-			LinkedHashMap<String, DNASequence> a = FastaReaderHelper.readFastaDNASequence(new File("data/"+Filename));
+			LinkedHashMap<String, DNASequence> a = FastaReaderHelper.readFastaDNASequence(f);
 			List<DNASequence> Result = new ArrayList<DNASequence>();
-			FileWriter fw = new FileWriter(new File("data/SequenceDataUse.log"), true);
-			fw.write("\r\n \r\n Results calculated on " + new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date())
-					+ ":" + "\r\n");
-			fw.write("Loaded Sequence filename: data/"+Filename+"\r\n");
-			fw.write("Usable Sequences:");
-
-			int loadedCount = 0;
-			int mod3=0;
-			int notMod3=0;
-			int notMod3startCodon=0;
-			int startCodonSeq=0;
-			int startAndEndSeq=0;
 			for (Entry<String, DNASequence> entry : a.entrySet()) {
-
-				loadedCount++; // count sequences loaded
-				int length = entry.getValue().getSequenceAsString().length();
-				System.out.println(
-						"Loaded: " + entry.getValue().getOriginalHeader() + " length = " + length + " nucleotides");
+				String seq = entry.getValue().getSequenceAsString();
+				int length = seq.length();
 				// nur Sequencen die mit Start Codon beginnen und mit Stop Codon
 				// enden und den Triplet Raster entsprechen, werden in Result
 				// weiterverarrbeitet
 				if ((length % 3) == 0) { // ist die Sequenz dur 3 teilbar?
-					 mod3++;
-					if (entry.getValue().getSequenceAsString().charAt(0) == 'A'
-							&& entry.getValue().getSequenceAsString().charAt(1) == 'T'
-							&& entry.getValue().getSequenceAsString().charAt(2) == 'G') {
-						startCodonSeq++; // beginnt sie mit einem Startcodon?
-
-//						Anpassung Leseraster Stop Codons in der Sequence zulassen
-						if (entry.getValue().getSequenceAsString().charAt(length - 3) == 'T') {
-							if ((entry.getValue().getSequenceAsString().charAt(length - 2) == 'A')) {
-								if ((entry.getValue().getSequenceAsString().charAt(length - 1) == 'A')
-										|| (entry.getValue().getSequenceAsString().charAt(length - 1) == 'G')) {
-									startAndEndSeq++;
-									fw.write(entry.getValue().getOriginalHeader() + "\r\n");
+					if (seq.charAt(0) == 'A' && seq.charAt(1) == 'T' && seq.charAt(2) == 'G') {
+						//Anpassung Leseraster Stop Codons in der Sequence zulassen
+						if (seq.charAt(length - 3) == 'T') {
+							if ((seq.charAt(length - 2) == 'A')) {
+								if ((seq.charAt(length - 1) == 'A') || (seq.charAt(length - 1) == 'G')) {
 									Result.add(entry.getValue());
 								}
-							} else if (entry.getValue().getSequenceAsString().charAt(length - 2) == 'G'
-									&& entry.getValue().getSequenceAsString().charAt(length - 1) == 'A') {
-								startAndEndSeq++;
-								fw.write(entry.getValue().getOriginalHeader() + "\r\n");
+							} else if (seq.charAt(length - 2) == 'G' && seq.charAt(length - 1) == 'A') {
 								Result.add(entry.getValue());
-
 							}
 						}
-
-					} 
-
-				}
-				if ((length % 3) != 0) {
-					notMod3++;
-					if (entry.getValue().getSequenceAsString().charAt(0) == 'A'
-							&& entry.getValue().getSequenceAsString().charAt(1) == 'T'
-							&& entry.getValue().getSequenceAsString().charAt(2) == 'G') {
-						notMod3startCodon++;
 					}
 				}
 			}
-
-			fw.write("\r\n Loaded Sequence Count        : " + loadedCount);
-			fw.write("\r\n Count not Mod 3 Count : " + notMod3);
-			fw.write("\r\n Count  Sequences with not mod 3 but Start : " + notMod3startCodon);
-			fw.write("\r\n Count  Mod 3 Count : " + mod3);
-			int check = startCodonSeq - startAndEndSeq;
-			int ranStart = mod3 - startCodonSeq;
-			fw.write("\r\n Count  Sequence (mod3) with random Start : " + ranStart);
-			fw.write("\r\n Count  Sequence (mod3) with Start : " + startCodonSeq);
-			fw.write("\r\n Count  Sequence (mod3) with Start but without End : " + check);
-			fw.write("\r\n Count  Sequence (mod3) with Start/End : " + startAndEndSeq);
-			
-			fw.close();
-
 			if (Result.size() == 0) {
 				return null;
 			}
-
 			return Result;
-
 		} catch (Exception e) {
-			System.out.println("ERROR: FASTA-File could not be loaded.");
-			System.out.println(e.getMessage());
 			e.printStackTrace();
 			return null;
 		}
@@ -114,16 +56,14 @@ public class GenBankConnection {
 	//Allows loading of files containing multiple sequences
 	public List<DNASequence> LoadMixedFile(String Filename){
 		File f=new File("data/"+Filename);
-		System.out.println("Loading file Mixed.fasta to memory ("+(f.length()/1024)+" KB)...");
+		System.out.println("Loading file "+Filename+" to memory ("+(f.length()/1024)+" KB)...");
 		try{
-			LinkedHashMap<String, DNASequence> a = FastaReaderHelper.readFastaDNASequence(new File("data/HomoSapiens_CodingSequences.fasta"));
+			LinkedHashMap<String, DNASequence> a = FastaReaderHelper.readFastaDNASequence(f);
 			List<DNASequence> Result=new ArrayList<DNASequence>();
-			int invalid=0;
 			for (  Entry<String, DNASequence> entry : a.entrySet() ) {
 				Result.add (entry.getValue());
 			}
 			if (Result.size()==0)return null;
-			System.out.println("Invalid Sequences: "+invalid);
 			return Result;
 		} catch (Exception e) {
 			System.out.println("ERROR: FASTA-File could not be loaded.");

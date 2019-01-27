@@ -70,7 +70,7 @@ public class MarkovChainForStopCodonsCalculator {
                     String c = Constants.Bases[k];
                     String codon = a + b + c;
                     averageDistanceSums.put(codon, getDistanceToStopCodonRec(0, i, j, k));
-                    System.out.println("Distance " + codon + ": " + ToolMethods.df.format(averageDistanceSums.get(codon)));
+                    //System.out.println("Distance " + codon + ": " + ToolMethods.df.format(averageDistanceSums.get(codon)));
                 }
             }
         }

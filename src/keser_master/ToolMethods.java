@@ -1,7 +1,6 @@
 package keser_master;
 
 import Objects.Constants;
-
 import java.text.DecimalFormat;
 
 public class ToolMethods {
@@ -90,6 +89,7 @@ public class ToolMethods {
 		}
 		return sum;
 	}
+
 	public static double getWeightedStopCodonFrequency_Overall(){
 		double[] SNP=getWeightedCountOfStopCodons_SNP();
 		double[] Shift= getWeightedCountOfStopCodons_Shift();
@@ -98,6 +98,29 @@ public class ToolMethods {
 		System.out.println("SNP: Pos1: "+ df.format(SNP[0])+" Pos2: "+ df.format(SNP[1])+" Pos3: "+ df.format(SNP[0]));
 		System.out.println("Shift: Links: "+ df.format(Shift[0])+" Rechts: "+ df.format(Shift[1]));
 		return total;
+	}
+
+	//calculates the ratio of coding tripletts to stop-tripletts
+	public static double getStopCodonFrequency(String sequence, boolean inReadingFrame, int offset){
+		int triplettcount = 0;
+		int stopcodoncount = 0;
+		if(offset!=0){
+			sequence=sequence.substring(offset);
+		}
+		int stepsize = 1;
+		if(inReadingFrame){
+			stepsize=3;
+		}
+
+		//count stopcodons
+		for (int i = 0; i<sequence.length()-3; i = i + stepsize){
+			String codon = sequence.substring(i,i+3);
+			triplettcount++;
+			if(Constants.isStopCodon(codon)){
+				stopcodoncount++;
+			}
+		}
+		return (double)stopcodoncount/(double)triplettcount;
 	}
 
 	//Elementwise Difference between 2 4x4 matrices
