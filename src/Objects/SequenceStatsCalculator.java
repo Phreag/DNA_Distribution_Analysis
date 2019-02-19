@@ -30,7 +30,7 @@ public class SequenceStatsCalculator {
             this.Sequence = this.Sequence.substring(offset);
         }
 
-        for (int i = 0; i < Sequence.length() - 6; i = i + step) {
+        for (int i = 0; i <= Sequence.length() - 6; i = i + step) {
             int[] nucleotides = {-1, -1, -1, -1, -1, -1};
             int remaining = 6;
             for (int n = 0; n < 6; n++) {
@@ -90,7 +90,6 @@ public class SequenceStatsCalculator {
                     for (int l = 0; l < 4; l++) {
                         for (int m = 0; m < 4; m++) {
                             for (int n = 0; n < 4; n++) {
-                                //if(Constants.isStopCodon(i,j,k))continue;
                                 tripletCount[i][j][k] += rawData[i][j][k][l][m][n];
                                 overallCount += rawData[i][j][k][l][m][n];
                             }
@@ -124,7 +123,6 @@ public class SequenceStatsCalculator {
                         for (int m = 0; m < 4; m++) {
                             for (int n = 0; n < 4; n++) {
                                 if (readInReadingFrame) {
-                                    //if(Constants.isStopCodon(i,j,k))continue;
                                     nucleotideTransitionCount[i][j] += rawData[i][j][k][l][m][n];
                                     nucleotideTransitionCount[j][k] += rawData[i][j][k][l][m][n];
                                     nucleotideTransitionCount[k][l] += rawData[i][j][k][l][m][n];
@@ -133,7 +131,6 @@ public class SequenceStatsCalculator {
                                     nucleotideTransitionCount[i][j] += rawData[i][j][k][l][m][n];
                                     overallCount += rawData[i][j][k][l][m][n];
                                 }
-
                             }
                         }
                     }
@@ -154,8 +151,9 @@ public class SequenceStatsCalculator {
     }
 
     public TripletTransition gettripletTransition() {
+        //sum
         int overallCount = 0;
-        int[][][][][] tripletTransitionNucleotideCount = new int[4][4][4][4][2];
+        double[][][][][] tripletTransitionNucleotide = new double[4][4][4][4][2];
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 for (int k = 0; k < 4; k++) {
@@ -163,18 +161,35 @@ public class SequenceStatsCalculator {
                         for (int m = 0; m < 4; m++) {
                             for (int n = 0; n < 4; n++) {
                                 overallCount += rawData[i][j][k][l][m][n];
-                                tripletTransitionNucleotideCount[i][j][k][l][1] += rawData[i][j][k][l][m][n];
-                                tripletTransitionNucleotideCount[l][m][n][k][0] += rawData[i][j][k][l][m][n];
+                                tripletTransitionNucleotide[i][j][k][l][1] +=  rawData[i][j][k][l][m][n];
+                                tripletTransitionNucleotide[l][m][n][k][0] +=  rawData[i][j][k][l][m][n];
                             }
                         }
                     }
                 }
             }
         }
-        double[][][][][][] tripletTransition = new double[4][4][4][4][4][4];
-        double[][][][][] tripletTransitionNucleotide = new double[4][4][4][4][2];
+        //Nucleotide
         double sumFront = 0;
         double sumAfter = 0;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                for (int k = 0; k < 4; k++) {
+                    for (int l = 0; l < 4; l++) {
+                        tripletTransitionNucleotide[i][j][k][l][1] =  tripletTransitionNucleotide[i][j][k][l][1] * 256 / (double) overallCount ;
+                        tripletTransitionNucleotide[i][j][k][l][0] =  tripletTransitionNucleotide[i][j][k][l][0] * 256 / (double) overallCount;
+                        sumFront += tripletTransitionNucleotide[i][j][k][l][1];
+                        sumAfter += tripletTransitionNucleotide[i][j][k][l][0];
+                    }
+                }
+            }
+        }
+        sumFront=sumFront/256;
+        sumAfter=sumAfter/256;
+        System.out.println("Triplet Transition Average (Nucleotide): Front:"+sumFront+" After:"+sumAfter + " Both: "+ (sumFront+sumAfter)/2);
+
+        //triplett
+        double[][][][][][] tripletTransition = new double[4][4][4][4][4][4];
         double sum = 0;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
@@ -182,12 +197,9 @@ public class SequenceStatsCalculator {
                     for (int l = 0; l < 4; l++) {
                         for (int m = 0; m < 4; m++) {
                             for (int n = 0; n < 4; n++) {
-                                tripletTransition[i][j][k][l][m][n] = (double) rawData[i][j][k][l][m][n] * 4096 / (double) overallCount;
+                                //Triplett
+                                tripletTransition[i][j][k][l][m][n] = (double) rawData[i][j][k][l][m][n] * 4096.0 / (double) overallCount;
                                 sum += tripletTransition[i][j][k][l][m][n];
-                                tripletTransitionNucleotide[i][j][k][l][1] += (double) rawData[i][j][k][l][m][n] * 256 / (double) overallCount;
-                                tripletTransitionNucleotide[l][m][n][k][0] += (double) rawData[i][j][k][l][m][n] * 256 / (double) overallCount;
-                                sumFront += tripletTransitionNucleotide[i][j][k][l][1];
-                                sumAfter += tripletTransitionNucleotide[l][m][n][k][0];
                             }
                         }
                     }
@@ -195,9 +207,6 @@ public class SequenceStatsCalculator {
             }
         }
         sum = sum / 4096;
-        sumFront=sumFront/256;
-        sumAfter=sumAfter/256;
-        System.out.println("Triplet Transition Average (Nucleotide): Front:"+sumFront+" After:"+sumAfter);
         System.out.println("Triplet Transition Average: " + sum);
         return new TripletTransition(tripletTransition, tripletTransitionNucleotide);
     }

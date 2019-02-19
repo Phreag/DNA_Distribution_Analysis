@@ -2,7 +2,6 @@ package keser_master;
 
 import Objects.*;
 
-import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +13,8 @@ public class MarkovChainForStopCodonsCalculator {
     private boolean useNucleotideTransition = true;
     private Map<String, Double> averageDistanceSums = new HashMap<>();
     private Map<String, Double> cachedValues = new HashMap<>();
+    private int maxdepth = 2000;
+    private boolean maxdepth_return_zero = false;
 
     public MarkovChainForStopCodonsCalculator(GeneCode code, TripletTransition tripletTransition, TripletApriori tripletApriori) {
         this.code = code;
@@ -29,7 +30,24 @@ public class MarkovChainForStopCodonsCalculator {
         this.tripletApriori=tripletApriori;
         calculateAverageDistSums();
     }
+    public MarkovChainForStopCodonsCalculator(GeneCode code, NucleotideTransition nucleotideTransition, TripletApriori tripletApriori,int maxdepth, boolean maxdepth_return_zero) {
+        this.code = code;
+        this.nucleotideTransition=nucleotideTransition;
+        this.tripletApriori=tripletApriori;
+        this.maxdepth=maxdepth;
+        this.maxdepth_return_zero=maxdepth_return_zero;
+        calculateAverageDistSums();
+    }
 
+    public MarkovChainForStopCodonsCalculator(GeneCode code, TripletTransition tripletTransition, TripletApriori tripletApriori, int maxdepth, boolean maxdepth_return_zero){
+        this.code = code;
+        this.tripletTransition = tripletTransition;
+        this.tripletApriori = tripletApriori;
+        useNucleotideTransition=false;
+        this.maxdepth=maxdepth;
+        this.maxdepth_return_zero=maxdepth_return_zero;
+        calculateAverageDistSums();
+    }
 
     public double getChainLengthAfterMuatation() {
         double averageDistanceSum = 0;
@@ -57,7 +75,7 @@ public class MarkovChainForStopCodonsCalculator {
             }
         }
         double average = averageDistanceSum / count;
-        System.out.println("Average Distance to Stop Codon: " + ToolMethods.df.format(average));
+        //System.out.println("Average Distance to Stop Codon: " + ToolMethods.df.format(average));
         return average;
     }
 
@@ -90,8 +108,12 @@ public class MarkovChainForStopCodonsCalculator {
 
 
     private double getDistanceToStopCodonRec(int depth, int a, int b, int c) {
-        int maxdepth = 2000;
-        if (depth >= maxdepth) return maxdepth;
+        if (depth >= maxdepth){
+            if(maxdepth_return_zero){
+                return 0;
+            }
+            return maxdepth;
+        }
         String codon = Constants.Bases[a] + Constants.Bases[b] + Constants.Bases[c];
         if (cachedValues.containsKey(codon + "_" + depth)) {
             return cachedValues.get(codon + "_" + depth);

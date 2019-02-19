@@ -1,11 +1,14 @@
 package keser_master;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import Objects.*;
 import org.biojava.nbio.core.sequence.DNASequence;
+
+import javax.sound.midi.Sequence;
 
 public class MainClass {
     public static NucleotideApriori nucleotideApriori;
@@ -40,9 +43,11 @@ public class MainClass {
     public static void main(String[] args) {
         //compareNA_CCDS_CHR1();
         //compareRandomCodesAcrossLifeforms();
-        nonsenseMutationCount();
+        //nonsenseMutationCount();
         //stopCodonMarkovChainV2();
         //countStopCodonsInSequences();
+        stopCodonMarkocChainCompareImpl();
+        //getAverageCCDSSequenceLength();
 
     }
 
@@ -114,13 +119,13 @@ public class MainClass {
         WeightLoop loop = new WeightLoop(stat.getNucleotide_aPriori(), stat.getTriplet_aPriori(), stat.getNucleotideTransition(), stat.gettripletTransition());
         System.out.println("Nonsense Mutation Count on CCDS Homo Sapiens");
         while (loop.moveNext()) {
-            System.out.println("#Nonsense Mutations SNP/Shift [Pos1, Pos2, Pos3][Left, Right]" + Arrays.toString(ToolMethods.getWeightedCountOfStopCodons_SNP())+Arrays.toString(ToolMethods.getWeightedCountOfStopCodons_Shift()));
+            System.out.println("#Nonsense Mutations SNP/Shift [Pos1, Pos2, Pos3][Left, Right]" + Arrays.toString(ToolMethods.getWeightedCountOfStopCodons_SNP()) + Arrays.toString(ToolMethods.getWeightedCountOfStopCodons_Shift()));
             System.out.println("Total sum of stopcodons: " + ToolMethods.getWeightedStopCodonFrequency_Overall());
         }
         WeightLoop loop2 = new WeightLoop(stat2.getNucleotide_aPriori(), stat2.getTriplet_aPriori(), stat2.getNucleotideTransition(), stat2.gettripletTransition());
         System.out.println("Nonsense Mutation Count on Chromosome 1 Homo Sapiens");
         while (loop2.moveNext()) {
-            System.out.println("#Nonsense Mutations SNP/Shift [Pos1, Pos2, Pos3][Left, Right]" + Arrays.toString(ToolMethods.getWeightedCountOfStopCodons_SNP())+Arrays.toString(ToolMethods.getWeightedCountOfStopCodons_Shift()));
+            System.out.println("#Nonsense Mutations SNP/Shift [Pos1, Pos2, Pos3][Left, Right]" + Arrays.toString(ToolMethods.getWeightedCountOfStopCodons_SNP()) + Arrays.toString(ToolMethods.getWeightedCountOfStopCodons_Shift()));
             System.out.println("Total sum of stopcodons: " + ToolMethods.getWeightedStopCodonFrequency_Overall());
         }
     }
@@ -207,18 +212,64 @@ public class MainClass {
         System.out.println("CCDS Ofset 2: " + calcC2.getChainLengthAfterMuatation());
     }
 
-    private static void countStopCodonsInSequences(){
-        DNASequence chr1 = StatProvider.loadSequence("NC_000001.11");
-        List<DNASequence> ccds = StatProvider.loadSequenceMixed("HomoSapiens_CCDS_Klaucke.fasta",true);
-        System.out.println("Chromosome1 Stopcodonfrequency Offset 0: "+ToolMethods.df_long.format(ToolMethods.getStopCodonFrequency(Collections.singletonList(chr1),true,0)));
-        System.out.println("Chromosome1 Stopcodonfrequency Offset 1: "+ToolMethods.df_long.format(ToolMethods.getStopCodonFrequency(Collections.singletonList(chr1),true,1)));
-        System.out.println("Chromosome1 Stopcodonfrequency Offset 2: "+ToolMethods.df_long.format(ToolMethods.getStopCodonFrequency(Collections.singletonList(chr1),true,2)));
-        System.out.println("Chromosome1 Stopcodonfrequency Non Readingframe: "+ToolMethods.df_long.format(ToolMethods.getStopCodonFrequency(Collections.singletonList(chr1),false,0)));
+    private static void stopCodonMarkocChainCompareImpl() {
+        //SequenceStatsCalculator stat0 = StatProvider.loadSequenceStatsMixed("HomoSapiens_CCDS_Klaucke.fasta", true, 0);
+        SequenceStatsCalculator stat0 = StatProvider.loadSequenceStats("NC_000001.11", false, 0);
+        TripletTransition TT = stat0.gettripletTransition();
+        TripletApriori TA = stat0.getTriplet_aPriori();
+        NucleotideTransition NT = stat0.getNucleotideTransition();
+        GeneCode code = new GeneCode();
 
-        System.out.println("CCDS Stopcodonfrequency Offset 0: "+ToolMethods.df_long.format(ToolMethods.getStopCodonFrequency(ccds,true,0)));
-        System.out.println("CCDS Stopcodonfrequency Offset 1: "+ToolMethods.df_long.format(ToolMethods.getStopCodonFrequency(ccds,true,1)));
-        System.out.println("CCDS Stopcodonfrequency Offset 2: "+ToolMethods.df_long.format(ToolMethods.getStopCodonFrequency(ccds,true,2)));
-        System.out.println("CCDS Stopcodonfrequency Non Readingframe: "+ToolMethods.df_long.format(ToolMethods.getStopCodonFrequency(ccds,false,0)));
+        List<Double> distancesRetDepth = new ArrayList<>();
+        List<Double> distancesRetZero = new ArrayList<>();
+
+
+        for (int depth = 0; depth < 200; depth++) {
+            System.out.println("depth = "+depth);
+            MarkovChainForStopCodonsCalculator calcDepth = new MarkovChainForStopCodonsCalculator(code, TT, TA, depth, false);
+            MarkovChainForStopCodonsCalculator calcZero = new MarkovChainForStopCodonsCalculator(code, TT, TA, depth, true);
+            distancesRetDepth.add(calcDepth.getChainLengthAfterMuatation());
+            distancesRetZero.add(calcZero.getChainLengthAfterMuatation());
+        }
+        System.out.println("Distance return depth/zero");
+        for (int depth = 0; depth < 200; depth++) {
+            System.out.println(ToolMethods.df.format(distancesRetDepth.get(depth))+" / " +ToolMethods.df.format(distancesRetZero.get(depth)));
+        }
+    }
+
+    private static void countStopCodonsInSequences() {
+        DNASequence chr1 = StatProvider.loadSequence("NC_000001.11");
+        List<DNASequence> ccds = StatProvider.loadSequenceMixed("HomoSapiens_CCDS_Klaucke.fasta", true);
+        System.out.println("Chromosome1 Stopcodonfrequency Offset 0: " + ToolMethods.df_long.format(ToolMethods.getStopCodonFrequency(Collections.singletonList(chr1), true, 0)));
+        System.out.println("Chromosome1 Stopcodonfrequency Offset 1: " + ToolMethods.df_long.format(ToolMethods.getStopCodonFrequency(Collections.singletonList(chr1), true, 1)));
+        System.out.println("Chromosome1 Stopcodonfrequency Offset 2: " + ToolMethods.df_long.format(ToolMethods.getStopCodonFrequency(Collections.singletonList(chr1), true, 2)));
+        System.out.println("Chromosome1 Stopcodonfrequency Non Readingframe: " + ToolMethods.df_long.format(ToolMethods.getStopCodonFrequency(Collections.singletonList(chr1), false, 0)));
+
+        System.out.println("CCDS Stopcodonfrequency Offset 0: " + ToolMethods.df_long.format(ToolMethods.getStopCodonFrequency(ccds, true, 0)));
+        System.out.println("CCDS Stopcodonfrequency Offset 1: " + ToolMethods.df_long.format(ToolMethods.getStopCodonFrequency(ccds, true, 1)));
+        System.out.println("CCDS Stopcodonfrequency Offset 2: " + ToolMethods.df_long.format(ToolMethods.getStopCodonFrequency(ccds, true, 2)));
+        System.out.println("CCDS Stopcodonfrequency Non Readingframe: " + ToolMethods.df_long.format(ToolMethods.getStopCodonFrequency(ccds, false, 0)));
+    }
+
+    private static void getAverageCCDSSequenceLength(){
+        List<DNASequence> seqList = StatProvider.loadSequenceMixed("HomoSapiens_CCDS_Klaucke.fasta", true);
+        int sum = 0;
+        int count = seqList.size();
+        for (DNASequence Seq : seqList) {
+            String sequence = Seq.getSequenceAsString();
+            int length=sequence.length();
+            for (int i = 0 ; i < length-4; i = i + 3){
+                if(Constants.isStopCodon(sequence.substring(i, i+3))){
+                    System.out.println("Stop at Pos "+i+" / "+length);
+                    count++;
+                }
+            }
+
+            sum += length;
+
+        }
+        System.out.println("Average Sequence Length: "+(double)sum / (double)seqList.size());
+        System.out.println("Average Sequence Length Adjusted: "+(double)sum / (double)count);
     }
 
 
