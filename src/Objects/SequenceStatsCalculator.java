@@ -150,7 +150,7 @@ public class SequenceStatsCalculator {
         return new NucleotideTransition(nucleotideTransition);
     }
 
-    public TripletTransition gettripletTransition() {
+    public TripletTransition getTripletTransition() {
         //sum
         int overallCount = 0;
         double[][][][][] tripletTransitionNucleotide = new double[4][4][4][4][2];

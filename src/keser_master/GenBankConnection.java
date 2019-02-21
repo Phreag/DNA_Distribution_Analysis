@@ -9,6 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import Objects.Constants;
 import org.apache.commons.io.FileUtils;
 import org.biojava.nbio.core.sequence.DNASequence;
 import org.biojava.nbio.core.sequence.io.FastaReaderHelper;
@@ -30,14 +31,8 @@ public class GenBankConnection {
 				if ((length % 3) == 0) { // ist die Sequenz dur 3 teilbar?
 					if (seq.charAt(0) == 'A' && seq.charAt(1) == 'T' && seq.charAt(2) == 'G') {
 						//Anpassung Leseraster Stop Codons in der Sequence zulassen
-						if (seq.charAt(length - 3) == 'T') {
-							if ((seq.charAt(length - 2) == 'A')) {
-								if ((seq.charAt(length - 1) == 'A') || (seq.charAt(length - 1) == 'G')) {
-									Result.add(entry.getValue());
-								}
-							} else if (seq.charAt(length - 2) == 'G' && seq.charAt(length - 1) == 'A') {
-								Result.add(entry.getValue());
-							}
+						if (Constants.isStopCodon(seq.substring(seq.length()-3))){
+							Result.add(entry.getValue());
 						}
 					}
 				}
@@ -94,6 +89,7 @@ public class GenBankConnection {
 					System.out.println("Headerend = "+headerend);
 					String Header=File.substring(0, headerend);
 					String Seq= File.substring(headerend);
+					int lengthOld = Seq.length();
 					Seq=Seq.replaceAll("U", "");
 					Seq=Seq.replaceAll("R", "");
 					Seq=Seq.replaceAll("Y", "");
@@ -107,6 +103,7 @@ public class GenBankConnection {
 					Seq=Seq.replaceAll("V", "");
 					Seq=Seq.replaceAll("N", "");
 					System.out.println("Writing changes to file...");
+					System.out.println("Removed Characters: "+ (lengthOld-Seq.length()));
 					File=Header+Seq;
 					f.delete();
 					f.createNewFile();

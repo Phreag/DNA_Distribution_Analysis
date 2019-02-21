@@ -1,9 +1,10 @@
 package keser_master;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.*;
 
 import Objects.*;
 import org.biojava.nbio.core.sequence.DNASequence;
@@ -39,15 +40,19 @@ public class MainClass {
     }
 
 
-    //This Program should be run with at least 7Gb of java heap space!
+    //This Program should be run with at least 8Gb of java heap space!
+    //Stack trace needs to be increased for stop codon chain length calculation
+    //used Arguments: -Xmx8G -Xss8m
     public static void main(String[] args) {
         //compareNA_CCDS_CHR1();
         //compareRandomCodesAcrossLifeforms();
         //nonsenseMutationCount();
-        //stopCodonMarkovChainV2();
+        stopCodonMarkovChainV2();
         //countStopCodonsInSequences();
-        stopCodonMarkocChainCompareImpl();
+        //stopCodonMarkovChainCompareImpl();
         //getAverageCCDSSequenceLength();
+        //generateRandomChromosome();
+        //getAverageDistToEachCodon();
 
     }
 
@@ -73,7 +78,7 @@ public class MainClass {
         //Tabelle 3.11 reproduzieren. Je 1 mal mit Homo Sapiens, E.Coli und Ciona intestinalis
         SequenceStatsCalculator stat = StatProvider.loadSequenceStatsMixed("Escherichia_coli.HUSEC2011CHR1.cdna.all.fasta", true);
         String T = "Tabelle 3.11 Reproduktion: Escherichia_coli.HUSEC2011CHR1.cdna.all.fasta";
-        WeightLoop loop = new WeightLoop(stat.getNucleotide_aPriori(), stat.getTriplet_aPriori(), stat.getNucleotideTransition(), stat.gettripletTransition());
+        WeightLoop loop = new WeightLoop(stat.getNucleotide_aPriori(), stat.getTriplet_aPriori(), stat.getNucleotideTransition(), stat.getTripletTransition());
         while (loop.moveNext()) {
             CodePermutation P = new CodePermutation();
             P.loadDefaultcodeSet();
@@ -81,7 +86,7 @@ public class MainClass {
         }
         SequenceStatsCalculator stat2 = StatProvider.loadSequenceStats("Escherichia_coli.HUSEC2011CHR1.dna.chromosome.Chromosome", false);
         T = "Tabelle 3.11 Reproduktion: Escherichia_coli.HUSEC2011CHR1.dna.chromosome.Chromosome";
-        WeightLoop loop2 = new WeightLoop(stat2.getNucleotide_aPriori(), stat2.getTriplet_aPriori(), stat2.getNucleotideTransition(), stat2.gettripletTransition());
+        WeightLoop loop2 = new WeightLoop(stat2.getNucleotide_aPriori(), stat2.getTriplet_aPriori(), stat2.getNucleotideTransition(), stat2.getTripletTransition());
         while (loop2.moveNext()) {
             CodePermutation P = new CodePermutation();
             P.loadDefaultcodeSet();
@@ -93,7 +98,7 @@ public class MainClass {
         //Tabelle 3.11 reproduzieren. Je 1 mal mit Homo Sapiens, E.Coli und Ciona intestinalis
         SequenceStatsCalculator stat = StatProvider.loadSequenceStatsMixed("Ciona_intestinalis_CCDS.fasta", true);
         String T = "Tabelle 3.11 Reproduktion: Ciona_intestinalis_CCDS.fasta";
-        WeightLoop loop = new WeightLoop(stat.getNucleotide_aPriori(), stat.getTriplet_aPriori(), stat.getNucleotideTransition(), stat.gettripletTransition());
+        WeightLoop loop = new WeightLoop(stat.getNucleotide_aPriori(), stat.getTriplet_aPriori(), stat.getNucleotideTransition(), stat.getTripletTransition());
         while (loop.moveNext()) {
             CodePermutation P = new CodePermutation();
             P.loadDefaultcodeSet();
@@ -101,7 +106,7 @@ public class MainClass {
         }
         SequenceStatsCalculator stat2 = StatProvider.loadSequenceStats("NC_020166.2", false);
         T = "Tabelle 3.11 Reproduktion: Ciona_intestinalis Chromosom 1";
-        WeightLoop loop2 = new WeightLoop(stat2.getNucleotide_aPriori(), stat2.getTriplet_aPriori(), stat2.getNucleotideTransition(), stat2.gettripletTransition());
+        WeightLoop loop2 = new WeightLoop(stat2.getNucleotide_aPriori(), stat2.getTriplet_aPriori(), stat2.getNucleotideTransition(), stat2.getTripletTransition());
         while (loop2.moveNext()) {
             CodePermutation P = new CodePermutation();
             P.loadDefaultcodeSet();
@@ -116,13 +121,13 @@ public class MainClass {
         SequenceStatsCalculator stat = StatProvider.loadSequenceStatsMixed("HomoSapiens_CCDS_Klaucke.fasta", true);
         SequenceStatsCalculator stat2 = StatProvider.loadSequenceStats("NC_000001.11", false);
 
-        WeightLoop loop = new WeightLoop(stat.getNucleotide_aPriori(), stat.getTriplet_aPriori(), stat.getNucleotideTransition(), stat.gettripletTransition());
+        WeightLoop loop = new WeightLoop(stat.getNucleotide_aPriori(), stat.getTriplet_aPriori(), stat.getNucleotideTransition(), stat.getTripletTransition());
         System.out.println("Nonsense Mutation Count on CCDS Homo Sapiens");
         while (loop.moveNext()) {
             System.out.println("#Nonsense Mutations SNP/Shift [Pos1, Pos2, Pos3][Left, Right]" + Arrays.toString(ToolMethods.getWeightedCountOfStopCodons_SNP()) + Arrays.toString(ToolMethods.getWeightedCountOfStopCodons_Shift()));
             System.out.println("Total sum of stopcodons: " + ToolMethods.getWeightedStopCodonFrequency_Overall());
         }
-        WeightLoop loop2 = new WeightLoop(stat2.getNucleotide_aPriori(), stat2.getTriplet_aPriori(), stat2.getNucleotideTransition(), stat2.gettripletTransition());
+        WeightLoop loop2 = new WeightLoop(stat2.getNucleotide_aPriori(), stat2.getTriplet_aPriori(), stat2.getNucleotideTransition(), stat2.getTripletTransition());
         System.out.println("Nonsense Mutation Count on Chromosome 1 Homo Sapiens");
         while (loop2.moveNext()) {
             System.out.println("#Nonsense Mutations SNP/Shift [Pos1, Pos2, Pos3][Left, Right]" + Arrays.toString(ToolMethods.getWeightedCountOfStopCodons_SNP()) + Arrays.toString(ToolMethods.getWeightedCountOfStopCodons_Shift()));
@@ -164,7 +169,7 @@ public class MainClass {
         calc.get_ShiftDeviation(2);
         //NA+TA+TT
         SequenceStatsCalculator stat = StatProvider.loadSequenceStatsMixed("HomoSapiens_CCDS_Klaucke.fasta", true);
-        setWeightings(stat.getNucleotide_aPriori(), stat.getTriplet_aPriori(), null, stat.gettripletTransition());
+        setWeightings(stat.getNucleotide_aPriori(), stat.getTriplet_aPriori(), null, stat.getTripletTransition());
         calc = new StabilityCalculator(code);
         calc.setPrintHistogram(true);
         calc.get_BaseDeviation(1);
@@ -194,46 +199,73 @@ public class MainClass {
         SequenceStatsCalculator stat0 = StatProvider.loadSequenceStatsMixed("HomoSapiens_CCDS_Klaucke.fasta", true, 0);
         SequenceStatsCalculator stat1 = StatProvider.loadSequenceStatsMixed("HomoSapiens_CCDS_Klaucke.fasta", true, 1);
         SequenceStatsCalculator stat2 = StatProvider.loadSequenceStatsMixed("HomoSapiens_CCDS_Klaucke.fasta", true, 2);
-        MarkovChainForStopCodonsCalculator calc0 = new MarkovChainForStopCodonsCalculator(new GeneCode(), stat0.getNucleotideTransition(), stat0.getTriplet_aPriori());
-        System.out.println("CCDS Ofset 0: " + calc0.getChainLengthAfterMuatation());
-        MarkovChainForStopCodonsCalculator calc1 = new MarkovChainForStopCodonsCalculator(new GeneCode(), stat1.getNucleotideTransition(), stat1.getTriplet_aPriori());
-        System.out.println("CCDS Ofset 1: " + calc1.getChainLengthAfterMuatation());
-        MarkovChainForStopCodonsCalculator calc2 = new MarkovChainForStopCodonsCalculator(new GeneCode(), stat2.getNucleotideTransition(), stat2.getTriplet_aPriori());
-        System.out.println("CCDS Ofset 2: " + calc2.getChainLengthAfterMuatation());
+        MarkovChainForStopCodonsCalculator calcTT0 = new MarkovChainForStopCodonsCalculator(new GeneCode(), stat0.getTripletTransition(), stat0.getTriplet_aPriori(), 20000, false);
+        MarkovChainForStopCodonsCalculator calcTT1 = new MarkovChainForStopCodonsCalculator(new GeneCode(), stat1.getTripletTransition(), stat1.getTriplet_aPriori(), 20000, false);
+        MarkovChainForStopCodonsCalculator calcTT2 = new MarkovChainForStopCodonsCalculator(new GeneCode(), stat2.getTripletTransition(), stat2.getTriplet_aPriori(), 20000, false);
+        MarkovChainForStopCodonsCalculator calcNT0 = new MarkovChainForStopCodonsCalculator(new GeneCode(), stat0.getNucleotideTransition(), stat0.getTriplet_aPriori(), 20000, false);
+        MarkovChainForStopCodonsCalculator calcNT1 = new MarkovChainForStopCodonsCalculator(new GeneCode(), stat1.getNucleotideTransition(), stat1.getTriplet_aPriori(), 20000, false);
+        MarkovChainForStopCodonsCalculator calcNT2 = new MarkovChainForStopCodonsCalculator(new GeneCode(), stat2.getNucleotideTransition(), stat2.getTriplet_aPriori(), 20000, false);
+        System.out.println("CCDS TT2 Offset 0: " + calcTT0.getChainLengthAfterMuatation());
+        System.out.println("CCDS TT2 Offset 1: " + calcTT1.getChainLengthAfterMuatation());
+        System.out.println("CCDS TT2 Offset 2: " + calcTT2.getChainLengthAfterMuatation());
+        System.out.println("CCDS NT Offset 0: " + calcNT0.getChainLengthAfterMuatation());
+        System.out.println("CCDS NT Offset 1: " + calcNT1.getChainLengthAfterMuatation());
+        System.out.println("CCDS NT Offset 2: " + calcNT2.getChainLengthAfterMuatation());
 
-        SequenceStatsCalculator statC0 = StatProvider.loadSequenceStats("NC_000001.11", true, 0);
-        SequenceStatsCalculator statC1 = StatProvider.loadSequenceStats("NC_000001.11", true, 1);
-        SequenceStatsCalculator statC2 = StatProvider.loadSequenceStats("NC_000001.11", true, 2);
-        MarkovChainForStopCodonsCalculator calcC0 = new MarkovChainForStopCodonsCalculator(new GeneCode(), statC0.getNucleotideTransition(), statC0.getTriplet_aPriori());
-        System.out.println("CCDS Ofset 0: " + calcC0.getChainLengthAfterMuatation());
-        MarkovChainForStopCodonsCalculator calcC1 = new MarkovChainForStopCodonsCalculator(new GeneCode(), statC1.getNucleotideTransition(), statC1.getTriplet_aPriori());
-        System.out.println("CCDS Ofset 1: " + calcC1.getChainLengthAfterMuatation());
-        MarkovChainForStopCodonsCalculator calcC2 = new MarkovChainForStopCodonsCalculator(new GeneCode(), statC2.getNucleotideTransition(), statC2.getTriplet_aPriori());
-        System.out.println("CCDS Ofset 2: " + calcC2.getChainLengthAfterMuatation());
+        stat0 = StatProvider.loadSequenceStats("RandomSequence", true, 0);
+        stat1 = StatProvider.loadSequenceStats("RandomSequence", true, 1);
+        stat2 = StatProvider.loadSequenceStats("RandomSequence", true, 2);
+        calcTT0 = new MarkovChainForStopCodonsCalculator(new GeneCode(), stat0.getTripletTransition(), stat0.getTriplet_aPriori(), 20000, false);
+        calcTT1 = new MarkovChainForStopCodonsCalculator(new GeneCode(), stat1.getTripletTransition(), stat1.getTriplet_aPriori(), 20000, false);
+        calcTT2 = new MarkovChainForStopCodonsCalculator(new GeneCode(), stat2.getTripletTransition(), stat2.getTriplet_aPriori(), 20000, false);
+        calcNT0 = new MarkovChainForStopCodonsCalculator(new GeneCode(), stat0.getNucleotideTransition(), stat0.getTriplet_aPriori(), 20000, false);
+        calcNT1 = new MarkovChainForStopCodonsCalculator(new GeneCode(), stat1.getNucleotideTransition(), stat1.getTriplet_aPriori(), 20000, false);
+        calcNT2 = new MarkovChainForStopCodonsCalculator(new GeneCode(), stat2.getNucleotideTransition(), stat2.getTriplet_aPriori(), 20000, false);
+        System.out.println("Random TT2 Offset 0: " + calcTT0.getChainLengthAfterMuatation());
+        System.out.println("Random TT2 Offset 1: " + calcTT1.getChainLengthAfterMuatation());
+        System.out.println("Random TT2 Offset 2: " + calcTT2.getChainLengthAfterMuatation());
+        System.out.println("Random NT Offset 0: " + calcNT0.getChainLengthAfterMuatation());
+        System.out.println("Random NT Offset 1: " + calcNT1.getChainLengthAfterMuatation());
+        System.out.println("Random NT Offset 2: " + calcNT2.getChainLengthAfterMuatation());
+
+        stat0 = StatProvider.loadSequenceStats("NC_000001.11", true, 0);
+        stat1 = StatProvider.loadSequenceStats("NC_000001.11", true, 1);
+        stat2 = StatProvider.loadSequenceStats("NC_000001.11", true, 2);
+        calcTT0 = new MarkovChainForStopCodonsCalculator(new GeneCode(), stat0.getTripletTransition(), stat0.getTriplet_aPriori(), 20000, false);
+        calcTT1 = new MarkovChainForStopCodonsCalculator(new GeneCode(), stat1.getTripletTransition(), stat1.getTriplet_aPriori(), 20000, false);
+        calcTT2 = new MarkovChainForStopCodonsCalculator(new GeneCode(), stat2.getTripletTransition(), stat2.getTriplet_aPriori(), 20000, false);
+        calcNT0 = new MarkovChainForStopCodonsCalculator(new GeneCode(), stat0.getNucleotideTransition(), stat0.getTriplet_aPriori(), 20000, false);
+        calcNT1 = new MarkovChainForStopCodonsCalculator(new GeneCode(), stat1.getNucleotideTransition(), stat1.getTriplet_aPriori(), 20000, false);
+        calcNT2 = new MarkovChainForStopCodonsCalculator(new GeneCode(), stat2.getNucleotideTransition(), stat2.getTriplet_aPriori(), 20000, false);
+        System.out.println("CHR1 TT2 Offset 0: " + calcTT0.getChainLengthAfterMuatation());
+        System.out.println("CHR1 TT2 Offset 1: " + calcTT1.getChainLengthAfterMuatation());
+        System.out.println("CHR1 TT2 Offset 2: " + calcTT2.getChainLengthAfterMuatation());
+        System.out.println("CHR1 NT Offset 0: " + calcNT0.getChainLengthAfterMuatation());
+        System.out.println("CHR1 NT Offset 1: " + calcNT1.getChainLengthAfterMuatation());
+        System.out.println("CHR1 NT Offset 2: " + calcNT2.getChainLengthAfterMuatation());
+
     }
 
-    private static void stopCodonMarkocChainCompareImpl() {
-        //SequenceStatsCalculator stat0 = StatProvider.loadSequenceStatsMixed("HomoSapiens_CCDS_Klaucke.fasta", true, 0);
-        SequenceStatsCalculator stat0 = StatProvider.loadSequenceStats("NC_000001.11", false, 0);
-        TripletTransition TT = stat0.gettripletTransition();
-        TripletApriori TA = stat0.getTriplet_aPriori();
-        NucleotideTransition NT = stat0.getNucleotideTransition();
-        GeneCode code = new GeneCode();
-
-        List<Double> distancesRetDepth = new ArrayList<>();
-        List<Double> distancesRetZero = new ArrayList<>();
+    private static void stopCodonMarkovChainCompareImpl() {
+        try {
+            SequenceStatsCalculator stat0 = StatProvider.loadSequenceStatsMixed("HomoSapiens_CCDS_Klaucke.fasta", true, 0);
+            TripletTransition TT = stat0.getTripletTransition();
+            TripletApriori TA = stat0.getTriplet_aPriori();
+            FileWriter fw = new FileWriter(new File("data/CompareTreeImpl.csv"), false);
+            GeneCode code = new GeneCode();
 
 
-        for (int depth = 0; depth < 200; depth++) {
-            System.out.println("depth = "+depth);
-            MarkovChainForStopCodonsCalculator calcDepth = new MarkovChainForStopCodonsCalculator(code, TT, TA, depth, false);
-            MarkovChainForStopCodonsCalculator calcZero = new MarkovChainForStopCodonsCalculator(code, TT, TA, depth, true);
-            distancesRetDepth.add(calcDepth.getChainLengthAfterMuatation());
-            distancesRetZero.add(calcZero.getChainLengthAfterMuatation());
-        }
-        System.out.println("Distance return depth/zero");
-        for (int depth = 0; depth < 200; depth++) {
-            System.out.println(ToolMethods.df.format(distancesRetDepth.get(depth))+" / " +ToolMethods.df.format(distancesRetZero.get(depth)));
+            fw.write("Search Distance; return Depth; return Zero\n");
+            for (int depth = 0; depth < 5000; depth = depth + 50) {
+                MarkovChainForStopCodonsCalculator calcDepth = new MarkovChainForStopCodonsCalculator(code, TT, TA, depth, false);
+                MarkovChainForStopCodonsCalculator calcZero = new MarkovChainForStopCodonsCalculator(code, TT, TA, depth, true);
+                String line = depth + "; " + ToolMethods.df.format(calcDepth.getChainLengthAfterMuatation()) + "; " + ToolMethods.df.format(calcZero.getChainLengthAfterMuatation());
+                System.out.println(line);
+                fw.write(line + "\n");
+            }
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -251,16 +283,16 @@ public class MainClass {
         System.out.println("CCDS Stopcodonfrequency Non Readingframe: " + ToolMethods.df_long.format(ToolMethods.getStopCodonFrequency(ccds, false, 0)));
     }
 
-    private static void getAverageCCDSSequenceLength(){
+    private static void getAverageCCDSSequenceLength() {
         List<DNASequence> seqList = StatProvider.loadSequenceMixed("HomoSapiens_CCDS_Klaucke.fasta", true);
         int sum = 0;
-        int count = seqList.size();
+        int count = 0;
         for (DNASequence Seq : seqList) {
             String sequence = Seq.getSequenceAsString();
-            int length=sequence.length();
-            for (int i = 0 ; i < length-4; i = i + 3){
-                if(Constants.isStopCodon(sequence.substring(i, i+3))){
-                    System.out.println("Stop at Pos "+i+" / "+length);
+            int length = sequence.length();
+            for (int i = 0; i < length - 4; i = i + 3) {
+                if (Constants.isStopCodon(sequence.substring(i, i + 3))) {
+                    System.out.println("Stop at Pos " + i + " / " + length);
                     count++;
                 }
             }
@@ -268,9 +300,78 @@ public class MainClass {
             sum += length;
 
         }
-        System.out.println("Average Sequence Length: "+(double)sum / (double)seqList.size());
-        System.out.println("Average Sequence Length Adjusted: "+(double)sum / (double)count);
+        System.out.println("Stopcodons in Readingframe: " + count);
+        System.out.println("Average Sequence Length: " + (double) sum / (double) seqList.size());
+        System.out.println("Average Sequence Length Adjusted: " + (double) sum / (double) (count + seqList.size()));
     }
 
+    private static void generateRandomChromosome() {
+        try {
+            FileWriter fw = new FileWriter(new File("data/RandomSequence.fasta"), false);
+            BufferedWriter bw = new BufferedWriter(fw);
+            XORShift_Random rnd = new XORShift_Random();
+            bw.write(">gi|0000000|ref|RandomSequence| random sequence generated with java Math.Random\n");
+            int[] nucCount = new int[4];
+            for (int i = 0; i < 250000000; i++) {
+                int nucleotide = rnd.getInt(4);
+                nucCount[nucleotide]++;
+                bw.write(Constants.Bases[nucleotide]);
+                if ((i + 1) % 70 == 0) {
+                    bw.write("\n");
+                }
+            }
+            System.out.println(nucCount[0] + " / " + nucCount[1] + " / " + nucCount[2] + " / " + nucCount[3]);
+            bw.close();
+        } catch (IOException e) {
+            System.out.println("Filewriter Error");
+            e.printStackTrace();
+        }
+    }
+
+    private static void getAverageDistToEachCodon() {
+        SequenceStatsCalculator stat0 = StatProvider.loadSequenceStatsMixed("HomoSapiens_CCDS_Klaucke.fasta", true, 0);
+        TripletTransition TT = stat0.getTripletTransition();
+        TripletApriori TA = stat0.getTriplet_aPriori();
+        GeneCode code = new GeneCode();
+        System.out.println("Average Chain length to specific codon (CCDS):");
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                for (int k = 0; k < 4; k++) {
+                    String codon = Constants.Bases[i] + Constants.Bases[j] + Constants.Bases[k];
+                    MarkovChainForStopCodonsCalculator calc = new MarkovChainForStopCodonsCalculator(code, TT, TA, 20000, codon);
+                    System.out.println(codon + ": " + calc.getChainLengthAfterMuatation());
+                }
+            }
+        }
+
+        SequenceStatsCalculator statC0 = StatProvider.loadSequenceStats("NC_000001.11", false, 0);
+        TT = statC0.getTripletTransition();
+        TA = statC0.getTriplet_aPriori();
+        System.out.println("Average Chain length to specific codon (Chr1):");
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                for (int k = 0; k < 4; k++) {
+                    String codon = Constants.Bases[i] + Constants.Bases[j] + Constants.Bases[k];
+                    MarkovChainForStopCodonsCalculator calc = new MarkovChainForStopCodonsCalculator(code, TT, TA, 20000, codon);
+                    System.out.println(codon + ": " + calc.getChainLengthAfterMuatation());
+                }
+            }
+        }
+
+
+        SequenceStatsCalculator statR0 = StatProvider.loadSequenceStats("RandomSequence", false, 0);
+        TT = statR0.getTripletTransition();
+        TA = statR0.getTriplet_aPriori();
+        System.out.println("Average Chain length to specific codon (Random):");
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                for (int k = 0; k < 4; k++) {
+                    String codon = Constants.Bases[i] + Constants.Bases[j] + Constants.Bases[k];
+                    MarkovChainForStopCodonsCalculator calc = new MarkovChainForStopCodonsCalculator(code, TT, TA, 20000, codon);
+                    System.out.println(codon + ": " + calc.getChainLengthAfterMuatation());
+                }
+            }
+        }
+    }
 
 }

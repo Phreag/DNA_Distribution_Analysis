@@ -2,8 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3722e911-d94c-48b4-8da3-12af415a860b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/Objects/XORShift_Random.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Histogramme GMS Daten.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/Histogramme GMS Daten.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/MutationHistogram.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/data/MutationHistogram.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Objects/SequenceStatsCalculator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Objects/SequenceStatsCalculator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/keser_master/GenBankConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/keser_master/GenBankConnection.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/keser_master/MainClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/keser_master/MainClass.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/keser_master/MarkovChainForStopCodonsCalculator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/keser_master/MarkovChainForStopCodonsCalculator.java" afterDir="false" />
     </list>
@@ -26,7 +30,7 @@
     <session id="-404792023">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="25" />
+          <entry key="project.closed" value="26" />
           <entry key="project.open.time.0" value="3" />
           <entry key="project.open.time.1" value="4" />
           <entry key="project.open.time.10" value="1" />
@@ -37,9 +41,9 @@
           <entry key="project.open.time.41" value="1" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.7" value="4" />
-          <entry key="project.open.time.8" value="3" />
-          <entry key="project.open.time.9" value="6" />
-          <entry key="project.opened" value="27" />
+          <entry key="project.open.time.8" value="4" />
+          <entry key="project.open.time.9" value="7" />
+          <entry key="project.opened" value="29" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -58,7 +62,7 @@
         <counts>
           <entry key="CLASS" value="1" />
           <entry key="IDEA_MODULE" value="1" />
-          <entry key="JAVA" value="71" />
+          <entry key="JAVA" value="80" />
           <entry key="PLAIN_TEXT" value="9" />
           <entry key="XML" value="3" />
         </counts>
@@ -75,7 +79,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="19002" />
+          <entry key="JAVA" value="21114" />
           <entry key="PLAIN_TEXT" value="93" />
           <entry key="XML" value="3" />
         </counts>
@@ -100,8 +104,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/keser_master/MarkovChainForStopCodonsCalculator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1700">
-              <caret line="103" column="14" selection-start-line="103" selection-start-column="14" selection-end-line="103" selection-end-column="14" />
+            <state relative-caret-position="651">
+              <caret line="57" column="5" selection-start-line="57" selection-start-column="5" selection-end-line="57" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -112,8 +116,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/keser_master/MainClass.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="275">
-              <caret line="214" column="58" selection-start-line="214" selection-start-column="58" selection-end-line="214" selection-end-column="58" />
+            <state relative-caret-position="-544">
+              <caret line="50" column="39" lean-forward="true" selection-start-line="50" selection-start-column="39" selection-end-line="50" selection-end-column="39" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#compareNA_CCDS_CHR1#0;class#MainClass#0" />
@@ -123,9 +127,30 @@
                 <element signature="method#compareNT_CCDS_CHR1#0;class#MainClass#0" />
                 <element signature="method#calculateErrorHistogram#0;class#MainClass#0" />
                 <element signature="method#stopCodonMarkovChainV1#0;class#MainClass#0" />
-                <element signature="method#stopCodonMarkovChainV2#0;class#MainClass#0" />
-                <element signature="method#stopCodonMarkocChainCompareImpl#0;class#MainClass#0" />
                 <element signature="method#countStopCodonsInSequences#0;class#MainClass#0" />
+                <element signature="method#getAverageCCDSSequenceLength#0;class#MainClass#0" />
+                <element signature="method#getAverageDistToEachCodon#0;class#MainClass#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/keser_master/StabilityCalculator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="4318">
+              <caret line="264" selection-start-line="264" selection-end-line="264" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/keser_master/GenBankConnection.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="374">
+              <caret line="35" column="25" selection-start-line="35" selection-start-column="25" selection-end-line="35" selection-end-column="25" />
+              <folding>
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -134,8 +159,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Objects/SequenceStatsCalculator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="595">
-              <caret line="35" column="41" selection-start-line="34" selection-start-column="30" selection-end-line="35" selection-end-column="41" />
+            <state relative-caret-position="257">
+              <caret line="188" column="8" selection-start-line="188" selection-start-column="8" selection-end-line="188" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -160,10 +185,12 @@
       <find>Stat</find>
       <find>Gewichtet Anzahl an Stopcodons die bei Muatationen entstehen könne</find>
       <find>Sequence.substring(i)</find>
+      <find>gettripletTransition</find>
     </findStrings>
     <replaceStrings>
       <replace>tripletTransition</replace>
       <replace>stat</replace>
+      <replace>getTripletTransition</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -192,13 +219,14 @@
         <option value="$PROJECT_DIR$/src/Objects/TripletTransition.java" />
         <option value="$PROJECT_DIR$/src/Objects/WeightLooper.java" />
         <option value="$PROJECT_DIR$/src/Objects/WeightLoop.java" />
-        <option value="$PROJECT_DIR$/src/keser_master/GenBankConnection.java" />
         <option value="$PROJECT_DIR$/src/keser_master/CodePermutation.java" />
         <option value="$PROJECT_DIR$/src/keser_master/ToolMethods.java" />
         <option value="$PROJECT_DIR$/src/Objects/Constants.java" />
         <option value="$PROJECT_DIR$/src/keser_master/StatProvider.java" />
-        <option value="$PROJECT_DIR$/src/keser_master/MarkovChainForStopCodonsCalculator.java" />
         <option value="$PROJECT_DIR$/src/Objects/SequenceStatsCalculator.java" />
+        <option value="$PROJECT_DIR$/src/Objects/XORShift_Random.java" />
+        <option value="$PROJECT_DIR$/src/keser_master/GenBankConnection.java" />
+        <option value="$PROJECT_DIR$/src/keser_master/MarkovChainForStopCodonsCalculator.java" />
         <option value="$PROJECT_DIR$/src/keser_master/MainClass.java" />
       </list>
     </option>
@@ -211,7 +239,7 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
+    <option name="x" value="-159" />
     <option name="y" value="-8" />
     <option name="width" value="1936" />
     <option name="height" value="1066" />
@@ -224,6 +252,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -253,11 +282,10 @@
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1550485330634" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1550587342405" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -281,7 +309,7 @@
     <configuration name="MainClass" type="Application" factoryName="Application" singleton="true" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="keser_master.MainClass" />
       <module name="TheOneCode" />
-      <option name="VM_PARAMETERS" value="-Xmx7G -Xss8m" />
+      <option name="VM_PARAMETERS" value="-Xmx8G -Xss8m" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="keser_master.*" />
@@ -329,12 +357,11 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
-    <editor active="true" />
+    <frame x="-1928" y="-8" width="1936" height="1066" extended-state="6" />
     <layout>
       <window_info id="Designer" order="0" />
       <window_info id="UI Designer" order="1" />
-      <window_info content_ui="combo" id="Project" order="2" side_tool="true" visible="true" weight="0.17857143" />
+      <window_info content_ui="combo" id="Project" order="2" side_tool="true" visible="true" weight="0.18176973" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info id="Capture Tool" order="4" />
       <window_info id="Image Layers" order="5" />
@@ -364,22 +391,22 @@
     <layout-to-restore>
       <window_info id="Designer" order="0" />
       <window_info id="UI Designer" order="1" />
-      <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info id="Capture Tool" order="3" />
-      <window_info id="Image Layers" order="4" />
-      <window_info content_ui="combo" id="Project" order="5" visible="true" weight="0.1716418" />
+      <window_info active="true" content_ui="combo" id="Project" order="2" side_tool="true" visible="true" weight="0.18176973" />
+      <window_info id="Favorites" order="3" side_tool="true" />
+      <window_info id="Capture Tool" order="4" />
+      <window_info id="Image Layers" order="5" />
       <window_info id="Structure" order="6" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Version Control" order="0" weight="0.2081545" />
-      <window_info anchor="bottom" id="Terminal" order="1" weight="0.32939914" />
-      <window_info anchor="bottom" id="Event Log" order="2" sideWeight="0.50053304" side_tool="true" weight="0.37768242" />
-      <window_info anchor="bottom" id="Messages" order="3" weight="0.18347639" />
-      <window_info anchor="bottom" id="Message" order="4" />
-      <window_info anchor="bottom" id="Find" order="5" weight="0.32939914" />
-      <window_info active="true" anchor="bottom" id="Run" order="6" sideWeight="0.49946696" visible="true" weight="0.37768242" />
-      <window_info anchor="bottom" id="Debug" order="7" weight="0.4" />
-      <window_info anchor="bottom" id="Problems" order="8" weight="0.32939914" />
-      <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="10" weight="0.4" />
+      <window_info anchor="bottom" id="Version Control" order="0" sideWeight="0.49903476" weight="0.20767495" />
+      <window_info anchor="bottom" id="Terminal" order="1" weight="0.32900676" />
+      <window_info anchor="bottom" id="Event Log" order="2" sideWeight="0.50096524" side_tool="true" weight="0.20767495" />
+      <window_info anchor="bottom" id="Message" order="3" />
+      <window_info anchor="bottom" id="Find" order="4" weight="0.32939914" />
+      <window_info anchor="bottom" id="Run" order="5" sideWeight="0.49946696" weight="0.41416308" />
+      <window_info anchor="bottom" id="Debug" order="6" weight="0.45171675" />
+      <window_info anchor="bottom" id="Problems" order="7" weight="0.32900676" />
+      <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.18340857" />
       <window_info anchor="bottom" id="TODO" order="11" weight="0.32939914" />
       <window_info anchor="right" id="Capture Analysis" order="0" />
       <window_info anchor="right" id="Theme Preview" order="1" />
@@ -389,6 +416,7 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="5" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="6" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="7" weight="0.25" />
+      <window_info anchor="right" id="Coverage" order="8" side_tool="true" weight="0.32995737" />
     </layout-to-restore>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -527,13 +555,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/keser_master/StabilityCalculator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2142">
-          <caret line="132" column="4" selection-start-line="132" selection-start-column="4" selection-end-line="132" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/keser_master/CodeEvaluation.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="663">
@@ -541,31 +562,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/keser_master/CodePermutation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" column="24" selection-start-line="13" selection-start-column="24" selection-end-line="13" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/keser_master/GenBankConnection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="27" selection-start-line="6" selection-start-column="27" selection-end-line="6" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/keser_master/ToolMethods.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1479">
           <caret line="91" column="25" selection-start-line="91" selection-start-column="25" selection-end-line="91" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Objects/Constants.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -580,6 +580,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_181/src.zip!/java/io/FileWriter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="674">
+          <caret line="105" column="11" selection-start-line="105" selection-start-column="11" selection-end-line="105" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Objects/XORShift_Random.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="47" lean-forward="true" selection-start-line="18" selection-start-column="47" selection-end-line="18" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Objects/Constants.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="94" column="26" selection-start-line="94" selection-start-column="26" selection-end-line="94" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/keser_master/StatProvider.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="578">
@@ -590,10 +611,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/keser_master/CodePermutation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="53" column="13" lean-forward="true" selection-start-line="53" selection-start-column="13" selection-end-line="53" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/keser_master/StabilityCalculator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4318">
+          <caret line="264" selection-start-line="264" selection-end-line="264" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/keser_master/MarkovChainForStopCodonsCalculator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1700">
-          <caret line="103" column="14" selection-start-line="103" selection-start-column="14" selection-end-line="103" selection-end-column="14" />
+        <state relative-caret-position="651">
+          <caret line="57" column="5" selection-start-line="57" selection-start-column="5" selection-end-line="57" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -602,15 +640,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Objects/SequenceStatsCalculator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="595">
-          <caret line="35" column="41" selection-start-line="34" selection-start-column="30" selection-end-line="35" selection-end-column="41" />
+        <state relative-caret-position="257">
+          <caret line="188" column="8" selection-start-line="188" selection-start-column="8" selection-end-line="188" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/keser_master/GenBankConnection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="35" column="25" selection-start-line="35" selection-start-column="25" selection-end-line="35" selection-end-column="25" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/keser_master/MainClass.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="214" column="58" selection-start-line="214" selection-start-column="58" selection-end-line="214" selection-end-column="58" />
+        <state relative-caret-position="-544">
+          <caret line="50" column="39" lean-forward="true" selection-start-line="50" selection-start-column="39" selection-end-line="50" selection-end-column="39" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#compareNA_CCDS_CHR1#0;class#MainClass#0" />
@@ -620,9 +668,9 @@
             <element signature="method#compareNT_CCDS_CHR1#0;class#MainClass#0" />
             <element signature="method#calculateErrorHistogram#0;class#MainClass#0" />
             <element signature="method#stopCodonMarkovChainV1#0;class#MainClass#0" />
-            <element signature="method#stopCodonMarkovChainV2#0;class#MainClass#0" />
-            <element signature="method#stopCodonMarkocChainCompareImpl#0;class#MainClass#0" />
             <element signature="method#countStopCodonsInSequences#0;class#MainClass#0" />
+            <element signature="method#getAverageCCDSSequenceLength#0;class#MainClass#0" />
+            <element signature="method#getAverageDistToEachCodon#0;class#MainClass#0" />
           </folding>
         </state>
       </provider>

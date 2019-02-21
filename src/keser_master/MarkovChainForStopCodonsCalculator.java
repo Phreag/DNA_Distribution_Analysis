@@ -3,6 +3,7 @@ package keser_master;
 import Objects.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MarkovChainForStopCodonsCalculator {
@@ -15,38 +16,45 @@ public class MarkovChainForStopCodonsCalculator {
     private Map<String, Double> cachedValues = new HashMap<>();
     private int maxdepth = 2000;
     private boolean maxdepth_return_zero = false;
+    private String searchCodon;
 
-    public MarkovChainForStopCodonsCalculator(GeneCode code, TripletTransition tripletTransition, TripletApriori tripletApriori) {
+    private MarkovChainForStopCodonsCalculator(GeneCode code, TripletTransition tripletTransition, NucleotideTransition nucleotideTransition, TripletApriori tripletApriori,int maxdepth, boolean maxdepth_return_zero, String searchCodon){
         this.code = code;
         this.tripletTransition = tripletTransition;
+        this.nucleotideTransition=nucleotideTransition;
         this.tripletApriori = tripletApriori;
-        useNucleotideTransition=false;
+        useNucleotideTransition= tripletTransition==null;
+        this.maxdepth = maxdepth;
+        this.maxdepth_return_zero = maxdepth_return_zero;
+        this.searchCodon = searchCodon;
         calculateAverageDistSums();
+    }
+
+    public MarkovChainForStopCodonsCalculator(GeneCode code, TripletTransition tripletTransition, TripletApriori tripletApriori) {
+        this(code,tripletTransition,null,tripletApriori,2000,false,null);
     }
 
     public MarkovChainForStopCodonsCalculator(GeneCode code, NucleotideTransition nucleotideTransition, TripletApriori tripletApriori) {
-        this.code = code;
-        this.nucleotideTransition=nucleotideTransition;
-        this.tripletApriori=tripletApriori;
-        calculateAverageDistSums();
+        this(code,null,nucleotideTransition,tripletApriori,2000,false,null);
     }
+    public MarkovChainForStopCodonsCalculator(GeneCode code, TripletTransition tripletTransition, TripletApriori tripletApriori, int maxdepth, String searchCodon) {
+        this(code,tripletTransition,null,tripletApriori,maxdepth,false,searchCodon);
+    }
+
     public MarkovChainForStopCodonsCalculator(GeneCode code, NucleotideTransition nucleotideTransition, TripletApriori tripletApriori,int maxdepth, boolean maxdepth_return_zero) {
-        this.code = code;
-        this.nucleotideTransition=nucleotideTransition;
-        this.tripletApriori=tripletApriori;
-        this.maxdepth=maxdepth;
-        this.maxdepth_return_zero=maxdepth_return_zero;
-        calculateAverageDistSums();
+        this(code,null,nucleotideTransition,tripletApriori,maxdepth,maxdepth_return_zero,null);
     }
 
     public MarkovChainForStopCodonsCalculator(GeneCode code, TripletTransition tripletTransition, TripletApriori tripletApriori, int maxdepth, boolean maxdepth_return_zero){
-        this.code = code;
-        this.tripletTransition = tripletTransition;
-        this.tripletApriori = tripletApriori;
-        useNucleotideTransition=false;
-        this.maxdepth=maxdepth;
-        this.maxdepth_return_zero=maxdepth_return_zero;
-        calculateAverageDistSums();
+        this(code,tripletTransition,null,tripletApriori,maxdepth,maxdepth_return_zero,null);
+    }
+
+    private boolean isSearchedCodon(String codon){
+        if(searchCodon != null){
+            return codon.equalsIgnoreCase(searchCodon);
+        }else{
+            return Constants.isStopCodon(codon);
+        }
     }
 
     public double getChainLengthAfterMuatation() {
@@ -118,9 +126,7 @@ public class MarkovChainForStopCodonsCalculator {
         if (cachedValues.containsKey(codon + "_" + depth)) {
             return cachedValues.get(codon + "_" + depth);
         }
-
-        String Amino = code.getAminoAcid(codon);
-        if (Amino.length() != 3) return depth;
+        if (isSearchedCodon(codon)) return depth;
         double[][] distArray = new double[64][2];
         double weightsSum = 0;
         //0 = weight
