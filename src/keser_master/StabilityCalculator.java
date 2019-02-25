@@ -41,13 +41,12 @@ public class StabilityCalculator {
                 for (int k = 0; k < 4; k++) {
                     String c = Constants.Bases[k];
                     String codon1 = a + b + c;
-                    String Amino = Code.getAminoAcid(codon1);
-                    if (Amino.length() != 3) continue; //Filters Stop Codons
-                    double Polar1 = Constants.getPolarReq(Amino);
-                    Double Diff = 0.0;
+                    String amino = Code.getAminoAcid(codon1);
+                    if (amino.length() != 3) continue; //Filters Stop Codons
+                    double diff = 0.0;
                     for (int m = 0; m < 4; m++) {
                         String x = Constants.Bases[m];
-                        String Amino2 = "";
+                        String amino2 = "";
                         String codon2 = "";
                         switch (Modus) {
                             case 1:
@@ -60,18 +59,14 @@ public class StabilityCalculator {
                                 codon2 = a + b + x;
                                 break;
                         }
-                        Amino2 = Code.getAminoAcid(codon2);
-                        double difference;
-                        if (Amino2.length() != 3) { //Filters Stop Codons or Applies NonsenseMutationWeighting
+                        amino2 = Code.getAminoAcid(codon2);
+
+                        if (amino2.length() != 3) { //Filters Stop Codons or Applies NonsenseMutationWeighting
 
                             continue;
 
-                        } else {
-
-                            double Polar2 = Constants.getPolarReq(Amino2);
-                            difference = (Polar1 - Polar2) * (Polar1 - Polar2);
                         }
-
+                        double difference = Constants.getSqareDifference(amino, amino2);
                         if (MainClass.nucleotideApriori != null) {
                             difference = difference * MainClass.nucleotideApriori.getValue(m);
                         }
@@ -96,12 +91,12 @@ public class StabilityCalculator {
                             }
                         }
                         if (printHistogram) {
-                            printHiostogramEntry(difference, "SNP;" + codon1 + "-" + codon2 + ";" + Amino + "-" + Amino2);
+                            printHiostogramEntry(difference, "SNP;" + codon1 + "-" + codon2 + ";" + amino + "-" + amino2);
                         }
-                        Diff += difference;
+                        diff += difference;
                     }
 
-                    deviation = deviation + Diff;
+                    deviation = deviation + diff;
                 }
             }
         }
@@ -143,13 +138,12 @@ public class StabilityCalculator {
                 for (int k = 0; k < 4; k++) {
                     String c = Constants.Bases[k];
                     String codon1 = a + b + c;
-                    String Amino = Code.getAminoAcid(codon1);
-                    if (Amino.length() != 3) continue; //Filters Stop Codons as Origin
-                    double Polar1 = Constants.getPolarReq(Amino);
-                    Double Diff = 0.0;
+                    String amino = Code.getAminoAcid(codon1);
+                    if (amino.length() != 3) continue; //Filters Stop Codons as Origin
+                    double diff = 0.0;
                     for (int m = 0; m < 4; m++) {
                         String x = Constants.Bases[m];
-                        String Amino2 = "";
+                        String amino2 = "";
                         String codon2 = "";
                         switch (Modus) {
                             case 1:
@@ -159,15 +153,12 @@ public class StabilityCalculator {
                                 codon2 = x + a + b;
                                 break;
                         }
-                        Amino2 = Code.getAminoAcid(codon2);
-                        double difference;
-                        if (Amino2.length() != 3) { //Filters Stop codons or applies NonsenseMutationWeights
+                        amino2 = Code.getAminoAcid(codon2);
+                        if (amino2.length() != 3) { //Filters Stop codons or applies NonsenseMutationWeights
 
                             continue;
-                        } else {
-                            double Polar2 = Constants.getPolarReq(Amino2);
-                            difference = (Polar1 - Polar2) * (Polar1 - Polar2);
                         }
+                        double difference = Constants.getSqareDifference(amino, amino2);
                         if (MainClass.nucleotideApriori != null) {
                             difference = difference * MainClass.nucleotideApriori.getValue(m);
                         }
@@ -195,11 +186,11 @@ public class StabilityCalculator {
                             }
                         }
                         if (printHistogram) {
-                            printHiostogramEntry(difference, "SHIFT;" + codon1 + "-" + codon2 + ";" + Amino + "-" + Amino2);
+                            printHiostogramEntry(difference, "SHIFT;" + codon1 + "-" + codon2 + ";" + amino + "-" + amino2);
                         }
-                        Diff += difference;
+                        diff += difference;
                     }
-                    deviation = deviation + Diff;
+                    deviation = deviation + diff;
                 }
             }
         }

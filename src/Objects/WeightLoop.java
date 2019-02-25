@@ -8,6 +8,12 @@ public class WeightLoop {
     private NucleotideTransition nt;
     private TripletTransition tt;
     private int currentpos = 0;
+    private boolean excludeNT = false;
+
+    public WeightLoop(NucleotideApriori na, TripletApriori ta, TripletTransition tt) {
+        this(na,ta,null,tt);
+        excludeNT=true;
+    }
 
 
     public WeightLoop(NucleotideApriori na, TripletApriori ta, NucleotideTransition nt, TripletTransition tt) {
@@ -34,12 +40,16 @@ public class WeightLoop {
         if (pos>=1){
             wts[3]=true;
         }
-        MainClass.setWeightings(wts[0] ? na : null, wts[1] ? ta : null, wts[2] ? nt : null, wts[3] ? tt : null);
+        MainClass.setWeightings(wts[2] ? na : null, wts[1] ? ta : null, wts[0] ? nt : null, wts[3] ? tt : null);
     }
 
     //returns false if finished.
     public boolean moveNext(){
-        if (currentpos > 15) return false;
+        if(excludeNT){
+            if (currentpos > 7) return false;
+        }else{
+            if (currentpos > 15) return false;
+        }
         setWeightsInMainClass(currentpos);
         currentpos++;
         return true;

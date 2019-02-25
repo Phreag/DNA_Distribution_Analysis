@@ -9,8 +9,6 @@ import java.util.*;
 import Objects.*;
 import org.biojava.nbio.core.sequence.DNASequence;
 
-import javax.sound.midi.Sequence;
-
 public class MainClass {
     public static NucleotideApriori nucleotideApriori;
     public static NucleotideTransition nucleotideTransition;
@@ -44,15 +42,36 @@ public class MainClass {
     //Stack trace needs to be increased for stop codon chain length calculation
     //used Arguments: -Xmx8G -Xss8m
     public static void main(String[] args) {
+        //getTA_ZScores();
         //compareNA_CCDS_CHR1();
         //compareRandomCodesAcrossLifeforms();
         //nonsenseMutationCount();
-        stopCodonMarkovChainV2();
+        //stopCodonMarkovChainV2();
         //countStopCodonsInSequences();
         //stopCodonMarkovChainCompareImpl();
         //getAverageCCDSSequenceLength();
         //generateRandomChromosome();
-        //getAverageDistToEachCodon();
+        getAverageDistToEachCodon();
+        //cleanTT2Weightings();
+        //getAverageToEachCodonTA_Cleared();
+        //millionHydropathyAndPolar();
+        //millionHydropathyOnly();
+        //millionCutOffHighDeltas();
+    }
+
+    private static void getTA_ZScores() {
+        SequenceStatsCalculator stat = StatProvider.loadSequenceStatsMixed("HomoSapiens_CCDS_Klaucke.fasta", true, 0);
+        System.out.println("Z-Scores");
+        ToolMethods.PrintTripletTable(ToolMethods.calculateZScores(stat.getTriplet_aPriori().getData()), false);
+        System.out.println("Weightings");
+        ToolMethods.PrintTripletTable(stat.getTriplet_aPriori().getData(), false);
+
+
+        stat = StatProvider.loadSequenceStats("NC_000001.11", false, 0);
+        System.out.println("Z-Scores");
+        ToolMethods.PrintTripletTable(ToolMethods.calculateZScores(stat.getTriplet_aPriori().getData()), false);
+        System.out.println("Weightings");
+        ToolMethods.PrintTripletTable(stat.getTriplet_aPriori().getData(), false);
 
     }
 
@@ -179,23 +198,7 @@ public class MainClass {
         calc.get_ShiftDeviation(2);
     }
 
-    private static void stopCodonMarkovChainV1() {
-        //ToDO: Messung der durchschnittlichen Länge der Sequenz nach einer Mutation bis zu einem Stoppcodon
-        //Berechnung der Wahrscheinlichkeit nach jedem Triplett ein Stoppcodon zu erhalten
-        //betrachtung der Länge bis maximal 20 Tripletts nach der Mutation
-        //Basis: Triplettübergang zu Triplett (TT)
-        SequenceStatsCalculator stat = StatProvider.loadSequenceStatsMixed("HomoSapiens_CCDS_Klaucke.fasta", true);
-        MarkovChainForStopCodonsCalculator calc = new MarkovChainForStopCodonsCalculator(new GeneCode(), stat.getNucleotideTransition(), stat.getTriplet_aPriori());
-        System.out.println(calc.getChainLengthAfterMuatation());
-
-        SequenceStatsCalculator stat2 = StatProvider.loadSequenceStats("NC_000001.11", false);
-        MarkovChainForStopCodonsCalculator calc2 = new MarkovChainForStopCodonsCalculator(new GeneCode(), stat2.getNucleotideTransition(), stat2.getTriplet_aPriori());
-        System.out.println(calc2.getChainLengthAfterMuatation());
-
-
-    }
-
-    private static void stopCodonMarkovChainV2() {
+    private static void stopCodonMarkovChain() {
         SequenceStatsCalculator stat0 = StatProvider.loadSequenceStatsMixed("HomoSapiens_CCDS_Klaucke.fasta", true, 0);
         SequenceStatsCalculator stat1 = StatProvider.loadSequenceStatsMixed("HomoSapiens_CCDS_Klaucke.fasta", true, 1);
         SequenceStatsCalculator stat2 = StatProvider.loadSequenceStatsMixed("HomoSapiens_CCDS_Klaucke.fasta", true, 2);
@@ -310,7 +313,7 @@ public class MainClass {
             FileWriter fw = new FileWriter(new File("data/RandomSequence.fasta"), false);
             BufferedWriter bw = new BufferedWriter(fw);
             XORShift_Random rnd = new XORShift_Random();
-            bw.write(">gi|0000000|ref|RandomSequence| random sequence generated with java Math.Random\n");
+            bw.write(">gi|0000000|ref|RandomSequence| random sequence generated with Xorshift\n");
             int[] nucCount = new int[4];
             for (int i = 0; i < 250000000; i++) {
                 int nucleotide = rnd.getInt(4);
@@ -333,45 +336,204 @@ public class MainClass {
         TripletTransition TT = stat0.getTripletTransition();
         TripletApriori TA = stat0.getTriplet_aPriori();
         GeneCode code = new GeneCode();
-        System.out.println("Average Chain length to specific codon (CCDS):");
+
+        double[][][] Values = new double[4][4][4];
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 for (int k = 0; k < 4; k++) {
                     String codon = Constants.Bases[i] + Constants.Bases[j] + Constants.Bases[k];
                     MarkovChainForStopCodonsCalculator calc = new MarkovChainForStopCodonsCalculator(code, TT, TA, 20000, codon);
-                    System.out.println(codon + ": " + calc.getChainLengthAfterMuatation());
+                    Values[i][j][k] = calc.getChainLengthAfterMuatation();
                 }
             }
         }
+        System.out.println("Average Chain length to specific codon (CCDS):");
+        ToolMethods.PrintTripletTable(Values, true);
+        ToolMethods.PrintTripletTable(ToolMethods.calculateZScores(Values),true);
 
         SequenceStatsCalculator statC0 = StatProvider.loadSequenceStats("NC_000001.11", false, 0);
         TT = statC0.getTripletTransition();
         TA = statC0.getTriplet_aPriori();
-        System.out.println("Average Chain length to specific codon (Chr1):");
+
+        Values = new double[4][4][4];
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 for (int k = 0; k < 4; k++) {
                     String codon = Constants.Bases[i] + Constants.Bases[j] + Constants.Bases[k];
                     MarkovChainForStopCodonsCalculator calc = new MarkovChainForStopCodonsCalculator(code, TT, TA, 20000, codon);
-                    System.out.println(codon + ": " + calc.getChainLengthAfterMuatation());
+                    Values[i][j][k] = calc.getChainLengthAfterMuatation();
                 }
             }
         }
-
+        System.out.println("Average Chain length to specific codon (Chr1):");
+        ToolMethods.PrintTripletTable(Values, true);
+        ToolMethods.PrintTripletTable(ToolMethods.calculateZScores(Values),true);
 
         SequenceStatsCalculator statR0 = StatProvider.loadSequenceStats("RandomSequence", false, 0);
         TT = statR0.getTripletTransition();
         TA = statR0.getTriplet_aPriori();
-        System.out.println("Average Chain length to specific codon (Random):");
+        Values = new double[4][4][4];
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 for (int k = 0; k < 4; k++) {
                     String codon = Constants.Bases[i] + Constants.Bases[j] + Constants.Bases[k];
                     MarkovChainForStopCodonsCalculator calc = new MarkovChainForStopCodonsCalculator(code, TT, TA, 20000, codon);
-                    System.out.println(codon + ": " + calc.getChainLengthAfterMuatation());
+                    Values[i][j][k] = calc.getChainLengthAfterMuatation();
                 }
             }
         }
+        System.out.println("Average Chain length to specific codon (Random):");
+        ToolMethods.PrintTripletTable(Values, true);
+        ToolMethods.PrintTripletTable(ToolMethods.calculateZScores(Values),true);
     }
 
+    private static void getAverageToEachCodonTA_Cleared() {
+        SequenceStatsCalculator stat0 = StatProvider.loadSequenceStatsMixed("HomoSapiens_CCDS_Klaucke.fasta", true, 0);
+        TripletTransition TT = stat0.getTripletTransition();
+        TripletApriori TA = stat0.getTriplet_aPriori();
+        TT.cleanTriplettApriori(TA);
+        GeneCode code = new GeneCode();
+
+        double[][][] Values = new double[4][4][4];
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                for (int k = 0; k < 4; k++) {
+                    String codon = Constants.Bases[i] + Constants.Bases[j] + Constants.Bases[k];
+                    MarkovChainForStopCodonsCalculator calc = new MarkovChainForStopCodonsCalculator(code, TT, TA, 20000, codon);
+                    Values[i][j][k] = calc.getChainLengthAfterMuatation();
+                }
+            }
+        }
+        System.out.println("Average Chain length to specific codon (CCDS & Cleared):");
+        ToolMethods.PrintTripletTable(Values, true);
+        System.out.println("Z-Scores");
+        ToolMethods.PrintTripletTable(ToolMethods.calculateZScores(Values), true);
+
+        SequenceStatsCalculator statC0 = StatProvider.loadSequenceStats("NC_000001.11", false, 0);
+        TT = statC0.getTripletTransition();
+        TA = statC0.getTriplet_aPriori();
+        TT.cleanTriplettApriori(TA);
+
+        Values = new double[4][4][4];
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                for (int k = 0; k < 4; k++) {
+                    String codon = Constants.Bases[i] + Constants.Bases[j] + Constants.Bases[k];
+                    MarkovChainForStopCodonsCalculator calc = new MarkovChainForStopCodonsCalculator(code, TT, TA, 20000, codon);
+                    Values[i][j][k] = calc.getChainLengthAfterMuatation();
+                }
+            }
+        }
+        System.out.println("Average Chain length to specific codon (Chr1 & Cleared):");
+        ToolMethods.PrintTripletTable(Values, true);
+        System.out.println("Z-Scores");
+        ToolMethods.PrintTripletTable(ToolMethods.calculateZScores(Values), true);
+
+        SequenceStatsCalculator statR0 = StatProvider.loadSequenceStats("RandomSequence", false, 0);
+        TT = statR0.getTripletTransition();
+        TA = statR0.getTriplet_aPriori();
+        TT.cleanTriplettApriori(TA);
+        Values = new double[4][4][4];
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                for (int k = 0; k < 4; k++) {
+                    String codon = Constants.Bases[i] + Constants.Bases[j] + Constants.Bases[k];
+                    MarkovChainForStopCodonsCalculator calc = new MarkovChainForStopCodonsCalculator(code, TT, TA, 20000, codon);
+                    Values[i][j][k] = calc.getChainLengthAfterMuatation();
+                }
+            }
+        }
+        System.out.println("Average Chain length to specific codon (Random & Cleared):");
+        ToolMethods.PrintTripletTable(Values, true);
+        System.out.println("Z-Scores");
+        ToolMethods.PrintTripletTable(ToolMethods.calculateZScores(Values), true);
+    }
+
+    private static void cleanTT2Weightings() {
+        SequenceStatsCalculator stat0 = StatProvider.loadSequenceStatsMixed("HomoSapiens_CCDS_Klaucke.fasta", true, 0);
+        TripletTransition TT = stat0.getTripletTransition();
+        TripletApriori TA = stat0.getTriplet_aPriori();
+        TT.cleanTriplettApriori(TA);
+        GeneCode code = new GeneCode();
+        double[][][] Values = new double[4][4][4];
+        double[][][] Values2 = new double[4][4][4];
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                for (int k = 0; k < 4; k++) {
+                    String codon = Constants.Bases[i] + Constants.Bases[j] + Constants.Bases[k];
+                    MarkovChainForStopCodonsCalculator calc = new MarkovChainForStopCodonsCalculator(code, TT, TA, 20000, codon);
+                    Values[i][j][k] = calc.getChainLengthAfterMuatation();
+                    Values2[i][j][k] = calc.getChainLengthAfterMuatation();
+                }
+            }
+        }
+        System.out.println("Average Chain length to specific codon (CCDS):");
+        ToolMethods.PrintTripletTable(Values, true);
+        System.out.println("Z-Scores (CCDS):");
+        ToolMethods.PrintTripletTable(ToolMethods.calculateZScores(Values2), true);
+
+    }
+
+    private static void millionHydropathyAndPolar() {
+        //ref
+        CodePermutation Pe = new CodePermutation();
+        Pe.loadDefaultcodeSet();
+        new CodeEvaluation(Pe.calculateValues()).countBetterCodes("No Weightings, Default settings");
+
+        //enable hydropathy
+        Constants.hydropathyEnabled = true;
+        Constants.normalizeBySigma = true;
+        SequenceStatsCalculator stat = StatProvider.loadSequenceStats("NC_000001.11", false, 0);
+        String T = "Chromosome 1 hydropathy + polar (normalized by Sigma)";
+        WeightLoop loop = new WeightLoop(stat.getNucleotide_aPriori(), stat.getTriplet_aPriori(), stat.getNucleotideTransition(), stat.getTripletTransition());
+        while (loop.moveNext()) {
+            CodePermutation P = new CodePermutation();
+            P.loadDefaultcodeSet();
+            new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
+        }
+
+        stat = StatProvider.loadSequenceStatsMixed("HomoSapiens_CCDS_Klaucke.fasta", true, 0);
+        T = "CCDS hydropathy + polar (normalized by Sigma)";
+        loop = new WeightLoop(stat.getNucleotide_aPriori(), stat.getTriplet_aPriori(), stat.getNucleotideTransition(), stat.getTripletTransition());
+        while (loop.moveNext()) {
+            CodePermutation P = new CodePermutation();
+            P.loadDefaultcodeSet();
+            new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
+        }
+    }
+
+    private static void millionHydropathyOnly() {
+        //enable hydropathy
+        Constants.hydropathyEnabled = true;
+        Constants.polarReqEnabled = false;
+        SequenceStatsCalculator stat = StatProvider.loadSequenceStats("NC_000001.11", false, 0);
+        String T = "Chromosome 1 polar";
+        WeightLoop loop = new WeightLoop(stat.getNucleotide_aPriori(), stat.getTriplet_aPriori(), stat.getTripletTransition());
+        while (loop.moveNext()) {
+            CodePermutation P = new CodePermutation();
+            P.loadDefaultcodeSet();
+            new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
+        }
+
+        stat = StatProvider.loadSequenceStatsMixed("HomoSapiens_CCDS_Klaucke.fasta", true, 0);
+        T = "CCDS polar";
+        loop = new WeightLoop(stat.getNucleotide_aPriori(), stat.getTriplet_aPriori(), stat.getTripletTransition());
+        while (loop.moveNext()) {
+            CodePermutation P = new CodePermutation();
+            P.loadDefaultcodeSet();
+            new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
+        }
+    }
+
+    private static void millionCutOffHighDeltas(){
+        Constants.cutOff = 66;
+        SequenceStatsCalculator stat = StatProvider.loadSequenceStatsMixed("HomoSapiens_CCDS_Klaucke.fasta", true, 0);
+        String T = "CCDS polar, cutOff: 66";
+        WeightLoop loop = new WeightLoop(stat.getNucleotide_aPriori(), stat.getTriplet_aPriori(), stat.getTripletTransition());
+        while (loop.moveNext()) {
+            CodePermutation P = new CodePermutation();
+            P.loadDefaultcodeSet();
+            new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
+        }
+    }
 }
