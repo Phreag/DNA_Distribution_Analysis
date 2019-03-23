@@ -51,12 +51,13 @@ public class MainClass {
         //stopCodonMarkovChainCompareImpl();
         //getAverageCCDSSequenceLength();
         //generateRandomChromosome();
-        getAverageDistToEachCodon();
+        //getAverageDistToEachCodon();
         //cleanTT2Weightings();
         //getAverageToEachCodonTA_Cleared();
         //millionHydropathyAndPolar();
         //millionHydropathyOnly();
         //millionCutOffHighDeltas();
+        millionOtherAminoAcidProperties();
     }
 
     private static void getTA_ZScores() {
@@ -530,6 +531,108 @@ public class MainClass {
         SequenceStatsCalculator stat = StatProvider.loadSequenceStatsMixed("HomoSapiens_CCDS_Klaucke.fasta", true, 0);
         String T = "CCDS polar, cutOff: 66";
         WeightLoop loop = new WeightLoop(stat.getNucleotide_aPriori(), stat.getTriplet_aPriori(), stat.getTripletTransition());
+        while (loop.moveNext()) {
+            CodePermutation P = new CodePermutation();
+            P.loadDefaultcodeSet();
+            new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
+        }
+    }
+
+    private static void millionOtherAminoAcidProperties(){
+        Constants.polarReqEnabled = false;
+        //molecular Weight
+        Constants.molVolEnabled = true;
+        SequenceStatsCalculator stat = StatProvider.loadSequenceStats("NC_000001.11", false, 0);
+        String T = "Chromosome 1 movlolume";
+        WeightLoop loop = new WeightLoop(stat.getNucleotide_aPriori(), stat.getTriplet_aPriori(), stat.getTripletTransition());
+        while (loop.moveNext()) {
+            CodePermutation P = new CodePermutation();
+            P.loadDefaultcodeSet();
+            new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
+        }
+        stat = StatProvider.loadSequenceStatsMixed("HomoSapiens_CCDS_Klaucke.fasta", true, 0);
+        T = "CCDS molVolume";
+        loop = new WeightLoop(stat.getNucleotide_aPriori(), stat.getTriplet_aPriori(), stat.getTripletTransition());
+        while (loop.moveNext()) {
+            CodePermutation P = new CodePermutation();
+            P.loadDefaultcodeSet();
+            new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
+        }
+
+        //molecular Weight
+        Constants.molVolEnabled = false;
+        Constants.molWeightEnabled = true;
+        stat = StatProvider.loadSequenceStats("NC_000001.11", false, 0);
+        T = "Chromosome 1 molWeight";
+        loop = new WeightLoop(stat.getNucleotide_aPriori(), stat.getTriplet_aPriori(), stat.getTripletTransition());
+        while (loop.moveNext()) {
+            CodePermutation P = new CodePermutation();
+            P.loadDefaultcodeSet();
+            new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
+        }
+        stat = StatProvider.loadSequenceStatsMixed("HomoSapiens_CCDS_Klaucke.fasta", true, 0);
+        T = "CCDS molWeight";
+        loop = new WeightLoop(stat.getNucleotide_aPriori(), stat.getTriplet_aPriori(), stat.getTripletTransition());
+        while (loop.moveNext()) {
+            CodePermutation P = new CodePermutation();
+            P.loadDefaultcodeSet();
+            new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
+        }
+
+        //pKa
+        Constants.molWeightEnabled=false;
+        Constants.pKaEnabled=true;
+        stat = StatProvider.loadSequenceStats("NC_000001.11", false, 0);
+        T = "Chromosome 1 pKa";
+        loop = new WeightLoop(stat.getNucleotide_aPriori(), stat.getTriplet_aPriori(), stat.getTripletTransition());
+        while (loop.moveNext()) {
+            CodePermutation P = new CodePermutation();
+            P.loadDefaultcodeSet();
+            new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
+        }
+        stat = StatProvider.loadSequenceStatsMixed("HomoSapiens_CCDS_Klaucke.fasta", true, 0);
+        T = "CCDS pKa";
+        loop = new WeightLoop(stat.getNucleotide_aPriori(), stat.getTriplet_aPriori(), stat.getTripletTransition());
+        while (loop.moveNext()) {
+            CodePermutation P = new CodePermutation();
+            P.loadDefaultcodeSet();
+            new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
+        }
+
+        //pKb
+        Constants.pKaEnabled=false;
+        Constants.pKbEnabled=true;
+        stat = StatProvider.loadSequenceStats("NC_000001.11", false, 0);
+        T = "Chromosome 1 pKb";
+        loop = new WeightLoop(stat.getNucleotide_aPriori(), stat.getTriplet_aPriori(), stat.getTripletTransition());
+        while (loop.moveNext()) {
+            CodePermutation P = new CodePermutation();
+            P.loadDefaultcodeSet();
+            new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
+        }
+        stat = StatProvider.loadSequenceStatsMixed("HomoSapiens_CCDS_Klaucke.fasta", true, 0);
+        T = "CCDS pKb";
+        loop = new WeightLoop(stat.getNucleotide_aPriori(), stat.getTriplet_aPriori(), stat.getTripletTransition());
+        while (loop.moveNext()) {
+            CodePermutation P = new CodePermutation();
+            P.loadDefaultcodeSet();
+            new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
+        }
+
+        //pI
+        Constants.pKbEnabled=false;
+        Constants.pIEnabled=true;
+        stat = StatProvider.loadSequenceStats("NC_000001.11", false, 0);
+        T = "Chromosome 1 pI";
+        loop = new WeightLoop(stat.getNucleotide_aPriori(), stat.getTriplet_aPriori(), stat.getTripletTransition());
+        while (loop.moveNext()) {
+            CodePermutation P = new CodePermutation();
+            P.loadDefaultcodeSet();
+            new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
+        }
+        stat = StatProvider.loadSequenceStatsMixed("HomoSapiens_CCDS_Klaucke.fasta", true, 0);
+        T = "CCDS pI";
+        loop = new WeightLoop(stat.getNucleotide_aPriori(), stat.getTriplet_aPriori(), stat.getTripletTransition());
         while (loop.moveNext()) {
             CodePermutation P = new CodePermutation();
             P.loadDefaultcodeSet();
