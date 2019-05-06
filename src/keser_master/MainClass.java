@@ -44,6 +44,7 @@ public class MainClass {
     public static void main(String[] args) {
         //getTA_ZScores();
         //compareNA_CCDS_CHR1();
+        getTT2_ZScores();
         //compareRandomCodesAcrossLifeforms();
         //nonsenseMutationCount();
         //stopCodonMarkovChainV2();
@@ -57,7 +58,7 @@ public class MainClass {
         //millionHydropathyAndPolar();
         //millionHydropathyOnly();
         //millionCutOffHighDeltas();
-        millionOtherAminoAcidProperties();
+        //millionOtherAminoAcidProperties();
     }
 
     private static void getTA_ZScores() {
@@ -88,10 +89,16 @@ public class MainClass {
         SequenceStatsCalculator stat2 = StatProvider.loadSequenceStats("NC_000001.11", false);
         System.out.println("Chromosom 1 NA Gewichte");
         ToolMethods.PrintMatrix(stat2.getNucleotide_aPriori().getData());
-        /*Resultat
-         * CCDS NA Gewichte T: 0.8668204368319248 C: 1.0654694621929026 A: 1.004639829034215 G: 1.0630702719409577
-         * Chromosom 1 NA Gewichte T: 1.1670230561211625 C: 0.833995717634103 A: 1.164005262975987 G: 0.8349759632687476
-         */
+    }
+
+    private static void getTT2_ZScores(){
+        SequenceStatsCalculator stat = StatProvider.loadSequenceStatsMixed("HomoSapiens_CCDS_Klaucke.fasta", true);
+        System.out.println("CCDS NA Gewichte");
+        ToolMethods.printTT2Table(ToolMethods.calculateZScores(stat.getTripletTransition().getDataTriplet()));
+        //Chromosom 1
+        SequenceStatsCalculator stat2 = StatProvider.loadSequenceStats("NC_000001.11", false);
+        System.out.println("Chromosom 1 NA Gewichte");
+        ToolMethods.printTT2Table(ToolMethods.calculateZScores(stat2.getTripletTransition().getDataTriplet()));
     }
 
     private static void compareRandomCodesEColi() {

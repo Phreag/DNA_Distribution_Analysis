@@ -19,19 +19,27 @@ public class GenBankConnection {
 	public List<DNASequence> LoadMixedFileReadingframe(String Filename) {
 		File f=new File("data/"+Filename);
 		System.out.println("Loading file "+Filename+" to memory ("+(f.length()/1024)+" KB)...");
+		int total = 0;
+		int mod3 = 0;
+		int start = 0;
+		int stop = 0;
 		try{
 			LinkedHashMap<String, DNASequence> a = FastaReaderHelper.readFastaDNASequence(f);
 			List<DNASequence> Result = new ArrayList<DNASequence>();
 			for (Entry<String, DNASequence> entry : a.entrySet()) {
+				total++;
 				String seq = entry.getValue().getSequenceAsString();
 				int length = seq.length();
 				// nur Sequencen die mit Start Codon beginnen und mit Stop Codon
 				// enden und den Triplet Raster entsprechen, werden in Result
 				// weiterverarrbeitet
 				if ((length % 3) == 0) { // ist die Sequenz dur 3 teilbar?
+					mod3++;
 					if (seq.charAt(0) == 'A' && seq.charAt(1) == 'T' && seq.charAt(2) == 'G') {
+						start++;
 						//Anpassung Leseraster Stop Codons in der Sequence zulassen
 						if (Constants.isStopCodon(seq.substring(seq.length()-3))){
+							stop++;
 							Result.add(entry.getValue());
 						}
 					}
@@ -40,6 +48,7 @@ public class GenBankConnection {
 			if (Result.size() == 0) {
 				return null;
 			}
+			System.out.println("Total: "+total+" Mod3: "+mod3+" Start: "+start+ " Stop:"+stop);
 			return Result;
 		} catch (Exception e) {
 			e.printStackTrace();

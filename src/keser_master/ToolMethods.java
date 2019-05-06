@@ -163,10 +163,10 @@ public class ToolMethods {
 
     //Prints NA Weightings
     public static void PrintMatrix(double[] M) {
-        System.out.println("T: " + M[0]);
-        System.out.println("C: " + M[1]);
-        System.out.println("A: " + M[2]);
-        System.out.println("G: " + M[3]);
+        System.out.println("T: " + df.format(M[0])+ "A-priori: "+ df.format(M[0]*0.25));
+        System.out.println("C: " + df.format(M[1])+ "A-priori: "+ df.format(M[1]*0.25));
+        System.out.println("A: " + df.format(M[2])+ "A-priori: "+ df.format(M[2]*0.25));
+        System.out.println("G: " + df.format(M[3])+ "A-priori: "+ df.format(M[3]*0.25));
     }
 
     //Prints a 4x4x4 matrix in the console
@@ -214,4 +214,95 @@ public class ToolMethods {
         System.out.println("Mean: "+df.format(mean)+" Sigma: "+df.format(sigma));
         return zScores;
     }
+
+    public static double[][][][][][] calculateZScores(double[][][][][][] matrix) {
+        double[][][][][][] zScores = new double[4][4][4][4][4][4];
+        //mean value
+        double mean = 0;
+        for (int a = 0; a < 4; a++) {
+            for (int b = 0; b < 4; b++) {
+                for (int c = 0; c < 4; c++) {
+                    for (int x = 0; x < 4; x++) {
+                        for (int y = 0; y < 4; y++) {
+                            for (int z = 0; z < 4; z++) {
+                                mean += matrix[a][b][c][x][y][z];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        mean = mean/(64*64);
+        //standard deviation
+        double sigma = 0;
+        for (int a = 0; a < 4; a++) {
+            for (int b = 0; b < 4; b++) {
+                for (int c = 0; c < 4; c++) {
+                    for (int x = 0; x < 4; x++) {
+                        for (int y = 0; y < 4; y++) {
+                            for (int z = 0; z < 4; z++) {
+                                sigma = sigma + Math.pow(matrix[a][b][c][x][y][z]-mean, 2);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        sigma = Math.sqrt(sigma / (64*64 - 1)); //divide my N-1
+
+        //z-scores
+        for (int a = 0; a < 4; a++) {
+            for (int b = 0; b < 4; b++) {
+                for (int c = 0; c < 4; c++) {
+                    for (int x = 0; x < 4; x++) {
+                        for (int y = 0; y < 4; y++) {
+                            for (int z = 0; z < 4; z++) {
+                                zScores[a][b][c][x][y][z] = (matrix[a][b][c][x][y][z] - mean) / sigma;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        System.out.println("Mean: "+df.format(mean)+" Sigma: "+df.format(sigma));
+        return zScores;
+    }
+
+    //Prints a 4x4x4 matrix in the console
+    public static void printTT2Table(double[][][][][][] M) {
+        DecimalFormat d =  df_short;
+        String[] N = Constants.Bases;
+        String firstCol = "";
+        for (int a = 0; a < 4; a++) {
+            for (int b = 0; b < 4; b++) {
+                for (int c = 0; c < 4; c++) {
+                    firstCol = "\\hline\\multirow{4}{*}{" + N[a] + N[b] + N[c] +"}";
+                    for (int x = 0; x < 4; x++) {
+                       System.out.println(firstCol +"&" + N[x]+"&"+
+                                       d.format(M[a][b][c][x][0][0])  + "&" +
+                                       d.format(M[a][b][c][x][0][1])  + "&" +
+                                       d.format(M[a][b][c][x][0][2])  + "&" +
+                                       d.format(M[a][b][c][x][0][3])  + "&" +
+
+                                       d.format(M[a][b][c][x][1][0])  + "&" +
+                                       d.format(M[a][b][c][x][1][1])  + "&" +
+                                       d.format(M[a][b][c][x][1][2])  + "&" +
+                                       d.format(M[a][b][c][x][1][3])  + "&" +
+
+                                       d.format(M[a][b][c][x][2][0])  + "&" +
+                                       d.format(M[a][b][c][x][2][1])  + "&" +
+                                       d.format(M[a][b][c][x][2][2])  + "&" +
+                                       d.format(M[a][b][c][x][2][3])  + "&" +
+
+                                       d.format(M[a][b][c][x][3][0])  + "&" +
+                                       d.format(M[a][b][c][x][3][1])  + "&" +
+                                       d.format(M[a][b][c][x][3][2])  + "&" +
+                                       d.format(M[a][b][c][x][3][3])  + " \\\\");
+                       firstCol = "";
+                    }
+                }
+            }
+        }
+    }
+
 }
