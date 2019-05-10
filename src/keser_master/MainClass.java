@@ -6,6 +6,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
+import MultiParam.CodeComparationMultiParam;
+import MultiParam.CodeEvaluationMultiParam;
 import Objects.*;
 import org.biojava.nbio.core.sequence.DNASequence;
 
@@ -44,7 +46,7 @@ public class MainClass {
     public static void main(String[] args) {
         //getTA_ZScores();
         //compareNA_CCDS_CHR1();
-        getTT2_ZScores();
+        //getTT2_ZScores();
         //compareRandomCodesAcrossLifeforms();
         //nonsenseMutationCount();
         //stopCodonMarkovChainV2();
@@ -59,6 +61,7 @@ public class MainClass {
         //millionHydropathyOnly();
         //millionCutOffHighDeltas();
         //millionOtherAminoAcidProperties();
+        millionMultiParam();
     }
 
     private static void getTA_ZScores() {
@@ -645,5 +648,41 @@ public class MainClass {
             P.loadDefaultcodeSet();
             new CodeEvaluation(P.calculateValues()).countBetterCodes(T);
         }
+    }
+
+    private static void millionMultiParam(){
+        //generate Codes
+        CodeComparationMultiParam comp = new CodeComparationMultiParam();
+        for (int i = 0 ; i < 1000 ; i++){
+            comp.generateCodeSet("RandomCodes_"+i);
+        }
+
+        SequenceStatsCalculator stat = StatProvider.loadSequenceStats("NC_000001.11", false, 0);
+        System.gc();
+        WeightLoop loop = new WeightLoop(stat.getNucleotide_aPriori(), stat.getTriplet_aPriori(), stat.getTripletTransition());
+        while (loop.moveNext()) {
+            calculateMillionMultiParam("Chromosome 1");
+        }
+
+        stat = StatProvider.loadSequenceStatsMixed("HomoSapiens_CCDS_Klaucke.fasta", true, 0);
+        System.gc();
+        loop = new WeightLoop(stat.getNucleotide_aPriori(), stat.getTriplet_aPriori(), stat.getTripletTransition());
+        while (loop.moveNext()) {
+            calculateMillionMultiParam("CCDS");
+        }
+    }
+
+    private static void calculateMillionMultiParam (String title){
+        CodeComparationMultiParam comp = new CodeComparationMultiParam();
+        CodeEvaluationMultiParam evaluation = new CodeEvaluationMultiParam(null);
+//        comp.loadDefaultcodeSet();
+//        evaluation.setValues(comp.calculateValues());
+//        evaluation.countBetterCodes(title);
+        for (int i = 0 ; i < 1000 ; i++){
+            comp.loadCodeSet("RandomCodes_"+i);
+            evaluation.setValues(comp.calculateValues());
+            evaluation.countBetterCodes(title);
+        }
+        evaluation.printSummary();
     }
 }

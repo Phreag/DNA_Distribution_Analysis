@@ -26,6 +26,11 @@ public class GeneCode {
 	//String[]Codes21={"TAA","TAG","TGA"}; Stopcodons will always be the same
 	String[][]Allcodes={Codes1,Codes2,Codes3,Codes4,Codes5,Codes6,Codes7,Codes8,Codes9,Codes10,Codes11,Codes12,Codes13,Codes14,Codes15,Codes16,Codes17,Codes18,Codes19,Codes20};
 	String[]Mapping;
+
+	public String[] getMapping() {
+		return Mapping;
+	}
+
 	public GeneCode(){
 		Mapping=naturalCode;
 	}

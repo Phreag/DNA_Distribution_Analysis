@@ -16,10 +16,16 @@ public class StatProvider {
         return loadSequenceStats(GeneID, readInReadingFrame, 0);
     }
 
+    public static void clearCache(){
+        singleSequenceCache = new HashMap<>();
+        mixedSequenceCache = new HashMap<>();
+    }
+
     public static SequenceStatsCalculator loadSequenceStats(String GeneID, boolean readInReadingFrame, int offset) {
         DNASequence seq = loadSequence(GeneID);
         SequenceStatsCalculator stat = new SequenceStatsCalculator(readInReadingFrame, offset);
         stat.processSequence(seq.getSequenceAsString());
+        stat.gc();
         return stat;
     }
 
@@ -34,6 +40,7 @@ public class StatProvider {
         for (DNASequence Seq : seqList) {
             stat.processSequence(Seq.getSequenceAsString());
         }
+        stat.gc();
         return stat;
     }
 

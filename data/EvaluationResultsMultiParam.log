@@ -1,0 +1,52 @@
+
+Calculation Start: 08.05.2019 18:40:29(Chromosome 1 Random Million set #1)
+   Weightings:None
+   Natural Code:
+   Mapping: [Leu, Pro, His, Gln, Arg, Ile, Met, Thr, Asn, Lys, Ser, Val, Ala, Asp, Glu, Gly, Phe, Tyr, Cys, Trp]
+   GMS Scores [polarReq, hydropathy, molVol, molWeight, pKa, pKb, pI]
+   [5.622666666666667, 11.665010101010102, 2964.3535353535353, 1591.3803212121213, 0.04433131313131314, 0.3374628282828282, 6.171920000000001]
+
+######## SUMMARY ########
+   Date | #CodesSeen | [polarReq, hydropathy, molVol, molWeight, pKa, pKb, pI, ImmerBesser]
+   08.05.2019 18:40:51 | 9901 | [0, 351, 4103, 5239, 3958, 5471, 7598, 0]
+
+Calculation Start: 08.05.2019 18:40:52(Chromosome 1 Random Million set #1)
+   Weightings:[TT]
+   Natural Code:
+   Mapping: [Leu, Pro, His, Gln, Arg, Ile, Met, Thr, Asn, Lys, Ser, Val, Ala, Asp, Glu, Gly, Phe, Tyr, Cys, Trp]
+   GMS Scores [polarReq, hydropathy, molVol, molWeight, pKa, pKb, pI]
+   [5.288798415719043, 10.608728335017133, 2733.671499376094, 1398.018938219758, 0.04247562076366403, 0.31863762318808914, 5.199809432914097]
+
+######## SUMMARY ########
+   Date | #CodesSeen | [polarReq, hydropathy, molVol, molWeight, pKa, pKb, pI, ImmerBesser]
+   08.05.2019 18:41:13 | 9901 | [0, 69, 2525, 2755, 3179, 4846, 5647, 0]
+
+Calculation Start: 08.05.2019 18:41:13(Chromosome 1 Random Million set #1)
+   Weightings:[NA]
+   Natural Code:
+   Mapping: [Leu, Pro, His, Gln, Arg, Ile, Met, Thr, Asn, Lys, Ser, Val, Ala, Asp, Glu, Gly, Phe, Tyr, Cys, Trp]
+   GMS Scores [polarReq, hydropathy, molVol, molWeight, pKa, pKb, pI]
+   [5.633491583931273, 11.719303610882212, 2929.3311977576664, 1564.6040263130874, 0.04369808232879292, 0.3332211665048965, 6.02565676565728]
+
+######## SUMMARY ########
+   Date | #CodesSeen | [polarReq, hydropathy, molVol, molWeight, pKa, pKb, pI, ImmerBesser]
+   08.05.2019 18:41:34 | 9901 | [0, 390, 3938, 4979, 3748, 5359, 7367, 0]
+
+Calculation Start: 08.05.2019 18:41:34(Chromosome 1 Random Million set #1)
+   Weightings:[NA][TT]
+   Natural Code:
+   Mapping: [Leu, Pro, His, Gln, Arg, Ile, Met, Thr, Asn, Lys, Ser, Val, Ala, Asp, Glu, Gly, Phe, Tyr, Cys, Trp]
+   GMS Scores [polarReq, hydropathy, molVol, molWeight, pKa, pKb, pI]
+   [5.38118187021491, 10.868883079178998, 2739.1188114786332, 1396.008334167197, 0.04237975598811128, 0.3191062684184126, 5.151941348321791]
+
+######## SUMMARY ########
+   Date | #CodesSeen | [polarReq, hydropathy, molVol, molWeight, pKa, pKb, pI, ImmerBesser]
+   08.05.2019 18:41:55 | 9901 | [0, 96, 2415, 2594, 2959, 4710, 5408, 0]
+
+Calculation Start: 08.05.2019 18:41:55(Chromosome 1 Random Million set #1)
+   Weightings:[TA]
+   Natural Code:
+   Mapping: [Leu, Pro, His, Gln, Arg, Ile, Met, Thr, Asn, Lys, Ser, Val, Ala, Asp, Glu, Gly, Phe, Tyr, Cys, Trp]
+   GMS Scores [polarReq, hydropathy, molVol, molWeight, pKa, pKb, pI]
+   [5.328770472524152, 10.813236548001749, 2689.258842563285, 1375.1487661056221, 0.042402632963375174, 0.31017141494586997, 5.311167326744313]
+

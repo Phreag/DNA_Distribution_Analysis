@@ -21,6 +21,10 @@ public class SequenceStatsCalculator {
         UpdateRawData();
     }
 
+    public void gc(){
+        this.Sequence = null;
+    }
+
     private void UpdateRawData() {
         int step = 1;
         if (readInReadingFrame) {

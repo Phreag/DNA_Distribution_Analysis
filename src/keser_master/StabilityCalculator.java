@@ -9,6 +9,14 @@ import java.io.IOException;
 public class StabilityCalculator {
     private GeneCode Code;
     private boolean printHistogram;
+    private final Constants_Object constants;
+
+    private double getSqareDifference(String oldAmino, String newAmino){
+        if (constants !=null){
+            return constants.getSqareDifference(oldAmino, newAmino);
+        }
+        return Constants.getSqareDifference(oldAmino, newAmino);
+    }
 
     public void setPrintHistogram(boolean printHistogram) {
         this.printHistogram = printHistogram;
@@ -16,6 +24,11 @@ public class StabilityCalculator {
 
     public StabilityCalculator(GeneCode code) {
         Code = code;
+        constants = null;
+    }
+    public StabilityCalculator(GeneCode code, Constants_Object constants) {
+        Code = code;
+        this.constants = constants;
     }
 
     //Changes the Code used for Calculations
@@ -62,11 +75,9 @@ public class StabilityCalculator {
                         amino2 = Code.getAminoAcid(codon2);
 
                         if (amino2.length() != 3) { //Filters Stop Codons or Applies NonsenseMutationWeighting
-
                             continue;
-
                         }
-                        double difference = Constants.getSqareDifference(amino, amino2);
+                        double difference = getSqareDifference(amino, amino2);
                         if (MainClass.nucleotideApriori != null) {
                             difference = difference * MainClass.nucleotideApriori.getValue(m);
                         }
@@ -158,7 +169,7 @@ public class StabilityCalculator {
 
                             continue;
                         }
-                        double difference = Constants.getSqareDifference(amino, amino2);
+                        double difference = getSqareDifference(amino, amino2);
                         if (MainClass.nucleotideApriori != null) {
                             difference = difference * MainClass.nucleotideApriori.getValue(m);
                         }
@@ -227,6 +238,16 @@ public class StabilityCalculator {
         rMS = rMS * 232;
         lMS = lMS * 232;
         return (rMS + lMS) / (232 + 232);
+    }
+
+    public double getGMS(){
+        return getGMS(
+                get_BaseDeviation(1),
+                get_BaseDeviation(2),
+                get_BaseDeviation(3),
+                get_ShiftDeviation(1),
+                get_ShiftDeviation(2)
+        );
     }
 
     public double getGMS(double MS1, double MS2, double MS3, double rMS, double lMS) {
