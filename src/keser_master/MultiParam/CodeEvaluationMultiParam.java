@@ -1,27 +1,27 @@
-package MultiParam;
+package keser_master.MultiParam;
 
 import keser_master.MainClass;
+import keser_master.MultiParam.code.MultiCharacteristicsCode;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.SQLOutput;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 
 public class CodeEvaluationMultiParam {
-    private MultiParamCode[] values;
+    private MultiCharacteristicsCode[] values;
     boolean firstrun = true;
     int[] betterCodes = new int[8];
-    MultiParamCode naturalCode;
+    MultiCharacteristicsCode naturalCode;
     int codesSeen = 0;
 
-    public CodeEvaluationMultiParam(MultiParamCode[] values) {
+    public CodeEvaluationMultiParam(MultiCharacteristicsCode[] values) {
         this.values = values;
     }
 
-    public void setValues(MultiParamCode[] values) {
+    public void setValues(MultiCharacteristicsCode[] values) {
         this.values = values;
     }
 
@@ -122,7 +122,7 @@ public class CodeEvaluationMultiParam {
         }
     }
 
-    private void printCodeData(MultiParamCode code, boolean betterCode) {
+    private void printCodeData(MultiCharacteristicsCode code, boolean betterCode) {
         try {
             FileWriter fw = new FileWriter(new File("data/EvaluationResultsMultiParam.log"), true);
             if (betterCode) {

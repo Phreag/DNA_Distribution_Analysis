@@ -1,4 +1,4 @@
-package Objects;
+package keser_master.Objects;
 
 public class SequenceStatsCalculator {
     private String Sequence;

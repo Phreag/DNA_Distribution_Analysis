@@ -1,4 +1,4 @@
-package Objects;
+package keser_master.Objects;
 
 import keser_master.MainClass;
 

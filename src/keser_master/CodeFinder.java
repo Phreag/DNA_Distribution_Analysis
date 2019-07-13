@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 
-import Objects.GeneCode;
+import keser_master.Objects.GeneCode;
 
 public class CodeFinder {
 	private int CodeCount;

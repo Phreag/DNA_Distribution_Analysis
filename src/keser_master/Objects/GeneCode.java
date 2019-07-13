@@ -1,4 +1,4 @@
-package Objects;
+package keser_master.Objects;
 
 public class GeneCode {
 	public static String[] naturalCode = {"Leu","Pro","His","Gln","Arg","Ile","Met","Thr","Asn","Lys","Ser","Val","Ala","Asp","Glu","Gly","Phe","Tyr","Cys","Trp"};

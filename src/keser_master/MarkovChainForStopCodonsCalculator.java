@@ -1,9 +1,8 @@
 package keser_master;
 
-import Objects.*;
+import keser_master.Objects.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MarkovChainForStopCodonsCalculator {

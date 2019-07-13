@@ -1,6 +1,6 @@
 package keser_master;
 
-import Objects.*;
+import keser_master.Objects.*;
 
 import java.io.File;
 import java.io.FileWriter;

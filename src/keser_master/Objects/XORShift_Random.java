@@ -1,4 +1,4 @@
-package Objects;
+package keser_master.Objects;
 
 public class XORShift_Random {
     private long seed;

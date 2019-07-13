@@ -1,6 +1,6 @@
 package keser_master;
 
-import Objects.Constants;
+import keser_master.Objects.Constants;
 import org.biojava.nbio.core.sequence.DNASequence;
 
 import java.text.DecimalFormat;

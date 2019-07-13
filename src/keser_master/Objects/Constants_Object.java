@@ -1,6 +1,6 @@
-package Objects;
+package keser_master.Objects;
 
-import static Objects.Constants.*;
+import static keser_master.Objects.Constants.*;
 
 public class Constants_Object {
     private int mode = 0;

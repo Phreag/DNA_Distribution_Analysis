@@ -1,8 +1,8 @@
-package MultiParam;
+package keser_master.MultiParam;
 
-import Objects.Constants;
-import Objects.Constants_Object;
-import Objects.GeneCode;
+import keser_master.MultiParam.code.MultiCharacteristicsCode;
+import keser_master.Objects.Constants_Object;
+import keser_master.Objects.GeneCode;
 import keser_master.StabilityCalculator;
 
 import java.io.*;
@@ -10,7 +10,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -19,7 +18,7 @@ public class CodeComparationMultiParam {
 	String[] RegC={"Phe","Leu","Ile","Met","Val","Ser","Pro","Thr","Ala","Tyr","His","Gln","Asn","Lys","Asp","Glu","Cys","Trp","Arg","Gly"};
 	int[] DiffCode={16,   -1,   3,    3,     7,    5,   -5,    0,    4,    8,    -8, -8,    -4,    -4,   -1,   -1,   2,    2,    -14,   -4};
 	private int CodeCount;
-	private MultiParamCode[] ValueBuffer;
+	private MultiCharacteristicsCode[] ValueBuffer;
 	private List<String> CodeBuffer;
 	private int nextValue;
 	private FileWriter codes;
@@ -38,7 +37,7 @@ public class CodeComparationMultiParam {
 	    		//if (currentCode%10000==0)System.out.println("Generating Code "+currentCode);
 	    		if(currentCode>=ValueBuffer.length)break;
 				String[] rCode=CodeBuffer.get(currentCode).split(" ")[1].split("~");
-				MultiParamCode codeData = new MultiParamCode(rCode);
+				MultiCharacteristicsCode codeData = new MultiCharacteristicsCode(rCode);
 	    		g.changeCode(rCode);
 	    		constants.reset();
 
@@ -69,7 +68,7 @@ public class CodeComparationMultiParam {
 	    }
 	}
 
-	public void loadDefaultcodeSet(){
+	public static void loadDefaultcodeSet(){
 		try{
 			Files.copy(Paths.get("data/codes_defaultset.txt"), Paths.get("data/codes.txt"),StandardCopyOption.REPLACE_EXISTING);
 		}catch(Exception e){
@@ -79,7 +78,7 @@ public class CodeComparationMultiParam {
 		System.out.println("Default Codeset loaded");
 	}
 
-	public void loadCodeSet(String name){
+	public static void loadCodeSet(String name){
 		try{
 			Files.copy(Paths.get("data/codes/CodeSet_"+ name+".txt"), Paths.get("data/codes.txt"),StandardCopyOption.REPLACE_EXISTING);
 		}catch(Exception e){
@@ -121,7 +120,7 @@ public class CodeComparationMultiParam {
 		System.out.println("Codeset "+ name + " generated");
 	}
 
-	public MultiParamCode[] calculateValues(){
+	public MultiCharacteristicsCode[] calculateValues(){
 		CodeCount=0;
 		nextValue=0;
 		ThreadsFinished=0;
@@ -138,16 +137,16 @@ public class CodeComparationMultiParam {
 		try {
 			br = new BufferedReader(new FileReader("data/codes.txt"));
 			String line = null;
-	    	while ((line = br.readLine()) != null) {
-	    		CodeBuffer.add(line);
-	    	}
-	    	br.close();
+			while ((line = br.readLine()) != null) {
+				CodeBuffer.add(line);
+			}
+			br.close();
 		} catch (Exception e) {
 			System.out.println("FEHLER: Filereader Error");
 			return null;
 		}
 		//Intitalize output Buffer Array
-		ValueBuffer=new MultiParamCode[CodeBuffer.size()];
+		ValueBuffer=new MultiCharacteristicsCode[CodeBuffer.size()];
 		System.out.println("Start calculation with " +Threads+" Threads...");
 		//Start the Calculation Threads
 		for (int i=0;i<Threads;i++){

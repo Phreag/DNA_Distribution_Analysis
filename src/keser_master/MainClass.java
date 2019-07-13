@@ -6,9 +6,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
-import MultiParam.CodeComparationMultiParam;
-import MultiParam.CodeEvaluationMultiParam;
-import Objects.*;
+import keser_master.MultiParam.CodeComparationMultiParam;
+import keser_master.MultiParam.CodeEvaluationMultiParam;
+import keser_master.MultiParam.CodeFinderMultiCharacteristics;
+import keser_master.MultiParam.CodeFinderMultiScore;
+import keser_master.Objects.*;
 import org.biojava.nbio.core.sequence.DNASequence;
 
 public class MainClass {
@@ -61,7 +63,11 @@ public class MainClass {
         //millionHydropathyOnly();
         //millionCutOffHighDeltas();
         //millionOtherAminoAcidProperties();
-        millionMultiParam();
+        //millionMultiParam();
+        //billionMultiParamTA_TT_Chr1();
+        //runCodeFinderMultiCharacterstics();
+        runCodeFinderMultiScore();
+
     }
 
     private static void getTA_ZScores() {
@@ -684,5 +690,42 @@ public class MainClass {
             evaluation.countBetterCodes(title);
         }
         evaluation.printSummary();
+    }
+
+    private static void billionMultiParamTA_TT_Chr1(){
+        CodeComparationMultiParam comp = new CodeComparationMultiParam();
+        for (int i = 0 ; i < 10000 ; i++){
+            comp.generateCodeSet("RandomCodes_"+i);
+        }
+
+        SequenceStatsCalculator stat = StatProvider.loadSequenceStats("NC_000001.11", false, 0);
+        System.gc();
+        setWeightings(null,stat.getTriplet_aPriori(),null,stat.getTripletTransition());
+        comp = new CodeComparationMultiParam();
+        CodeEvaluationMultiParam evaluation = new CodeEvaluationMultiParam(null);
+        for (int i = 0 ; i < 10000 ; i++){
+            comp.loadCodeSet("RandomCodes_"+i);
+            evaluation.setValues(comp.calculateValues());
+            evaluation.countBetterCodes("Chromosome 1");
+        }
+        evaluation.printSummary();
+    }
+
+    private static void runCodeFinderMultiCharacterstics(){
+        SequenceStatsCalculator stat = StatProvider.loadSequenceStats("NC_000001.11", false, 0);
+        System.gc();
+        setWeightings(null,stat.getTriplet_aPriori(),null,stat.getTripletTransition());
+        CodeComparationMultiParam.loadDefaultcodeSet();
+        CodeFinderMultiCharacteristics greedy = new CodeFinderMultiCharacteristics();
+        greedy.RunCodeFinder(50);
+    }
+
+    private static void runCodeFinderMultiScore(){
+        SequenceStatsCalculator stat = StatProvider.loadSequenceStats("NC_000001.11", false, 0);
+        System.gc();
+        setWeightings(null,stat.getTriplet_aPriori(),null,stat.getTripletTransition());
+        CodeComparationMultiParam.loadDefaultcodeSet();
+        CodeFinderMultiScore greedy = new CodeFinderMultiScore();
+        greedy.RunCodeFinder(50);
     }
 }

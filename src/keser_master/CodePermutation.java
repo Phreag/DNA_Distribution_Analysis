@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import Objects.GeneCode;
+import keser_master.Objects.GeneCode;
 
 public class CodePermutation {
 	//Mapping to read Values from Regine

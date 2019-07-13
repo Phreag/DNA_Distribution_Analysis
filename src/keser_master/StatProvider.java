@@ -1,6 +1,6 @@
 package keser_master;
 
-import Objects.SequenceStatsCalculator;
+import keser_master.Objects.SequenceStatsCalculator;
 import org.biojava.nbio.core.sequence.DNASequence;
 
 import java.util.HashMap;
